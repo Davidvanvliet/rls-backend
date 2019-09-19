@@ -1,0 +1,358 @@
+package nl.rls;
+
+import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Optional;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+
+import nl.rls.ci.aa.domain.AppUser;
+import nl.rls.ci.aa.domain.License;
+import nl.rls.ci.aa.domain.Owner;
+import nl.rls.ci.aa.domain.Role;
+import nl.rls.ci.aa.repository.LicenseRepository;
+import nl.rls.ci.aa.repository.OwnerRepository;
+import nl.rls.ci.aa.repository.RoleRepository;
+import nl.rls.ci.aa.repository.UserRepository;
+import nl.rls.composer.domain.Activity;
+import nl.rls.composer.domain.Company;
+import nl.rls.composer.domain.CompositIdentifierOperationalType;
+import nl.rls.composer.domain.GenericMessage;
+import nl.rls.composer.domain.JourneySection;
+import nl.rls.composer.domain.LocationIdent;
+import nl.rls.composer.domain.LocoTypeNumber;
+import nl.rls.composer.domain.Locomotive;
+import nl.rls.composer.domain.OperationalTrainNumber;
+import nl.rls.composer.domain.OperationalTrainNumberIdentifier;
+import nl.rls.composer.domain.Responsibility;
+import nl.rls.composer.domain.TrainCompositionJourneySection;
+import nl.rls.composer.domain.TrainCompositionMessage;
+import nl.rls.composer.domain.TrainRunningData;
+import nl.rls.composer.domain.Wagon;
+import nl.rls.composer.domain.WagonIdent;
+import nl.rls.composer.domain.WagonOperationalData;
+import nl.rls.composer.domain.code.BrakeType;
+import nl.rls.composer.domain.code.MessageType;
+import nl.rls.composer.domain.code.TractionMode;
+import nl.rls.composer.domain.code.TractionType;
+import nl.rls.composer.domain.code.TrainActivityType;
+import nl.rls.composer.domain.message.MessageStatus;
+import nl.rls.composer.repository.ActivityRepository;
+import nl.rls.composer.repository.CompanyRepository;
+import nl.rls.composer.repository.CompositIdentifierOperationalTypeRepository;
+import nl.rls.composer.repository.JourneySectionRepository;
+import nl.rls.composer.repository.LocationIdentRepository;
+import nl.rls.composer.repository.LocoTypeNumberRepository;
+import nl.rls.composer.repository.OperationalTrainNumberIdentifierRepository;
+import nl.rls.composer.repository.OperationalTrainNumberRepository;
+import nl.rls.composer.repository.ResponsibilityRepository;
+import nl.rls.composer.repository.TractionModeRepository;
+import nl.rls.composer.repository.TractionTypeRepository;
+import nl.rls.composer.repository.TrainActivityTypeRepository;
+import nl.rls.composer.repository.TrainCompositionJourneySectionRepository;
+import nl.rls.composer.repository.TrainCompositionMessageRepository;
+import nl.rls.composer.repository.WagonIdentRepository;
+import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
+
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+public class Main {
+//	@Autowired
+//	private static final Logger log = LoggerFactory.getLogger(Trains24CI.class);
+	@Autowired
+	private RoleRepository roleRepository;
+	@Autowired
+	private LicenseRepository licenseRepository;
+	@Autowired
+	private OwnerRepository ownerRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private ActivityRepository activityRepository;
+	@Autowired
+	private JourneySectionRepository journeySectionRepository;
+	@Autowired
+	private LocationIdentRepository locationIdentRepository;
+	@Autowired
+	private CompanyRepository companyRepository;
+	@Autowired
+	private CompositIdentifierOperationalTypeRepository compositIdentifierOperationalTypeRepository;
+	@Autowired
+	private LocoTypeNumberRepository locoTypeNumberRepository;
+	@Autowired
+	private OperationalTrainNumberRepository operationalTrainNumberRepository;
+	@Autowired
+	private OperationalTrainNumberIdentifierRepository operationalTrainNumberIdentifierRepository;
+	@Autowired
+	private ResponsibilityRepository responsibilityRepository;
+	@Autowired
+	private TractionModeRepository tractionModeRepository;
+	@Autowired
+	private TractionTypeRepository tractionTypeRepository;
+	@Autowired
+	private TrainActivityTypeRepository trainActivityTypeRepository;
+	@Autowired
+	private TrainCompositionJourneySectionRepository trainCompositionJourneySectionRepository;
+	@Autowired
+	private TrainCompositionMessageRepository trainCompositionMessageRepository;
+	@Autowired
+	private WagonIdentRepository wagonIdentRepository;
+	private static final Logger log = LoggerFactory.getLogger(Main.class);
+		
+	public static void main(String[] args) {
+		SpringApplication.run(Main.class, args);
+	}
+
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	@Transactional
+	public CommandLineRunner demo() {
+		return (args) -> {
+			log.info("Start CommandLineRunner");
+			roleRepository.save(new Role("ROLE_USER"));
+			roleRepository.save(new Role("ROLE_SUPER_USER"));
+			roleRepository.save(new Role("ROLE_ADMIN"));
+			Role role = roleRepository.findByName("ROLE_ADMIN");
+			AppUser user = new AppUser("Berend", "Wilkens", "berend.wilkens@hu.nl");
+			userRepository.save(user);
+			user = userRepository.findById(user.getId()).get();
+			user.getRoles().add(role);
+			user.setPassword(bCryptPasswordEncoder().encode("qwerty"));
+			Owner owner = new Owner();
+			owner.setCode("3502");
+			owner.setName("RLS - ADMIN");
+			Calendar now = Calendar.getInstance();
+			Calendar now3 = Calendar.getInstance();
+			now3.add(Calendar.MONTH, 3); 
+			user.setOwner(owner);
+			log.info("Start saving ...");
+			ownerRepository.save(owner);
+			licenseRepository.save(new License("LICENSE_ADMIN", now.getTime(), now3.getTime(), owner));
+			userRepository.save(user);
+			
+			owner = new Owner();
+			owner.setCode("3502");
+			owner.setName("Spitzke Spoorbouw BV");
+			now = Calendar.getInstance();
+			now3 = Calendar.getInstance();
+			now3.add(Calendar.MONTH, 3); 
+			log.info("Start saving ...");
+			ownerRepository.save(owner);
+			licenseRepository.save(new License("LICENSE_FREE", now.getTime(), now3.getTime(), owner));
+			
+//			Calendar now = Calendar.getInstance();
+//			now.add(Calendar.MONTH, -3); 
+//			Calendar now3 = Calendar.getInstance();
+//			now3.add(Calendar.MONTH, -1); 
+//			log.info("Start saving ...");
+//			ownerRepository.save(owner);
+//			licenseRepository.save(new License("FREE", now.getTime(), now3.getTime(), owner));
+			
+			log.info("End CommandLineRunner");
+			Integer ownerId = 1;
+			System.out.println("trainCompositionMessage 1");
+			TrainCompositionMessage trainCompositionMessage = new TrainCompositionMessage(ownerId);
+			addMessageHeader(trainCompositionMessage);
+			System.out.println("MessageStatus.creation "+MessageStatus.creation);
+			trainCompositionMessage.setMessageStatus(MessageStatus.creation.getValue());
+			trainCompositionMessage.setOwnerId(ownerId);
+			System.out.println("trainCompositionMessage 1.1");
+			Optional<OperationalTrainNumber> operationalTrainNumber = operationalTrainNumberRepository.findByValue("41350");
+			System.out.println("trainCompositionMessage 1.2");
+			if (operationalTrainNumber.isPresent()) {
+				trainCompositionMessage.setOperationalTrainNumber(operationalTrainNumber.get());
+				OperationalTrainNumberIdentifier operationalTrainNumberIdentifier = new OperationalTrainNumberIdentifier(
+						operationalTrainNumber.get(), new Date(), new Date());
+				operationalTrainNumberIdentifierRepository.save(operationalTrainNumberIdentifier);
+				trainCompositionMessage.setOperationalTrainNumberIdentifier(operationalTrainNumberIdentifier);
+			}
+			System.out.println("trainCompositionMessage 1.3");
+			trainCompositionMessage.setTransfereeIM(trainCompositionMessage.getRecipient());
+			System.out.println("trainCompositionMessage 1.3.0");
+			Optional<LocationIdent> transferPoint = locationIdentRepository.findById(621); 
+			System.out.println("trainCompositionMessage 1.3.1");
+			if (transferPoint.isPresent()) {
+				System.out.println("transferPoint.isPresent()");
+				trainCompositionMessage.setTransferPoint(transferPoint.get());
+			}
+			System.out.println("trainCompositionMessage 1.3.2");
+			trainCompositionMessageRepository.save(trainCompositionMessage);
+			/*
+			 * CompositIdentifierOperationalType
+			 */
+			System.out.println("trainCompositionMessage 1.3.3");
+			CompositIdentifierOperationalType compositIdentifierOperationalType = new CompositIdentifierOperationalType();
+			compositIdentifierOperationalType.setCompany(companyRepository.findByCode("3502").get());
+			compositIdentifierOperationalType.setObjectType("TR");
+			compositIdentifierOperationalType.setCore("041350222700");
+			compositIdentifierOperationalType.setStartDate(new Date());
+			compositIdentifierOperationalType.setTimetableYear(2019);
+			compositIdentifierOperationalType.setVariant("00");
+			System.out.println("trainCompositionMessage 1.3.4");
+			compositIdentifierOperationalTypeRepository.save(compositIdentifierOperationalType);
+			trainCompositionMessage.getCompositIdentifierOperationalType().add(compositIdentifierOperationalType);
+			System.out.println("trainCompositionMessage 1.3.5");
+			compositIdentifierOperationalTypeRepository.save(compositIdentifierOperationalType);
+			/*
+			 * JourneySection
+			 */
+			System.out.println("trainCompositionMessage 1.4");
+			JourneySection journeySection = new JourneySection(ownerId);
+			Optional<LocationIdent> journeySectionOrigin = locationIdentRepository.findById(621);
+			if (journeySectionOrigin.isPresent()) {
+				journeySection.setJourneySectionOrigin(journeySectionOrigin.get());
+			}
+			Optional<LocationIdent> journeySectionDestination = locationIdentRepository.findById(263);
+			if (journeySectionDestination.isPresent()) {
+				journeySection.setJourneySectionDestination(journeySectionDestination.get());
+			}
+
+			System.out.println("trainCompositionMessage 1.5");
+			Responsibility responsibility = new Responsibility(ownerId);
+			Company responsibleIM = companyRepository.findByCode("0084").get();
+			responsibility.setResponsibleIM(responsibleIM);
+			Company responsibleRU = companyRepository.findByCode("3502").get();
+			responsibility.setResponsibleRU(responsibleRU);
+			responsibilityRepository.save(responsibility);
+			journeySection.setResponsibilityActualSection(responsibility);
+			journeySection.setResponsibilityNextSection(responsibility);
+			journeySection.setOwnerId(ownerId);
+			journeySectionRepository.save(journeySection);
+			System.out.println(journeySection);
+			/*
+			 * TrainRunningTechData
+			 */
+			
+			/*
+			 * TrainRunningData
+			 */
+			System.out.println("trainCompositionMessage 1.7");
+			TrainRunningData trainRunningData = new TrainRunningData(ownerId);
+			trainRunningData.setDangerousGoodsIndicator(false);
+			Optional<TrainActivityType> trainActivityType = trainActivityTypeRepository.findByCode("0003");
+			Activity activity = new Activity();
+			activity.setTrainActivityType(trainActivityType.get());
+			activity.setActivityLocationIdent(journeySectionDestination.get());
+			activityRepository.save(activity);
+			trainRunningData.getActivities().add(activity);
+			trainRunningData.setTrainType(2);
+			trainRunningData.setTrainMaxSpeed(100);
+			
+			/*
+			 * LocoIdent Locomotive
+			 */
+			System.out.println("trainCompositionMessage 1.8");
+			Locomotive locomotive = new Locomotive(ownerId);
+			locomotive.setTractionPositionInTrain(1);
+			Optional<TractionType> tractionType  = tractionTypeRepository.findByCode("11");
+			locomotive.setTractionType(tractionType.get());
+			locomotive.setLocoNumber("928422031023");
+			Optional<LocoTypeNumber> locoTypeNumber = locoTypeNumberRepository.findByTypeCode1("1");
+			locomotive.setLocoTypeNumber(locoTypeNumber.get());
+			Optional<TractionMode> tractionMode = tractionModeRepository.findByCode("11");
+			locomotive.setTractionMode(tractionMode.get());
+			locomotive.setDriverIndication(1);
+			locomotive.setTractionPositionInTrain(1);
+			locomotive.setLengthOverBuffers(3000);
+			locomotive.setWeight(55000);
+			locomotive.setNumberOfAxles(6);
+
+//			locoIdentRepository.save(locoIdent);
+			/*
+			 * WagonData
+			 */
+			System.out.println("trainCompositionMessage 1.9");
+			Wagon wagon = new Wagon(ownerId);
+			wagon.setWagonTrainPosition(1);
+			wagon.setWagonOperationalData(new WagonOperationalData(BrakeType.G, 49000));
+			Optional<WagonIdent> wagonIdent = wagonIdentRepository.findByWagonNumberFreight("335249561341");
+			wagon.setWagonNumberFreight(wagonIdent.get());
+			
+			/*
+			 * TrainCompositionJourneySection
+			 */
+			System.out.println("trainCompositionMessage 1.10");
+			TrainCompositionJourneySection trainCompositionJourneySection = new TrainCompositionJourneySection(ownerId);
+			trainCompositionJourneySection.setLivestockOrPeopleIndicator(0);
+			trainCompositionJourneySection.setJourneySection(journeySection);
+//			trainRunningData.setTrain(trainCompositionJourneySection);			
+//			trainRunningDataRepository.save(trainRunningData);
+
+			
+			trainCompositionJourneySection.setTrainRunningData(trainRunningData);
+			trainCompositionJourneySection.getLocomotives().add(locomotive);
+			trainCompositionJourneySection.getWagons().add(wagon);
+			trainCompositionMessage.getTrainCompositionJourneySection().add(trainCompositionJourneySection);
+			trainCompositionJourneySectionRepository.save(trainCompositionJourneySection);
+			System.out.println(trainCompositionJourneySection);
+			
+			trainCompositionMessageRepository.save(trainCompositionMessage);
+			System.out.println("trainCompositionMessage 2");
+			nl.rls.xml.tcm.TrainCompositionMessage tcm = TrainCompositionMessageXmlMapper.map(trainCompositionMessage);
+			try {
+
+				File file = new File("train_composition_message.xml");
+				JAXBContext jaxbContext = JAXBContext.newInstance(nl.rls.xml.tcm.TrainCompositionMessage.class);
+				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+				// output pretty printed
+				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+				//
+				jaxbMarshaller.marshal(tcm, file);
+				jaxbMarshaller.marshal(tcm, System.out);
+
+			} catch (JAXBException e) {
+				e.printStackTrace();
+				//
+			}
+
+			// fetch an individual customer by ID
+			// repository.findById((long) 1L).ifPresent(train -> {
+			// log.info("Train found with findById(1L):");
+			// log.info("--------------------------------");
+			// log.info(train.getReferenceOTN().toString());
+			// log.info("");
+			// });
+
+			// fetch customers by last name
+			log.info("Trains found with findByType('type2'):");
+			log.info("--------------------------------------------");
+			// repository.findByType("type2").forEach(type2 -> {
+			// log.info(type2.toString());
+			// });
+			log.info("");
+		};
+
+	}
+
+	private void addMessageHeader(GenericMessage message) {
+		message.setMessageDateTime(new Date());
+		message.setMessageIdentifier("Vrije tekst?");
+		message.setMessageType(MessageType.TRAIN_COMPOSITION_MESSAGE.code());
+		message.setMessageTypeVersion(MessageType.TRAIN_COMPOSITION_MESSAGE.version());
+		message.setSenderReference("test bericht");
+		Company recipient = companyRepository.findByCode("0084").get();
+		Company sender = companyRepository.findByCode("3502").get();
+		message.setRecipient(recipient);
+		message.setSender(sender);
+		System.out.println("message(header attributes): " + message.toString());
+	}
+
+}
