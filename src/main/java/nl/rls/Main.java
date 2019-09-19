@@ -113,6 +113,8 @@ public class Main {
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
 		
 	public static void main(String[] args) {
+		String sqlURL = System.getenv("JDBC_DATABASE_URL"); 
+		log.info("=== database url === "+sqlURL);
 		SpringApplication.run(Main.class, args);
 	}
 
