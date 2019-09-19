@@ -324,22 +324,7 @@ public class Main {
 				e.printStackTrace();
 				//
 			}
-
-			// fetch an individual customer by ID
-			// repository.findById((long) 1L).ifPresent(train -> {
-			// log.info("Train found with findById(1L):");
-			// log.info("--------------------------------");
-			// log.info(train.getReferenceOTN().toString());
-			// log.info("");
-			// });
-
-			// fetch customers by last name
-			log.info("Trains found with findByType('type2'):");
-			log.info("--------------------------------------------");
-			// repository.findByType("type2").forEach(type2 -> {
-			// log.info(type2.toString());
-			// });
-			log.info("");
+			log.info("RLS - Application started");
 		};
 
 	}

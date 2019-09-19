@@ -18,4 +18,12 @@ public class IndexController {
 		indexDto.setName("TrainLinkSystem REST api is running.");
 		return ResponseEntity.ok(indexDto);
 	}
+	
+	@GetMapping(path="test", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<IndexDto> getTest() {
+		IndexDto indexDto = new IndexDto();
+		indexDto.setName("TrainLinkSystem REST api is running.");
+		return ResponseEntity.ok(indexDto);
+	}
+
 }
