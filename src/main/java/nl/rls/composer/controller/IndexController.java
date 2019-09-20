@@ -1,5 +1,8 @@
 package nl.rls.composer.controller;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +19,7 @@ public class IndexController {
 	public ResponseEntity<IndexDto> getIndex() {
 		IndexDto indexDto = new IndexDto();
 		indexDto.setName("RailLinkSystem REST api is running.");
+		indexDto.add(linkTo(methodOn(TrainCompositionMessageController.class).getAll()).withRel("tcm"));
 		return ResponseEntity.ok(indexDto);
 	}
 	
@@ -23,6 +27,8 @@ public class IndexController {
 	public ResponseEntity<IndexDto> getTest() {
 		IndexDto indexDto = new IndexDto();
 		indexDto.setName("RailLinkSystem REST api is running.");
+		indexDto.add(linkTo(methodOn(TrainCompositionMessageController.class).getAll()).withRel("tcm"));
+
 		return ResponseEntity.ok(indexDto);
 	}
 
