@@ -11,8 +11,5 @@ import lombok.Setter;
 @Getter @Setter
 public class WagonIdentPostDto {
 	private String wagonNumberFreight;
-	private int lengthOverBuffers;
-	private int wagonNumberOfAxles;
-	private int handBrakeBrakedWeight;
-	private int wagonWeightEmpty;
+	private String wagonTechData;
 }

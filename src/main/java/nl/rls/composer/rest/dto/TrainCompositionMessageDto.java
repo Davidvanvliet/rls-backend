@@ -13,7 +13,7 @@ import lombok.Setter;
 public class TrainCompositionMessageDto extends GenericMessageDto  {
 	private List<CompositIdentifierOperationalTypeDto> compositIdentifierOperationalType = new ArrayList<CompositIdentifierOperationalTypeDto>();
 	private OperationalTrainNumberIdentifierDto operationalTrainNumberIdentifier;
-	private OperationalTrainNumberDto operationalTrainNumber;
+	private String operationalTrainNumber;
 	private LocationIdentDto transferPoint;
 	private CompanyDto transfereeIM;
 	private List<TrainCompositionJourneySectionDto> trainCompositionJourneySection = new ArrayList<TrainCompositionJourneySectionDto>();

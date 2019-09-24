@@ -67,8 +67,7 @@ public class TrainCompositionMessage extends GenericMessage {
 	 * Identifies the train for traffic management purposes by the Dispatcher, GSMR
 	 * services, etc.
 	 */
-	@ManyToOne
-	private OperationalTrainNumber operationalTrainNumber;
+	private String operationalTrainNumber;
 	/**
 	 * Transfer point or station of destination in the considered network
 	 */

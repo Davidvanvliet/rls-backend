@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +23,7 @@ public class OperationalTrainNumberIdentifier {
     /**
      * Identifies the train for traffic management purposes by the Dispatcher, GSMR services, etc.
      */
-	@ManyToOne
-    private OperationalTrainNumber operationalTrainNumber;
+    private String operationalTrainNumber;
     /**
      * The scheduled departure date and time or the scheduled handover date and time at the border between two different IMs.
      */
@@ -35,7 +33,7 @@ public class OperationalTrainNumberIdentifier {
      */
     private Date scheduledDateTimeAtTransfer;
     
-	public OperationalTrainNumberIdentifier(OperationalTrainNumber operationalTrainNumber, Date scheduledTimeAtHandover,
+	public OperationalTrainNumberIdentifier(String operationalTrainNumber, Date scheduledTimeAtHandover,
 			Date scheduledDateTimeAtTransfer) {
 		super();
 		this.operationalTrainNumber = operationalTrainNumber;

@@ -16,8 +16,8 @@ import nl.rls.composer.controller.TrainCompositionMessageController;
 import nl.rls.composer.domain.TrainCompositionJourneySection;
 import nl.rls.composer.domain.TrainCompositionMessage;
 import nl.rls.composer.rest.dto.TrainCompositionJourneySectionDto;
+import nl.rls.composer.rest.dto.TrainCompositionMessageCreateDto;
 import nl.rls.composer.rest.dto.TrainCompositionMessageDto;
-import nl.rls.composer.rest.dto.TrainCompositionMessagePostDto;
 
 public class TrainCompositionMessageDtoMapper {
 	public static TrainCompositionMessageDto map(TrainCompositionMessage entity) {
@@ -49,7 +49,7 @@ public class TrainCompositionMessageDtoMapper {
 		return dto;
 	}
 
-	public static TrainCompositionMessage map(TrainCompositionMessagePostDto dto) {
+	public static TrainCompositionMessage map(TrainCompositionMessageCreateDto dto) {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {

@@ -107,4 +107,5 @@ public class TrainCompositionJourneySectionController {
 		return ResponseEntity.created(linkTo(methodOn(TrainCompositionJourneySectionController.class).getById(trainCompositionJourneySection.getId())).toUri()).build();
 	}
 
+
 }

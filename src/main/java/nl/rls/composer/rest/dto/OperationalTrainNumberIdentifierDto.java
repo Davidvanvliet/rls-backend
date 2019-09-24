@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OperationalTrainNumberIdentifierDto extends ResourceSupport {
-	private OperationalTrainNumberDto operationalTrainNumber;
+	private String operationalTrainNumber;
 	private Date scheduledTimeAtHandover;
 	private Date scheduledDateTimeAtTransfer;
 

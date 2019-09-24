@@ -4,7 +4,7 @@ import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 
 import nl.rls.composer.domain.LocationSubsidiaryIdentification;
-import nl.rls.xml.tcm.TrainCompositionMessage;
+import info.taf_jsg.schemes.TrainCompositionMessage;
 
 public class TrainCompositionMessageXmlMapper {
 
@@ -12,42 +12,42 @@ public class TrainCompositionMessageXmlMapper {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
-				mapping(nl.rls.composer.domain.message.MessageHeader.class, nl.rls.xml.tcm.MessageHeader.class)
+				mapping(nl.rls.composer.domain.message.MessageHeader.class, info.taf_jsg.schemes.MessageHeader.class)
 						.fields("sender.code", "sender").fields("recipient.code", "recipient");
 				mapping(nl.rls.composer.domain.CompositIdentifierOperationalType.class,
-						nl.rls.xml.tcm.TransportOperationalIdentifiers.class).fields("company.code", "company");
+						info.taf_jsg.schemes.TransportOperationalIdentifiers.class).fields("company.code", "company");
 				mapping(nl.rls.composer.domain.Responsibility.class,
-						nl.rls.xml.tcm.ResponsibilityActualSection.class).fields("responsibleRU.code", "responsibleRU")
+						info.taf_jsg.schemes.ResponsibilityActualSection.class).fields("responsibleRU.code", "responsibleRU")
 								.fields("responsibleIM.code", "responsibleIM");
 				mapping(nl.rls.composer.domain.Responsibility.class,
-						nl.rls.xml.tcm.ResponsibilityNextSection.class).fields("responsibleRU.code", "responsibleRU")
+						info.taf_jsg.schemes.ResponsibilityNextSection.class).fields("responsibleRU.code", "responsibleRU")
 								.fields("responsibleIM.code", "responsibleIM");
 				mapping(nl.rls.composer.domain.TrainCompositionMessage.class,
-						nl.rls.xml.tcm.TrainCompositionMessage.class)
+						info.taf_jsg.schemes.TrainCompositionMessage.class)
 								.fields("transfereeIM.code", "transfereeIM")
 								.fields("trainCompositionJourneySection",
 										field("trainCompositionJourneySection").accessible(true))
 								.fields("compositIdentifierOperationalType",
 										field("transportOperationalIdentifiers").accessible(true))
 								.fields("messageStatus", "messageStatus")
-								.fields("operationalTrainNumber.value", "operationalTrainNumber");
-				mapping(LocationSubsidiaryIdentification.class, nl.rls.xml.tcm.LocationSubsidiaryIdentification.class)
+								.fields("operationalTrainNumber", "operationalTrainNumber");
+				mapping(LocationSubsidiaryIdentification.class, info.taf_jsg.schemes.LocationSubsidiaryIdentification.class)
 						.fields("locationSubsidiaryCode", "locationSubsidiaryCode.value")
 						.fields("allocationCompany.code", "allocationCompany");
 				mapping(nl.rls.composer.domain.OperationalTrainNumberIdentifier.class,
-						nl.rls.xml.tcm.OperationalTrainNumberIdentifier.class).fields("operationalTrainNumber.value",
+						info.taf_jsg.schemes.OperationalTrainNumberIdentifier.class).fields("operationalTrainNumber",
 								"operationalTrainNumber");
-				mapping(nl.rls.composer.domain.LocationIdent.class, nl.rls.xml.tcm.LocationIdent.class)
+				mapping(nl.rls.composer.domain.LocationIdent.class, info.taf_jsg.schemes.LocationIdent.class)
 						.fields("countryIso", "countryCodeISO");
 				mapping(nl.rls.composer.domain.Locomotive.class,
-						nl.rls.xml.tcm.TrainCompositionJourneySection.LocoIdent.class)
+						info.taf_jsg.schemes.TrainCompositionJourneySection.LocoIdent.class)
 								.fields("tractionType.code", "tractionType")
 								.fields("tractionMode.code", "tractionMode");
 				mapping(nl.rls.composer.domain.TrainCompositionJourneySection.class,
-						nl.rls.xml.tcm.TrainCompositionJourneySection.class)
+						info.taf_jsg.schemes.TrainCompositionJourneySection.class)
 								.fields("locomotives", field("locoIdent").accessible(true))
 								.fields("wagons", field("wagonData").accessible(true));
-				mapping(nl.rls.composer.domain.Wagon.class, nl.rls.xml.tcm.WagonData.class)
+				mapping(nl.rls.composer.domain.Wagon.class, info.taf_jsg.schemes.WagonData.class)
 						.fields("wagonNumberFreight.wagonNumberFreight", "wagonNumberFreight")
 						.fields("wagonNumberFreight.wagonTechData", "wagonTechData");
 

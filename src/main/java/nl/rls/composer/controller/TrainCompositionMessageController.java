@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -45,11 +46,9 @@ import nl.rls.composer.repository.LocationIdentRepository;
 import nl.rls.composer.repository.ResponsibilityRepository;
 import nl.rls.composer.repository.TrainCompositionJourneySectionRepository;
 import nl.rls.composer.repository.TrainCompositionMessageRepository;
-import nl.rls.composer.repository.TrainRunningDataRepository;
-import nl.rls.composer.rest.dto.TrainCompositionJourneySectionDto;
 import nl.rls.composer.rest.dto.TrainCompositionJourneySectionPostDto;
+import nl.rls.composer.rest.dto.TrainCompositionMessageCreateDto;
 import nl.rls.composer.rest.dto.TrainCompositionMessageDto;
-import nl.rls.composer.rest.dto.TrainCompositionMessagePostDto;
 import nl.rls.composer.rest.dto.mapper.TrainCompositionMessageDtoMapper;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 
@@ -70,8 +69,6 @@ public class TrainCompositionMessageController {
 	private TrainCompositionJourneySectionRepository trainCompositionJourneySectionRepository;
 	@Autowired
 	private JourneySectionRepository journeySectionRepository;
-	@Autowired
-	private TrainRunningDataRepository trainRunningDataRepository;
 
 	@Autowired
 	private SecurityContext securityContext;
@@ -121,10 +118,10 @@ public class TrainCompositionMessageController {
 		if (optional.isPresent()) {
 			StringWriter sw = new StringWriter();
 			System.out.println(optional.get());
-			nl.rls.xml.tcm.TrainCompositionMessage tcm = TrainCompositionMessageXmlMapper.map(optional.get());
+			info.taf_jsg.schemes.TrainCompositionMessage tcm = TrainCompositionMessageXmlMapper.map(optional.get());
 			try {
 				// File file = new File("train_composition_message.xml");
-				JAXBContext jaxbContext = JAXBContext.newInstance(nl.rls.xml.tcm.TrainCompositionMessage.class);
+				JAXBContext jaxbContext = JAXBContext.newInstance(info.taf_jsg.schemes.TrainCompositionMessage.class);
 				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 				// output pretty printed
 				// jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
@@ -142,17 +139,18 @@ public class TrainCompositionMessageController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TrainCompositionMessageDto> create(@RequestBody TrainCompositionMessagePostDto dto) {
+	public ResponseEntity<TrainCompositionMessageDto> create(@RequestBody TrainCompositionMessageCreateDto dto) {
 		int ownerId = securityContext.getOwnerId();
 		TrainCompositionMessage trainCompositionMessage = new TrainCompositionMessage();
 		trainCompositionMessage.setOwnerId(ownerId);
-		trainCompositionMessage.setMessageIdentifier(dto.getMessageIdentifier());
+		trainCompositionMessage.setMessageIdentifier(UUID.randomUUID().toString());
 		trainCompositionMessage.setMessageDateTime(new Date());
 		trainCompositionMessage.setMessageType(MessageType.TRAIN_COMPOSITION_MESSAGE.code());
 		trainCompositionMessage.setMessageTypeVersion(MessageType.TRAIN_COMPOSITION_MESSAGE.version());
 		trainCompositionMessage.setMessageStatus(MessageStatus.creation.getValue());
-		trainCompositionMessage.setSenderReference("senderReference");
-
+		trainCompositionMessage.setSenderReference(UUID.randomUUID().toString());
+		trainCompositionMessage.setOperationalTrainNumber(dto.getOperationalTrainNumber());
+		/* ProRail = 0084 */
 		Optional<Company> recipient = companyRepository.findByCode("0084");
 		if (recipient.isPresent()) {
 			trainCompositionMessage.setRecipient(recipient.get());
@@ -188,12 +186,12 @@ public class TrainCompositionMessageController {
 
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TrainCompositionMessageDto> update(@PathVariable Integer id,
-			@RequestBody TrainCompositionMessagePostDto trainCompositionMessagePostDto) {
+			@RequestBody TrainCompositionMessageCreateDto trainCompositionMessageCreateDto) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
 			TrainCompositionMessage trainCompositionMessage = TrainCompositionMessageDtoMapper
-					.map(trainCompositionMessagePostDto);
+					.map(trainCompositionMessageCreateDto);
 			trainCompositionMessage.setOwnerId(ownerId);
 			trainCompositionMessage = trainCompositionMessageRepository.save(trainCompositionMessage);
 			if (trainCompositionMessage != null) {
@@ -222,7 +220,7 @@ public class TrainCompositionMessageController {
 		trainRunningData.setDangerousGoodsIndicator(dto.getDangerousGoodsIndicator() == 1);
 		trainRunningData.setExceptionalGaugingInd(dto.getExceptionalGaugingInd() == 1);
 		trainRunningData.setTrainType(dto.getTrainType());
-		trainRunningData.setTrainMaxSpeed(80);
+		trainRunningData.setTrainMaxSpeed(100);
 		trainRunningData.setTrain(entity);
 		entity.setTrainRunningData(trainRunningData);
 		entity.setLivestockOrPeopleIndicator(dto.getLivestockOrPeopleIndicator());

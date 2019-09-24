@@ -19,10 +19,7 @@ import lombok.ToString;
 @Entity
 @NoArgsConstructor
 @Getter @Setter
-public class WagonIdent {
-	@Id 	
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private int id;
+public class WagonIdent extends OwnedEntity{
 	private String wagonNumberFreight;
     @ManyToOne
     private WagonTechData wagonTechData;

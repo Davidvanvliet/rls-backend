@@ -14,6 +14,7 @@ import nl.rls.composer.domain.WagonOperationalData;
 @Getter @Setter
 public class WagonDto extends ResourceSupport {
     private int wagonTrainPosition;
+    private int totalLoadWeight;
 	private WagonIdentDto wagonIdent;
     private WagonOperationalData wagonOperationalData;
 

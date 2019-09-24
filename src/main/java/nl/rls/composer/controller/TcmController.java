@@ -58,11 +58,11 @@ public class TcmController {
 		Optional<TrainCompositionMessage> trainCompositionMessage = trainCompositionMessageRepository.findById(id);
 		if (trainCompositionMessage.isPresent()) {
 			System.out.println(trainCompositionMessage.get());
-			nl.rls.xml.tcm.TrainCompositionMessage trainCompositionXmlMessage = TrainCompositionMessageXmlMapper.map(trainCompositionMessage.get());
+			info.taf_jsg.schemes.TrainCompositionMessage trainCompositionXmlMessage = TrainCompositionMessageXmlMapper.map(trainCompositionMessage.get());
 			try {
 
 				File file = new File("train_composition_message.xml");
-				JAXBContext jaxbContext = JAXBContext.newInstance(nl.rls.xml.tcm.TrainCompositionMessage.class);
+				JAXBContext jaxbContext = JAXBContext.newInstance(info.taf_jsg.schemes.TrainCompositionMessage.class);
 				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
 				// output pretty printed

@@ -19,6 +19,8 @@ public class WagonTechData {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	private String name;
+	private String code;
 	/**
 	 * Length over buffers is expressed in cm.
 	 */

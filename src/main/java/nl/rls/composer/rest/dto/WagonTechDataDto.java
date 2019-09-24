@@ -15,8 +15,10 @@ import lombok.ToString;
 @Getter
 @Setter
 public class WagonTechDataDto extends ResourceSupport {
+	private String name;
+	private String code;
 	private int lengthOverBuffers;
 	private int wagonNumberOfAxles;
-	private int handBrakeBrakedWeight;
 	private int wagonWeightEmpty;
+	private int handBrakeBrakedWeight;
 }
