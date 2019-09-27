@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import lombok.Getter;
@@ -44,7 +45,7 @@ public class TrainCompositionJourneySection extends OwnedEntity {
      * Damage has to include code '09.'
      */
     private int livestockOrPeopleIndicator;
-    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "train_composition_journey_section_id")
-    private List<Wagon> wagons  = new ArrayList<Wagon>();
+    private List<WagonInTrain> wagons  = new ArrayList<WagonInTrain>();
 }

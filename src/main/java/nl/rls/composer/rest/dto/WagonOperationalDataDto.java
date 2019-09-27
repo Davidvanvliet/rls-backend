@@ -1,18 +1,17 @@
 package nl.rls.composer.rest.dto;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rls.composer.domain.code.BrakeType;
 
-@XmlRootElement
 @NoArgsConstructor
-@Getter @Setter
-public class WagonCreateDto {
-	private String wagonIdent;
-	private String brakeType;
+@Getter
+@Setter
+public class WagonOperationalDataDto {
+	private BrakeType brakeType;
 	private int totalLoadWeight;
 	private int brakeWeight;
 	private int wagonMaxSpeed;
+
 }

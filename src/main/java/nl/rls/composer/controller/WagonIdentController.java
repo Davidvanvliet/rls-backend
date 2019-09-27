@@ -80,7 +80,8 @@ public class WagonIdentController {
 		}
 		wagonIdentRepository.save(entity);
 		WagonIdentDto wagonIdentDto = WagonIdentDtoMapper.map(entity);
-		return ResponseEntity.ok(wagonIdentDto);
+		return ResponseEntity.created(linkTo(methodOn(WagonIdentController.class).getById(entity.getId()))
+				.toUri()).body(wagonIdentDto);
 	}
 
 }

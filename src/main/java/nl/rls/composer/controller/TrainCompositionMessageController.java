@@ -151,17 +151,17 @@ public class TrainCompositionMessageController {
 		trainCompositionMessage.setSenderReference(UUID.randomUUID().toString());
 		trainCompositionMessage.setOperationalTrainNumber(dto.getOperationalTrainNumber());
 		/* ProRail = 0084 */
-		Optional<Company> recipient = companyRepository.findByCode("0084");
-		if (recipient.isPresent()) {
-			trainCompositionMessage.setRecipient(recipient.get());
-			trainCompositionMessage.setTransfereeIM(recipient.get());
+		List<Company> recipient = companyRepository.findByCode("0084");
+		if (recipient.size() == 1) {
+			trainCompositionMessage.setRecipient(recipient.get(0));
+			trainCompositionMessage.setTransfereeIM(recipient.get(0));
 		}
 
 		Optional<Owner> owner = ownerRepository.findById(ownerId);
 		if (owner.isPresent()) {
-			Optional<Company> sender = companyRepository.findByCode(owner.get().getCode());
-			if (sender.isPresent()) {
-				trainCompositionMessage.setSender(sender.get());
+			List<Company> sender = companyRepository.findByCode(owner.get().getCode());
+			if (sender.size() == 1) {
+				trainCompositionMessage.setSender(sender.get(0));
 			}
 		}
 

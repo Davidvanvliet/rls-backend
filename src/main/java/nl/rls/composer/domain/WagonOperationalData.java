@@ -1,9 +1,6 @@
 package nl.rls.composer.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,17 +20,14 @@ import nl.rls.composer.domain.code.BrakeType;
 @NoArgsConstructor
 @Getter
 @Setter
-public class WagonOperationalData {
-	@Id 	
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private int id;
+public class WagonOperationalData extends OwnedEntity {
 	/**
 	 * Type of braking system
 	 */
 	private BrakeType brakeType;
 	private int totalLoadWeight;
-//	private int brakeWeight;
-//	private int wagonMaxSpeed;
+	private int brakeWeight;
+	private int wagonMaxSpeed;
 //	@ManyToOne	
 //	private ExceptionalGaugingProfile exceptionalGaugingProfile;
 //	@ManyToOne

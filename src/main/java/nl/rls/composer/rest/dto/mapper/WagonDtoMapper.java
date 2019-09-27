@@ -8,6 +8,7 @@ import org.dozer.loader.api.FieldsMappingOptions;
 
 import nl.rls.composer.controller.WagonController;
 import nl.rls.composer.domain.Wagon;
+import nl.rls.composer.rest.dto.WagonCreateDto;
 import nl.rls.composer.rest.dto.WagonDto;
 
 public class WagonDtoMapper {
@@ -27,6 +28,17 @@ public class WagonDtoMapper {
 		WagonDto dto = mapper.map(entity, WagonDto.class);
 		dto.add(linkTo(methodOn(WagonController.class).getById(entity.getId())).withSelfRel());
 		return dto;
+	}
+
+	public static Wagon map(WagonCreateDto dto) {
+		DozerBeanMapper mapper = new DozerBeanMapper();
+		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
+			protected void configure() {
+			}
+		};
+		mapper.addMapping(mappingBuilder);
+		Wagon entity = mapper.map(dto, Wagon.class);
+		return entity;
 	}
 
 }

@@ -24,12 +24,12 @@ import nl.rls.composer.rest.dto.CompanyDto;
 import nl.rls.composer.rest.dto.mapper.CompanyDtoMapper;
 
 @RestController
-@RequestMapping("/api/v1/companies")
+@RequestMapping("/api/v1/companies/")
 public class CompanyController {
 	@Autowired
 	private CompanyRepository companyRepository;
 
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CompanyDto> getById(@PathVariable Integer id) {
 		Optional<Company> optional = companyRepository.findById(id);
 		if (optional.isPresent()) {
@@ -41,29 +41,26 @@ public class CompanyController {
 		}
 	}
 
-	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CompanyDto> getByCode(@RequestParam("code") String code) {
-		Optional<Company> optional = companyRepository.findByCode(code);
-		if (optional.isPresent()) {
-			CompanyDto companyDto = CompanyDtoMapper
-					.map(optional.get());
-			return ResponseEntity.ok(companyDto);
-		} else {
-			return ResponseEntity.notFound().build();
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Resources<CompanyDto>> getAll(
+		@RequestParam(name = "country", required = false) String countryIso, 
+		@RequestParam(name= "code", required = false) String code) {
+		Iterable<Company> companyList = null;
+		if (countryIso != null) {
+			companyList = companyRepository.findByCountryIso(countryIso);
+		} else if (code != null) {
+			companyList = companyRepository.findByCode(code);
+		} else if (code == null && countryIso == null) {
+			companyList = companyRepository.findAll();			
 		}
-	}
-
-	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<CompanyDto>> getAll() {
-		Iterable<Company> companyList = companyRepository.findAll();
+		
 		List<CompanyDto> companyDtoList = new ArrayList<>();
 
 		for (Company company : companyList) {
 			companyDtoList.add(CompanyDtoMapper.map(company));
 		}
-		Link companiesLink = linkTo(methodOn(CompanyController.class).getAll()).withSelfRel();
+		Link companiesLink = linkTo(methodOn(CompanyController.class).getAll(countryIso, code)).withSelfRel();
 		Resources<CompanyDto> locations = new Resources<CompanyDto>(companyDtoList, companiesLink);
 		return ResponseEntity.ok(locations);
 	}
-
 }

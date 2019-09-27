@@ -2196,7 +2196,7 @@ INSERT INTO restriction_code (code, forp, description) VALUES ('99', 'P', 'Other
 
 INSERT INTO loco_type_number (owner_id, type_code1, type_code2, country_code, series_number, serial_number) VALUES (1, '1', '123', '11', '1', '1')
 
-INSERT INTO operational_train_number (value, description) VALUES ('41350', 'De trein van John Doe');
+INSERT INTO operational_train_number (value, description) VALUES ('41350', 'De trein van Johan en Berend');
 INSERT INTO wagon_tech_data (name, code, length_over_buffers, wagon_number_of_axles, wagon_weight_empty, hand_brake_braked_weight) VALUES ('Fccpps', 'Fccpps', 964, 2, 10340, 0);
 INSERT INTO wagon_tech_data (name, code, length_over_buffers, wagon_number_of_axles, wagon_weight_empty, hand_brake_braked_weight) VALUES ('Klmos', 'Klmos', 1174, 2, 12500, 0);
 INSERT INTO wagon_tech_data (name, code, length_over_buffers, wagon_number_of_axles, wagon_weight_empty, hand_brake_braked_weight) VALUES ('Kls', 'Kls', 1386, 2, 12200, 0);

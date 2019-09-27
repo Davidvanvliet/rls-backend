@@ -47,10 +47,11 @@ public class TrainCompositionMessageXmlMapper {
 						info.taf_jsg.schemes.TrainCompositionJourneySection.class)
 								.fields("locomotives", field("locoIdent").accessible(true))
 								.fields("wagons", field("wagonData").accessible(true));
-				mapping(nl.rls.composer.domain.Wagon.class, info.taf_jsg.schemes.WagonData.class)
-						.fields("wagonNumberFreight.wagonNumberFreight", "wagonNumberFreight")
-						.fields("wagonNumberFreight.wagonTechData", "wagonTechData");
-
+				mapping(nl.rls.composer.domain.WagonInTrain.class, info.taf_jsg.schemes.WagonData.class)
+						.fields("wagonTrainPosition", "wagonTrainPosition")
+						.fields("wagon.wagonNumberFreight.wagonNumberFreight", "wagonNumberFreight")
+						.fields("wagon.wagonNumberFreight.wagonTechData", "wagonTechData")
+						.fields("wagon", "wagonOperationalData");
 			}
 		};
 		mapper.addMapping(mappingBuilder);
