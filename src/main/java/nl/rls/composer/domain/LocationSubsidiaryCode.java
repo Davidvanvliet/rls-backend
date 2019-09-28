@@ -8,14 +8,12 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
  * Code list
  *
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter

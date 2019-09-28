@@ -6,14 +6,12 @@ import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import nl.rls.composer.domain.code.BrakeType;
 
 /**
  * @author berend.wilkens
  * Wagon relevant data for the wagons within a running train
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter

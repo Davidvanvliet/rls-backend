@@ -8,13 +8,11 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
  * Additional codified information on the load. Coding Structures as defined in 404-2  chapter 4.1
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter @Setter

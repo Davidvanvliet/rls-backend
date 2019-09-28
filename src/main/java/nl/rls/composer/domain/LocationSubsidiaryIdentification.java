@@ -7,13 +7,11 @@ import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
  * Code, Name and allocation company of Subsidiary Location
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter @Setter

@@ -30,7 +30,7 @@ public class TrainCompositionMessageXmlMapper {
 								.fields("compositIdentifierOperationalType",
 										field("transportOperationalIdentifiers").accessible(true))
 								.fields("messageStatus", "messageStatus")
-								.fields("operationalTrainNumber", "operationalTrainNumber");
+								.fields("operationalTrainNumberIdentifier.operationalTrainNumber", "operationalTrainNumber");
 				mapping(LocationSubsidiaryIdentification.class, info.taf_jsg.schemes.LocationSubsidiaryIdentification.class)
 						.fields("locationSubsidiaryCode", "locationSubsidiaryCode.value")
 						.fields("allocationCompany.code", "allocationCompany");

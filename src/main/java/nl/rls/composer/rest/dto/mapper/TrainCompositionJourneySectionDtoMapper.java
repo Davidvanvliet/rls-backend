@@ -11,10 +11,10 @@ import org.dozer.loader.api.BeanMappingBuilder;
 import org.dozer.loader.api.FieldsMappingOptions;
 
 import nl.rls.composer.controller.TrainCompositionJourneySectionController;
-import nl.rls.composer.domain.Locomotive;
+import nl.rls.composer.domain.LocomotiveInTrain;
 import nl.rls.composer.domain.TrainCompositionJourneySection;
 import nl.rls.composer.domain.WagonInTrain;
-import nl.rls.composer.rest.dto.LocomotiveDto;
+import nl.rls.composer.rest.dto.LocomotiveInTrainDto;
 import nl.rls.composer.rest.dto.TrainCompositionJourneySectionDto;
 import nl.rls.composer.rest.dto.TrainCompositionJourneySectionPostDto;
 import nl.rls.composer.rest.dto.WagonInTrainDto;
@@ -44,9 +44,13 @@ public class TrainCompositionJourneySectionDtoMapper {
 		mapper.addMapping(mappingBuilder);
 		TrainCompositionJourneySectionDto dto = mapper.map(entity, TrainCompositionJourneySectionDto.class);
 
-		List<LocomotiveDto> locomotiveDtoList = new ArrayList<LocomotiveDto>();
-		for (Locomotive listItem : entity.getLocomotives()) {
-			locomotiveDtoList.add(LocomotiveDtoMapper.map(listItem));
+		List<LocomotiveInTrainDto> locomotiveDtoList = new ArrayList<LocomotiveInTrainDto>();
+		for (LocomotiveInTrain locomotiveInTrain : entity.getLocomotives()) {
+			LocomotiveInTrainDto locomotiveInTrainDto = new LocomotiveInTrainDto();
+			locomotiveInTrainDto.setLocomotive(LocomotiveDtoMapper.map(locomotiveInTrain.getLocomotive()));
+			locomotiveInTrainDto.setDriverIndication(locomotiveInTrain.getDriverIndication());
+			locomotiveInTrainDto.setTractionPositionInTrain(locomotiveInTrain.getTractionPositionInTrain());
+			locomotiveDtoList.add(locomotiveInTrainDto);
 		}
 		dto.setLocomotives(locomotiveDtoList);
 

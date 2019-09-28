@@ -8,13 +8,11 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
  * Acceptance agreement number, coded in UIC  404-2 chapter 4.9.2
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter @Setter

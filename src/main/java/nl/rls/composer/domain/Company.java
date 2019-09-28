@@ -13,13 +13,11 @@ import org.hibernate.annotations.NaturalId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
  * Identifies the RU, IM or other company involved in the Rail Transport Chain
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter @Setter

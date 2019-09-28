@@ -8,7 +8,10 @@ import org.dozer.loader.api.BeanMappingBuilder;
 
 import nl.rls.composer.controller.LocomotiveController;
 import nl.rls.composer.domain.Locomotive;
+import nl.rls.composer.domain.Wagon;
+import nl.rls.composer.rest.dto.LocomotiveCreateDto;
 import nl.rls.composer.rest.dto.LocomotiveDto;
+import nl.rls.composer.rest.dto.WagonCreateDto;
 
 public class LocomotiveDtoMapper {
 
@@ -27,6 +30,17 @@ public class LocomotiveDtoMapper {
 		LocomotiveDto dto = mapper.map(entity, LocomotiveDto.class);
 		dto.add(linkTo(methodOn(LocomotiveController.class).getById(entity.getId())).withSelfRel());
 		return dto;
+	}
+	
+	public static Locomotive map(LocomotiveCreateDto dto) {
+		DozerBeanMapper mapper = new DozerBeanMapper();
+		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
+			protected void configure() {
+			}
+		};
+		mapper.addMapping(mappingBuilder);
+		Locomotive entity = mapper.map(dto, Locomotive.class);
+		return entity;
 	}
 
 }

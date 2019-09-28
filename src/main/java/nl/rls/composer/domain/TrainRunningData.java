@@ -8,14 +8,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
  * 
  *         Train relevant data for a running train
  */
-@ToString
 @Entity
 @NoArgsConstructor
 public class TrainRunningData extends OwnedEntity {
@@ -112,8 +110,8 @@ public class TrainRunningData extends OwnedEntity {
 				trainWeight += wagon.getWagon().getWagonNumberFreight().getWagonTechData().getWagonWeightEmpty();
 				trainWeight += wagon.getWagon().getTotalLoadWeight();
 			}
-			for (Locomotive locomotive : train.getLocomotives()) {
-				trainWeight += locomotive.getWeight();
+			for (LocomotiveInTrain locomotive : train.getLocomotives()) {
+				trainWeight += locomotive.getLocomotive().getWeight();
 			}
 		}
 		return trainWeight;
@@ -128,8 +126,8 @@ public class TrainRunningData extends OwnedEntity {
 		for (WagonInTrain wagon : train.getWagons()) {
 			trainLength += wagon.getWagon().getWagonNumberFreight().getWagonTechData().getLengthOverBuffers();
 		}
-		for (Locomotive locomotive : train.getLocomotives()) {
-			trainLength += locomotive.getLengthOverBuffers();
+		for (LocomotiveInTrain locomotive : train.getLocomotives()) {
+			trainLength += locomotive.getLocomotive().getLengthOverBuffers();
 		}
 		return trainLength;
 	}
@@ -145,8 +143,8 @@ public class TrainRunningData extends OwnedEntity {
 		for (WagonInTrain wagon : train.getWagons()) {
 			numberOfAxles += wagon.getWagon().getWagonNumberFreight().getWagonTechData().getWagonNumberOfAxles();
 		}
-		for (Locomotive locomotive : train.getLocomotives()) {
-			numberOfAxles += locomotive.getNumberOfAxles();
+		for (LocomotiveInTrain locomotive : train.getLocomotives()) {
+			numberOfAxles += locomotive.getLocomotive().getNumberOfAxles();
 		}
 		return numberOfAxles;
 	}

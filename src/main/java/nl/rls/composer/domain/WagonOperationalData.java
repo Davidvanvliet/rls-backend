@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import nl.rls.composer.domain.code.BrakeType;
 
 /**
@@ -15,7 +14,6 @@ import nl.rls.composer.domain.code.BrakeType;
  *         its elements are optional (contract defines what IM requires). But if
  *         there is dangerous goods in the train, then this group is mandatory.
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter

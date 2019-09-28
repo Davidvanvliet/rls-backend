@@ -14,16 +14,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class WagonInTrain {
+public class LocomotiveInTrain {
 	@Id 	
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Integer id;
 	/**
-	 * Identifies the position of a wagon within a train.  
-	 * Sequential number starting with the first wagon at the front of train as N°1.
+	 * 0 - no driver present in Loco, 1 - driver(s) is /are) present in Loco
 	 */
-    private int wagonTrainPosition;
+	protected Integer driverIndication;
+	/**
+	 * Identifies position of intermediate traction unit(s) in the train indicating
+	 * after which wagon (specified by order number) the unit is placed.
+	 */
+	private Integer tractionPositionInTrain;
     @ManyToOne
-    private Wagon wagon;
+    private Locomotive locomotive;
 
 }

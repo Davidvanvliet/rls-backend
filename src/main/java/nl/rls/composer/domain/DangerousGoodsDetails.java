@@ -9,13 +9,11 @@ import javax.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
  * Identifies dangerous goods
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter @Setter

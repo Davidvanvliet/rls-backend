@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
@@ -18,7 +17,6 @@ import lombok.ToString;
  *         message. Codes are defined in UIC leaflet 505-1/503 and EN
  *         15273-2:2013 Code list.
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter

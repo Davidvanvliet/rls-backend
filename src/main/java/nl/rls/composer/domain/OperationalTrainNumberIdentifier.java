@@ -3,9 +3,6 @@ package nl.rls.composer.domain;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +13,7 @@ import lombok.ToString;
 @Entity
 @NoArgsConstructor
 @Getter @Setter
-public class OperationalTrainNumberIdentifier {
-	@Id 	
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private int id;
+public class OperationalTrainNumberIdentifier extends OwnedEntity {
     /**
      * Identifies the train for traffic management purposes by the Dispatcher, GSMR services, etc.
      */

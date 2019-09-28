@@ -11,13 +11,11 @@ import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
  * This element indicates the type of a dangerous load
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter @Setter

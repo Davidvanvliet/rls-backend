@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens 
@@ -13,7 +12,6 @@ import lombok.ToString;
  * elements identify the series of the loco, rest can identify the exact 
  * individual locomotive.
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter

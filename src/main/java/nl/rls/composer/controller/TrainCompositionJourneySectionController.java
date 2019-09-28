@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,16 +24,21 @@ import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.JourneySection;
 import nl.rls.composer.domain.LocationIdent;
+import nl.rls.composer.domain.Locomotive;
+import nl.rls.composer.domain.LocomotiveInTrain;
 import nl.rls.composer.domain.TrainCompositionJourneySection;
 import nl.rls.composer.domain.TrainRunningData;
 import nl.rls.composer.domain.Wagon;
 import nl.rls.composer.domain.WagonInTrain;
 import nl.rls.composer.repository.JourneySectionRepository;
 import nl.rls.composer.repository.LocationIdentRepository;
+import nl.rls.composer.repository.LocomotiveInTrainRepository;
+import nl.rls.composer.repository.LocomotiveRepository;
 import nl.rls.composer.repository.TrainCompositionJourneySectionRepository;
 import nl.rls.composer.repository.TrainRunningDataRepository;
 import nl.rls.composer.repository.WagonInTrainRepository;
 import nl.rls.composer.repository.WagonRepository;
+import nl.rls.composer.rest.dto.LocomotiveAddDto;
 import nl.rls.composer.rest.dto.TrainCompositionJourneySectionDto;
 import nl.rls.composer.rest.dto.TrainCompositionJourneySectionPostDto;
 import nl.rls.composer.rest.dto.WagonAddDto;
@@ -49,6 +55,10 @@ public class TrainCompositionJourneySectionController {
 	private JourneySectionRepository journeySectionRepository;
 	@Autowired
 	private TrainRunningDataRepository trainRunningDataRepository;
+	@Autowired
+	private LocomotiveRepository locomotiveRepository;
+	@Autowired
+	private LocomotiveInTrainRepository locomotiveInTrainRepository;
 	@Autowired
 	private WagonRepository wagonRepository;
 	@Autowired
@@ -99,7 +109,7 @@ public class TrainCompositionJourneySectionController {
 				.map(dto);
 		trainCompositionJourneySection.setOwnerId(ownerId);
 		JourneySection journeySection = new JourneySection();
-
+		journeySection.setOwnerId(ownerId);
 		Integer locationIdentId = DecodePath.decodeInteger(dto.getJourneySectionOrigin(), "locationidents");
 		Optional<LocationIdent> optional = locationIdentRepository.findByLocationPrimaryCode(locationIdentId);
 		if (optional.isPresent()) {
@@ -122,8 +132,39 @@ public class TrainCompositionJourneySectionController {
 		trainCompositionJourneySectionRepository.save(trainCompositionJourneySection);
 		TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper
 				.map(trainCompositionJourneySection);
-		return ResponseEntity.created(linkTo(methodOn(TrainCompositionJourneySectionController.class)
-				.getById(trainCompositionJourneySection.getId())).toUri()).body(trainCompositionJourneySectionDto);
+		return ResponseEntity
+				.created(linkTo(methodOn(TrainCompositionJourneySectionController.class)
+						.getById(trainCompositionJourneySection.getId())).toUri())
+				.body(trainCompositionJourneySectionDto);
+	}
+
+	@PostMapping(value = "{id}/locomotives", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<TrainCompositionJourneySectionDto> addLocomotive(@PathVariable int id,
+			@RequestBody LocomotiveAddDto dto) {
+		int ownerId = securityContext.getOwnerId();
+		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
+				.findByIdAndOwnerId(id, ownerId);
+		if (optional.isPresent()) {
+			int locomotiveId = DecodePath.decodeInteger(dto.getLocomotive(), "locomtives");
+			Optional<Locomotive> locomotive = locomotiveRepository.findByIdAndOwnerId(locomotiveId, ownerId);
+			if (locomotive.isPresent()) {
+				TrainCompositionJourneySection trainCompositionJourneySection = optional.get();
+				LocomotiveInTrain locomotiveInTrain = new LocomotiveInTrain();
+				locomotiveInTrain.setLocomotive(locomotive.get());
+				locomotiveInTrain.setTractionPositionInTrain(dto.getTractionPositionInTrain());
+				locomotiveInTrain.setDriverIndication(dto.getDriverIndication());
+				locomotiveInTrainRepository.save(locomotiveInTrain);
+				trainCompositionJourneySection.getLocomotives().add(locomotiveInTrain);
+				trainCompositionJourneySectionRepository.save(trainCompositionJourneySection);
+				TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper
+						.map(trainCompositionJourneySection);
+				return ResponseEntity
+						.created(linkTo(methodOn(TrainCompositionJourneySectionController.class)
+								.getById(trainCompositionJourneySection.getId())).toUri())
+						.body(trainCompositionJourneySectionDto);
+			}
+		}
+		return ResponseEntity.notFound().build();
 	}
 
 	@PostMapping(value = "{id}/wagons", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -145,10 +186,47 @@ public class TrainCompositionJourneySectionController {
 				trainCompositionJourneySectionRepository.save(trainCompositionJourneySection);
 				TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper
 						.map(trainCompositionJourneySection);
-				return ResponseEntity.created(linkTo(methodOn(TrainCompositionJourneySectionController.class)
-						.getById(trainCompositionJourneySection.getId())).toUri()).body(trainCompositionJourneySectionDto);
+				return ResponseEntity
+						.created(linkTo(methodOn(TrainCompositionJourneySectionController.class)
+								.getById(trainCompositionJourneySection.getId())).toUri())
+						.body(trainCompositionJourneySectionDto);
 			}
 		}
 		return ResponseEntity.notFound().build();
+	}
+
+	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<TrainCompositionJourneySectionDto> update(@PathVariable int id,
+			@RequestBody TrainCompositionJourneySectionPostDto dto) {
+		int ownerId = securityContext.getOwnerId();
+		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
+				.findByIdAndOwnerId(id, ownerId);
+		if (optional.isPresent()) {
+			TrainCompositionJourneySection trainCompositionJourneySection = optional.get();
+			trainCompositionJourneySection.setLivestockOrPeopleIndicator(dto.getLivestockOrPeopleIndicator());
+			Integer locationIdentId = DecodePath.decodeInteger(dto.getJourneySectionOrigin(), "locationidents");
+			Optional<LocationIdent> locationIdent = locationIdentRepository.findByLocationPrimaryCode(locationIdentId);
+			if (locationIdent.isPresent()) {
+				trainCompositionJourneySection.getJourneySection().setJourneySectionOrigin(locationIdent.get());
+			}
+
+			locationIdentId = DecodePath.decodeInteger(dto.getJourneySectionDestination(), "locationidents");
+			locationIdent = locationIdentRepository.findByLocationPrimaryCode(locationIdentId);
+			if (locationIdent.isPresent()) {
+				trainCompositionJourneySection.getJourneySection().setJourneySectionDestination(locationIdent.get());
+			}
+			journeySectionRepository.save(trainCompositionJourneySection.getJourneySection());
+		
+			trainCompositionJourneySection.getTrainRunningData().setTrainType(dto.getTrainType());
+			trainRunningDataRepository.save(trainCompositionJourneySection.getTrainRunningData());
+			trainCompositionJourneySectionRepository.save(trainCompositionJourneySection);
+			TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper
+					.map(trainCompositionJourneySection);
+			return ResponseEntity
+						.accepted()
+						.body(trainCompositionJourneySectionDto);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }

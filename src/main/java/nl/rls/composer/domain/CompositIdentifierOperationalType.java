@@ -11,7 +11,6 @@ import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
@@ -19,7 +18,6 @@ import lombok.ToString;
  * Used for unique identification of the objects handled in the messages such as train, 
  * path, path request or case refernce.
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter @Setter

@@ -12,7 +12,6 @@ import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
@@ -49,7 +48,6 @@ import lombok.ToString;
  *         the train composition to the path and train data as mentioned in
  *         Chapter 4.2.2.1 (Path request, Preliminary remarks).
  */
-@ToString
 @NoArgsConstructor
 @Getter
 @Setter
@@ -63,14 +61,6 @@ public class TrainCompositionMessage extends GenericMessage {
 	private List<CompositIdentifierOperationalType> compositIdentifierOperationalType = new ArrayList<CompositIdentifierOperationalType>();
 	@ManyToOne
 	private OperationalTrainNumberIdentifier operationalTrainNumberIdentifier;
-	/**
-	 * Identifies the train for traffic management purposes by the Dispatcher, GSMR
-	 * services, etc.
-	 */
-	private String operationalTrainNumber;
-	/**
-	 * Transfer point or station of destination in the considered network
-	 */
 	@ManyToOne
 	private LocationIdent transferPoint;
 	/**

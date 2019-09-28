@@ -20,7 +20,7 @@ public class TrainCompositionJourneySectionDto extends ResourceSupport {
     private CompanyDto responsibilityActualSectionRU;
     private CompanyDto responsibilityNextSectionRU;
     private TrainRunningDataDto trainRunningData;
-    private List<LocomotiveDto> locomotives  = new ArrayList<LocomotiveDto>();;
+    private List<LocomotiveInTrainDto> locomotives  = new ArrayList<LocomotiveInTrainDto>();;
     private List<WagonInTrainDto> wagons  = new ArrayList<WagonInTrainDto>();
     private Integer exceptionalGaugingInd;
     private Integer livestockOrPeopleIndicator;

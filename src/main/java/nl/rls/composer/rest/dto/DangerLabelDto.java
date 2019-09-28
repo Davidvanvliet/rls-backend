@@ -9,9 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LocomotiveDto extends ResourceSupport {
-	protected TractionTypeDto tractionType;
-	protected String locoTypeNumber;
-	protected String locoNumber;
-	protected TractionModeDto tractionMode;
+public class DangerLabelDto extends ResourceSupport {
+	private String value;
+	private String description;
 }

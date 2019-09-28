@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.URL;
 import nl.rls.composer.domain.JourneySection;
 import nl.rls.composer.domain.LocationIdent;
@@ -37,10 +38,14 @@ public class JourneySectionController {
 	private JourneySectionRepository journeySectionRepository;
 	@Autowired
 	private LocationIdentRepository locationIdentRepository;
+	@Autowired
+	private SecurityContext securityContext;
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JourneySectionDto> getJourneySection(@PathVariable Integer id) {
-		Optional<JourneySection> optional = journeySectionRepository.findById(id);
+		int ownerId = securityContext.getOwnerId();
+
+		Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
 			JourneySectionDto journeySectionDto = JourneySectionDtoMapper.map(optional.get());
 			return ResponseEntity.ok(journeySectionDto);
@@ -51,8 +56,9 @@ public class JourneySectionController {
 
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Resources<JourneySectionDto>> getAll() {
+		int ownerId = securityContext.getOwnerId();
 
-		Iterable<JourneySection> journeySectionList = journeySectionRepository.findAll();
+		Iterable<JourneySection> journeySectionList = journeySectionRepository.findByOwnerId(ownerId);
 		List<JourneySectionDto> journeySectionDtoList = new ArrayList<>();
 
 		for (JourneySection journeySection : journeySectionList) {
@@ -66,7 +72,9 @@ public class JourneySectionController {
 
 	@PutMapping(value = "/{id}/origin")
 	public ResponseEntity<JourneySectionDto> setOriginByCode(@PathVariable("id") Integer id, @RequestParam("code") String code) {
-		Optional<JourneySection> journeySectionOptional = journeySectionRepository.findById(id);
+		int ownerId = securityContext.getOwnerId();
+
+		Optional<JourneySection> journeySectionOptional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
 		if (!journeySectionOptional.isPresent()) {
 		
 		}
@@ -81,33 +89,5 @@ public class JourneySectionController {
 		return ResponseEntity.ok(journeySectionDto);
 	}
 
-	@PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JourneySectionDto> create(@RequestBody JourneySectionPostDto dto) {
-		JourneySection journeySection = new JourneySection();
-		journeySection.setOwnerId(1);
-		//journeySectionRepository.save(journeySection);
-		URL url = new URL(dto.getJourneySectionOrigin());
-		String locationidents = url.getChildDirectory("locationidents");
-		System.out.println("locationidents " + locationidents);
-		Integer locationIdentId = new Integer(locationidents);
-		Optional<LocationIdent> locationIdentOptional = locationIdentRepository.findByLocationPrimaryCode(locationIdentId);
-		if (locationIdentOptional.isPresent()) {
-			journeySection.setJourneySectionOrigin(locationIdentOptional.get());
-		}
-
-		url = new URL(dto.getJourneySectionDestination());
-		locationidents = url.getChildDirectory("locationidents");
-		System.out.println(url +" locationidents " + locationidents);
-		locationIdentId = new Integer(locationidents);
-		locationIdentOptional = locationIdentRepository.findByLocationPrimaryCode(locationIdentId);
-		if (locationIdentOptional.isPresent()) {
-			journeySection.setJourneySectionDestination(locationIdentOptional.get());
-		}
-
-		journeySectionRepository.save(journeySection);
-		JourneySectionDto journeySectionDto = JourneySectionDtoMapper.map(journeySection);
-	    
-		return ResponseEntity.ok(journeySectionDto);
-	}
 
 }

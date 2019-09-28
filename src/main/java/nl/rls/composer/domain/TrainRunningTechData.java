@@ -10,7 +10,6 @@ import lombok.ToString;
 /**
  * @author berend.wilkens Shows the relevant techical data for a running train
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter

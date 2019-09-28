@@ -34,6 +34,7 @@ import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Company;
 import nl.rls.composer.domain.JourneySection;
 import nl.rls.composer.domain.LocationIdent;
+import nl.rls.composer.domain.OperationalTrainNumberIdentifier;
 import nl.rls.composer.domain.Responsibility;
 import nl.rls.composer.domain.TrainCompositionJourneySection;
 import nl.rls.composer.domain.TrainCompositionMessage;
@@ -43,6 +44,7 @@ import nl.rls.composer.domain.message.MessageStatus;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.repository.JourneySectionRepository;
 import nl.rls.composer.repository.LocationIdentRepository;
+import nl.rls.composer.repository.OperationalTrainNumberIdentifierRepository;
 import nl.rls.composer.repository.ResponsibilityRepository;
 import nl.rls.composer.repository.TrainCompositionJourneySectionRepository;
 import nl.rls.composer.repository.TrainCompositionMessageRepository;
@@ -69,6 +71,8 @@ public class TrainCompositionMessageController {
 	private TrainCompositionJourneySectionRepository trainCompositionJourneySectionRepository;
 	@Autowired
 	private JourneySectionRepository journeySectionRepository;
+	@Autowired
+	private OperationalTrainNumberIdentifierRepository operationalTrainNumberIdentifierRepository;
 
 	@Autowired
 	private SecurityContext securityContext;
@@ -149,7 +153,13 @@ public class TrainCompositionMessageController {
 		trainCompositionMessage.setMessageTypeVersion(MessageType.TRAIN_COMPOSITION_MESSAGE.version());
 		trainCompositionMessage.setMessageStatus(MessageStatus.creation.getValue());
 		trainCompositionMessage.setSenderReference(UUID.randomUUID().toString());
-		trainCompositionMessage.setOperationalTrainNumber(dto.getOperationalTrainNumber());
+		
+		OperationalTrainNumberIdentifier operationalTrainNumberIdentifier = new OperationalTrainNumberIdentifier(
+				"41350", new Date(), new Date());
+		operationalTrainNumberIdentifier.setOwnerId(ownerId);
+		operationalTrainNumberIdentifierRepository.save(operationalTrainNumberIdentifier);
+		trainCompositionMessage.setOperationalTrainNumberIdentifier(operationalTrainNumberIdentifier);
+
 		/* ProRail = 0084 */
 		List<Company> recipient = companyRepository.findByCode("0084");
 		if (recipient.size() == 1) {

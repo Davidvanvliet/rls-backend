@@ -7,7 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -15,13 +14,11 @@ import javax.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
  * Defines the make up of a train for each section of its journey
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter @Setter
@@ -34,9 +31,9 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	@OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="train_running_data_id") 
 	private TrainRunningData trainRunningData;
-    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "train_composition_journey_section_id")
-    private List<Locomotive> locomotives = new ArrayList<Locomotive>();
+    private List<LocomotiveInTrain> locomotives = new ArrayList<LocomotiveInTrain>();
     /**
      * Indicates that livestock and people (other than train crew) will be carried. 
      * Coding: if live animals or people are transported = 1, in opposite case = 0. 

@@ -6,13 +6,11 @@ import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author berend.wilkens
  * Defines the data provided by the IM for a journey section
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter 
