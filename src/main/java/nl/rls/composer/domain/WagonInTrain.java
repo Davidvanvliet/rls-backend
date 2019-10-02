@@ -25,5 +25,7 @@ public class WagonInTrain {
     private int wagonTrainPosition;
     @ManyToOne
     private Wagon wagon;
+    @ManyToOne
+    private TrainCompositionJourneySection trainCompositionJourneySection;
 
 }

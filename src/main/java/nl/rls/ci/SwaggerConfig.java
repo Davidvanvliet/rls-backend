@@ -25,7 +25,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiEndPointsInfo() {
-        return new ApiInfoBuilder().title("Rls Common Interface REST API")
+        return new ApiInfoBuilder().title("RLS Common Interface REST API")
             .description("Common Interface REST API")
             .contact(new Contact("Berend Wilkens", "www.koekoeksplein.nl", "berend.j.wilkens@gmail.com"))
             .license("Apache 2.0")

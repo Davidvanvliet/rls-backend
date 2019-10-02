@@ -11,7 +11,7 @@ import nl.rls.composer.domain.code.TrainActivityType;
 @Entity
 @NoArgsConstructor
 @Getter @Setter
-public class Activity extends OwnedEntity {
+public class ActivityInTrain extends OwnedEntity {
 	/**
 	 * Indicates certain treatments or operations required for a train.  If national codes are used, the first 2 position will be the ISO country code, followed by 00-99.
 	 */
@@ -19,4 +19,6 @@ public class Activity extends OwnedEntity {
     private TrainActivityType trainActivityType;
     @ManyToOne
     private LocationIdent activityLocationIdent;
+    @ManyToOne
+    private TrainRunningData trainRunningData;
 }

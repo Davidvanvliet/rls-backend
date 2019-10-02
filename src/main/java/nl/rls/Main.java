@@ -28,7 +28,8 @@ import nl.rls.ci.aa.repository.LicenseRepository;
 import nl.rls.ci.aa.repository.OwnerRepository;
 import nl.rls.ci.aa.repository.RoleRepository;
 import nl.rls.ci.aa.repository.UserRepository;
-import nl.rls.composer.domain.Activity;
+
+import nl.rls.composer.domain.ActivityInTrain;
 import nl.rls.composer.domain.Company;
 import nl.rls.composer.domain.CompositIdentifierOperationalType;
 import nl.rls.composer.domain.GenericMessage;
@@ -50,7 +51,7 @@ import nl.rls.composer.domain.code.TractionMode;
 import nl.rls.composer.domain.code.TractionType;
 import nl.rls.composer.domain.code.TrainActivityType;
 import nl.rls.composer.domain.message.MessageStatus;
-import nl.rls.composer.repository.ActivityRepository;
+import nl.rls.composer.repository.ActivityInTrainRepository;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.repository.CompositIdentifierOperationalTypeRepository;
 import nl.rls.composer.repository.JourneySectionRepository;
@@ -82,7 +83,7 @@ public class Main {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private ActivityRepository activityRepository;
+	private ActivityInTrainRepository activityInTrainRepository;
 	@Autowired
 	private JourneySectionRepository journeySectionRepository;
 	@Autowired
@@ -205,6 +206,7 @@ public class Main {
 			 */
 			System.out.println("trainCompositionMessage 1.3.3");
 			CompositIdentifierOperationalType compositIdentifierOperationalType = new CompositIdentifierOperationalType();
+			compositIdentifierOperationalType.setOwnerId(ownerId);
 			compositIdentifierOperationalType.setCompany(companyRepository.findByCode("3502").get(0));
 			compositIdentifierOperationalType.setObjectType("TR");
 			compositIdentifierOperationalType.setCore("041350222700");
@@ -252,11 +254,12 @@ public class Main {
 			System.out.println("trainCompositionMessage 1.7");
 			TrainRunningData trainRunningData = new TrainRunningData(ownerId);
 			trainRunningData.setDangerousGoodsIndicator(false);
+			trainRunningData.setExceptionalGaugingInd(false);;
 			Optional<TrainActivityType> trainActivityType = trainActivityTypeRepository.findByCode("0003");
-			Activity activity = new Activity();
+			ActivityInTrain activity = new ActivityInTrain();
 			activity.setTrainActivityType(trainActivityType.get());
 			activity.setActivityLocationIdent(journeySectionDestination.get());
-			activityRepository.save(activity);
+			activityInTrainRepository.save(activity);
 			trainRunningData.getActivities().add(activity);
 			trainRunningData.setTrainType(2);
 			trainRunningData.setTrainMaxSpeed(100);

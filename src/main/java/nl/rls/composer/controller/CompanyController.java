@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
 import nl.rls.composer.domain.Company;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.rest.dto.CompanyDto;
 import nl.rls.composer.rest.dto.mapper.CompanyDtoMapper;
 
+@Api(value = "Access to all companies, RU's and IM's")
 @RestController
 @RequestMapping("/api/v1/companies/")
 public class CompanyController {

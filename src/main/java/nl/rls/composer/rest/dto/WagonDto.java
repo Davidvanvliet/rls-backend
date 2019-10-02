@@ -13,6 +13,9 @@ import lombok.Setter;
 @Getter @Setter
 public class WagonDto extends ResourceSupport {
 	private WagonIdentDto wagonIdent;
-    private WagonOperationalDataDto wagonOperationalData;
+	private String brakeType;
+	private int totalLoadWeight;
+	private int brakeWeight;
+	private int wagonMaxSpeed;
 
 }

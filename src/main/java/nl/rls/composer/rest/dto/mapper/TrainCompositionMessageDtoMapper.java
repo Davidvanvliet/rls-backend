@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
-import org.dozer.loader.api.FieldsMappingOptions;
 
 import nl.rls.composer.controller.CompanyController;
 import nl.rls.composer.controller.LocationIdentController;
@@ -25,9 +24,7 @@ public class TrainCompositionMessageDtoMapper {
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
 				mapping(TrainCompositionMessage.class, TrainCompositionMessageDto.class)
-				.fields("transfereeIM", "transfereeIM", FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.mapper.CompanyConverter"))
-				.fields("transferPoint", "transferPoint", FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.mapper.LocationIdentConverter"))
-//				.fields("transfereeIM.code", "transfereeIM")
+				.fields("operationalTrainNumberIdentifier.operationalTrainNumber", "operationalTrainNumber")
 				.fields("sender.code", "sender")
 				.fields("recipient.code", "recipient")
 				;

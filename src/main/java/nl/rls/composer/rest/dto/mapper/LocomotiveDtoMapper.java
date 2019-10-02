@@ -8,10 +8,8 @@ import org.dozer.loader.api.BeanMappingBuilder;
 
 import nl.rls.composer.controller.LocomotiveController;
 import nl.rls.composer.domain.Locomotive;
-import nl.rls.composer.domain.Wagon;
 import nl.rls.composer.rest.dto.LocomotiveCreateDto;
 import nl.rls.composer.rest.dto.LocomotiveDto;
-import nl.rls.composer.rest.dto.WagonCreateDto;
 
 public class LocomotiveDtoMapper {
 

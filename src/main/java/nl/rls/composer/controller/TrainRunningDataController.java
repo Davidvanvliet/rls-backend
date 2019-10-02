@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.composer.domain.ActivityInTrain;
 import nl.rls.composer.domain.TrainRunningData;
 import nl.rls.composer.repository.TrainRunningDataRepository;
+import nl.rls.composer.rest.dto.ActivityInTrainDto;
 import nl.rls.composer.rest.dto.TrainRunningDataDto;
+import nl.rls.composer.rest.dto.mapper.ActivityInTrainDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainRunningDataDtoMapper;
 
 @RestController
@@ -35,6 +38,20 @@ public class TrainRunningDataController {
 		} else {
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@GetMapping(value = "{id}/activity/{activityId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ActivityInTrainDto> getActivityInTrain(@PathVariable Integer id, @PathVariable Integer activityId) {
+		int ownerId = securityContext.getOwnerId();
+		Optional<TrainRunningData> optional = trainRunningDataRepository
+				.findByIdAndOwnerId(id, ownerId);
+		if (optional.isPresent()) {
+			TrainRunningData entity = optional.get();
+			ActivityInTrain activityInTrain = entity.getActivityById(activityId);
+			ActivityInTrainDto dto = ActivityInTrainDtoMapper.map(activityInTrain);
+			return ResponseEntity.ok(dto);
+		}
+		return ResponseEntity.notFound().build();
 	}
 
 }

@@ -30,7 +30,7 @@ public class TrainActivityTypeController {
 	private TrainActivityTypeRepository trainActivityTypeRepository;
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TrainActivityTypeDto> getTrainActivityType(@PathVariable Integer id) {
+	public ResponseEntity<TrainActivityTypeDto> getById(@PathVariable Integer id) {
 		Optional<TrainActivityType> optional = trainActivityTypeRepository.findById(id);
 		if (optional.isPresent()) {
 			TrainActivityTypeDto trainActivityTypeDto = TrainActivityTypeDtoMapper
@@ -42,7 +42,7 @@ public class TrainActivityTypeController {
 	}
 
 	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TrainActivityTypeDto> getTrainActivityTypeByCode(@RequestParam("code") String code) {
+	public ResponseEntity<TrainActivityTypeDto> getByCode(@RequestParam("code") String code) {
 		Optional<TrainActivityType> optional = trainActivityTypeRepository.findByCode(code);
 		if (optional.isPresent()) {
 			TrainActivityTypeDto trainActivityTypeDto = TrainActivityTypeDtoMapper

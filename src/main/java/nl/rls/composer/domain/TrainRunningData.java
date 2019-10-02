@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -26,7 +27,8 @@ public class TrainRunningData extends OwnedEntity {
 	private Boolean exceptionalGaugingInd;
 	private Boolean dangerousGoodsIndicator;
 	@OneToMany
-	private List<Activity> activities = new ArrayList<>();
+	@JoinColumn(name = "train_running_data_id")
+	private List<ActivityInTrain> activities = new ArrayList<>();
 	/*
 	 * TrainRunningTechData:
 	 */
@@ -76,11 +78,11 @@ public class TrainRunningData extends OwnedEntity {
 		this.dangerousGoodsIndicator = dangerousGoodsIndicator;
 	}
 
-	public List<Activity> getActivities() {
+	public List<ActivityInTrain> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(List<Activity> activities) {
+	public void setActivities(List<ActivityInTrain> activities) {
 		this.activities = activities;
 	}
 
@@ -147,6 +149,15 @@ public class TrainRunningData extends OwnedEntity {
 			numberOfAxles += locomotive.getLocomotive().getNumberOfAxles();
 		}
 		return numberOfAxles;
+	}
+
+	public ActivityInTrain getActivityById(Integer activityId) {
+		for (ActivityInTrain ait : activities) {
+			if (ait.getId() == activityId) {
+				return ait;
+			}
+		}
+		return null;
 	}
 
 }

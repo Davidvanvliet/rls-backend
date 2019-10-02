@@ -1,0 +1,1497 @@
+{
+	"info": {
+		"name": "rls - tcm",
+		"_postman_id": "cd178625-fd0c-b067-3075-e2379125d056",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/sign-up berend copy",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"berend@koekoeksplein.nl\",\r\n  \"firstName\" : \"Berend\",\r\n  \"lastName\" : \"Wilkens\",\r\n  \"password\": \"password\"\r\n}"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}/sign-up/berend@koekoeksplein.nl",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"sign-up",
+						"berend@koekoeksplein.nl"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "/login Berend copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f856910b-c86a-49c7-ac98-87c80a963f29",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Header \\\"Authorization\\\" is present\"] = postman.getResponseHeader(\"Authorization\"); ",
+							"pm.variables.set(\"Authorization\", postman.getResponseHeader(\"Authorization\"));",
+							"postman.setEnvironmentVariable(\"token\", postman.getResponseHeader(\"Authorization\"));",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Header \\\"Authorization\\\" is present\", function () {",
+							"    pm.response.to.have.header(\"Authorization\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"berend@koekoeksplein.nl\",\r\n  \"password\": \"password\"\r\n}"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}/login",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/companies/101",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/companies/101",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"companies",
+						"101"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/companies/?country=NL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/companies/?country=NL",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"companies",
+						""
+					],
+					"query": [
+						{
+							"key": "country",
+							"value": "NL",
+							"equals": true
+						}
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/locationidents/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/locationidents/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"locationidents",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/locationidents/100",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/locationidents/100",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"locationidents",
+						"100"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/locationidents?code=Ut",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/locationidents?code=Ut",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"locationidents"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "Ut",
+							"equals": true
+						}
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/wagontechdata/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/wagontechdata/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"wagontechdata",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/wagontechdata/1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/wagontechdata/1",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"wagontechdata",
+						"1"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/trainactivitytypes/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/trainactivitytypes/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"trainactivitytypes",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/trainactivitytypes/15",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/trainactivitytypes/15",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"trainactivitytypes",
+						"15"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/dangerlabels/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/dangerlabels/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"dangerlabels",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/trainactivitytypes?code=0015",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/trainactivitytypes?code=0015",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"trainactivitytypes"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "0015",
+							"equals": true
+						}
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/traincompositionmessages/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a8e004ca-1904-487a-a0a1-08eefc09a632",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/traincompositionmessages/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"traincompositionmessages",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/traincompositionmessages/1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a8e004ca-1904-487a-a0a1-08eefc09a632",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/traincompositionmessages/1",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"traincompositionmessages",
+						"1"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/traincompositionmessages/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f5b8af28-efa4-4dc6-bcac-28f345e2a9de",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transferPoint\": \"http://localhost:5000/api/v1/locationidents/1006\",\n    \"operationalTrainNumber\" : \"684565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/traincompositionmessages/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"traincompositionmessages",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/traincompositionmessages/1/journeysections/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f5b8af28-efa4-4dc6-bcac-28f345e2a9de",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"dangerousGoodsIndicator\": 0,\r\n  \"exceptionalGaugingInd\": 0,\r\n  \"journeySectionDestination\": \"http://localhost:5000/api/v1/locationidents/1195\",\r\n  \"journeySectionOrigin\": \"http://localhost:5000/api/v1/locationidents/369\",\r\n  \"livestockOrPeopleIndicator\": 0,\r\n  \"trainType\": 2\r\n}"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/traincompositionmessages/1/journeysections/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"traincompositionmessages",
+						"1",
+						"journeysections",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/wagonidents/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/wagonidents/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"wagonidents",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/wagonidents/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f5b8af28-efa4-4dc6-bcac-28f345e2a9de",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/wagonidents/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"wagonidents",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/wagonidents/1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af47a60c-2fb3-4bba-aa75-0aa8fe745e89",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"wagonTechData\": \"http://localhost:5000/api/v1/wagontechdata/2\",\n    \"wagonNumberFreight\" : \"686784565\"\n}\n"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/wagonidents/2",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"wagonidents",
+						"2"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/wagons",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "736040a9-2030-4678-ae20-fc3e260ff675",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"brakeType\": \"B\",\r\n  \"brakeWeight\": 1000,\r\n  \"totalLoadWeight\": 15000,\r\n  \"wagonIdent\": \"http://localhost:5000/api/v1/wagonidents/3\",\r\n  \"wagonMaxSpeed\": 100\r\n}"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/wagons/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"wagons",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/wagons",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f5b8af28-efa4-4dc6-bcac-28f345e2a9de",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"brakeType\": \"B\",\r\n  \"brakeWeight\": 1000,\r\n  \"totalLoadWeight\": 15000,\r\n  \"wagonIdent\": \"http://localhost:5000/api/v1/wagonidents/3\",\r\n  \"wagonMaxSpeed\": 100\r\n}"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}//api/v1/wagons/",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"wagons",
+						""
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/traincompositionjourneysections/1/wagons",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f5b8af28-efa4-4dc6-bcac-28f345e2a9de",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"wagon\": \"http://localhost:5000/api/v1/wagons/1\",\r\n  \"wagonTrainPosition\" : \"3\"\r\n}"
+				},
+				"url": {
+					"raw": "http://{{host-ci}}/api/v1/traincompositionjourneysections/1/wagons",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"traincompositionjourneysections",
+						"1",
+						"wagons"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "api/v1/traincompositionjourneysections/1/wagons/1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d9881b6c-4dac-426a-aae9-f2e956c90dcd",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/hal+json\", function () {",
+							"    postman.getResponseHeader(\"Content-Type\") == \"application/hal+json;charset=UTF-8\"",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host-ci}}/api/v1/traincompositionjourneysections/1/wagons/1",
+					"protocol": "http",
+					"host": [
+						"{{host-ci}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"traincompositionjourneysections",
+						"1",
+						"wagons",
+						"1"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		}
+	]
+}

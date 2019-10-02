@@ -19,7 +19,7 @@ public class TrainActivityTypeDtoMapper {
 		};
 		mapper.addMapping(mappingBuilder);
 		TrainActivityTypeDto trainActivityTypeDto = mapper.map(trainActivityType, TrainActivityTypeDto.class);
-		trainActivityTypeDto.add(linkTo(methodOn(TrainActivityTypeController.class).getTrainActivityType(trainActivityType.getId())).withSelfRel());
+		trainActivityTypeDto.add(linkTo(methodOn(TrainActivityTypeController.class).getById(trainActivityType.getId())).withSelfRel());
 		return trainActivityTypeDto;
 	}
 

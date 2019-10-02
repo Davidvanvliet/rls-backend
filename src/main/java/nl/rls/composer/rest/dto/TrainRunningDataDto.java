@@ -14,7 +14,7 @@ import lombok.Setter;
 public class TrainRunningDataDto extends ResourceSupport {
 	protected Boolean exceptionalGaugingInd;
 	protected Boolean dangerousGoodsIndicator;
-	protected List<ActivityDto> activities;
+	protected List<ActivityInTrainDto> activities;
 	private int trainType;
 	private int trainWeight;
 	private int trainLength;

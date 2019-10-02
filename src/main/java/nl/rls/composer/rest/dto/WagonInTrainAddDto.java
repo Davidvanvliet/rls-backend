@@ -9,7 +9,7 @@ import lombok.Setter;
 @XmlRootElement
 @NoArgsConstructor
 @Getter @Setter
-public class WagonAddDto {
+public class WagonInTrainAddDto {
     private int wagonTrainPosition;
 	private String wagon;
 }

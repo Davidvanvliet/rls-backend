@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 
 import nl.rls.composer.domain.JourneySection;
-import nl.rls.composer.domain.Locomotive;
 
 public interface JourneySectionRepository extends CrudRepository<JourneySection, Integer> {
 	Optional<JourneySection> findByIdAndOwnerId(int id, int ownerId);

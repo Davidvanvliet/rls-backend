@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ActivityDto extends ResourceSupport {
-    private TrainActivityTypeDto trainActivityType;
-    private LocationIdentDto activityLocationIdent;
+public class ActivityInTrainDto extends ResourceSupport {
+//    private TrainActivityTypeDto trainActivityType;
+//    private LocationIdentDto activityLocationIdent;
 }

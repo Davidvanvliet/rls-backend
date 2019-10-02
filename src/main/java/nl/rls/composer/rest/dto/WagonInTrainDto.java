@@ -1,5 +1,7 @@
 package nl.rls.composer.rest.dto;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class WagonInTrainDto {
+public class WagonInTrainDto extends ResourceSupport {
     private int wagonTrainPosition;
     private WagonDto wagon;
 }
