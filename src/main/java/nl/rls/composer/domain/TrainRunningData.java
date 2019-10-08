@@ -1,11 +1,6 @@
 package nl.rls.composer.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import lombok.NoArgsConstructor;
@@ -26,9 +21,6 @@ public class TrainRunningData extends OwnedEntity {
 	private TrainCompositionJourneySection train;
 	private Boolean exceptionalGaugingInd;
 	private Boolean dangerousGoodsIndicator;
-	@OneToMany
-	@JoinColumn(name = "train_running_data_id")
-	private List<ActivityInTrain> activities = new ArrayList<>();
 	/*
 	 * TrainRunningTechData:
 	 */
@@ -78,14 +70,6 @@ public class TrainRunningData extends OwnedEntity {
 		this.dangerousGoodsIndicator = dangerousGoodsIndicator;
 	}
 
-	public List<ActivityInTrain> getActivities() {
-		return activities;
-	}
-
-	public void setActivities(List<ActivityInTrain> activities) {
-		this.activities = activities;
-	}
-
 	public int getTrainType() {
 		return trainType;
 	}
@@ -112,8 +96,8 @@ public class TrainRunningData extends OwnedEntity {
 				trainWeight += wagon.getWagon().getWagonNumberFreight().getWagonTechData().getWagonWeightEmpty();
 				trainWeight += wagon.getWagon().getTotalLoadWeight();
 			}
-			for (LocomotiveInTrain locomotive : train.getLocomotives()) {
-				trainWeight += locomotive.getLocomotive().getWeight();
+			for (TractionInTrain traction : train.getTractions()) {
+				trainWeight += traction.getTraction().getWeight();
 			}
 		}
 		return trainWeight;
@@ -128,15 +112,15 @@ public class TrainRunningData extends OwnedEntity {
 		for (WagonInTrain wagon : train.getWagons()) {
 			trainLength += wagon.getWagon().getWagonNumberFreight().getWagonTechData().getLengthOverBuffers();
 		}
-		for (LocomotiveInTrain locomotive : train.getLocomotives()) {
-			trainLength += locomotive.getLocomotive().getLengthOverBuffers();
+		for (TractionInTrain traction : train.getTractions()) {
+			trainLength += traction.getTraction().getLengthOverBuffers();
 		}
 		return trainLength;
 	}
 
 	public int getNumberOfVehicles() {
 		int numberOfVehicles = train.getWagons().size();
-		numberOfVehicles += train.getLocomotives().size();
+		numberOfVehicles += train.getTractions().size();
 		return numberOfVehicles;
 	}
 
@@ -145,19 +129,9 @@ public class TrainRunningData extends OwnedEntity {
 		for (WagonInTrain wagon : train.getWagons()) {
 			numberOfAxles += wagon.getWagon().getWagonNumberFreight().getWagonTechData().getWagonNumberOfAxles();
 		}
-		for (LocomotiveInTrain locomotive : train.getLocomotives()) {
-			numberOfAxles += locomotive.getLocomotive().getNumberOfAxles();
+		for (TractionInTrain traction : train.getTractions()) {
+			numberOfAxles += traction.getTraction().getNumberOfAxles();
 		}
 		return numberOfAxles;
 	}
-
-	public ActivityInTrain getActivityById(Integer activityId) {
-		for (ActivityInTrain ait : activities) {
-			if (ait.getId() == activityId) {
-				return ait;
-			}
-		}
-		return null;
-	}
-
 }

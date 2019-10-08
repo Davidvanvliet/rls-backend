@@ -28,17 +28,15 @@ import nl.rls.ci.aa.repository.LicenseRepository;
 import nl.rls.ci.aa.repository.OwnerRepository;
 import nl.rls.ci.aa.repository.RoleRepository;
 import nl.rls.ci.aa.repository.UserRepository;
-
-import nl.rls.composer.domain.ActivityInTrain;
 import nl.rls.composer.domain.Company;
 import nl.rls.composer.domain.CompositIdentifierOperationalType;
 import nl.rls.composer.domain.GenericMessage;
 import nl.rls.composer.domain.JourneySection;
 import nl.rls.composer.domain.LocationIdent;
-import nl.rls.composer.domain.Locomotive;
-import nl.rls.composer.domain.LocomotiveInTrain;
 import nl.rls.composer.domain.OperationalTrainNumberIdentifier;
 import nl.rls.composer.domain.Responsibility;
+import nl.rls.composer.domain.Traction;
+import nl.rls.composer.domain.TractionInTrain;
 import nl.rls.composer.domain.TrainCompositionJourneySection;
 import nl.rls.composer.domain.TrainCompositionMessage;
 import nl.rls.composer.domain.TrainRunningData;
@@ -51,16 +49,15 @@ import nl.rls.composer.domain.code.TractionMode;
 import nl.rls.composer.domain.code.TractionType;
 import nl.rls.composer.domain.code.TrainActivityType;
 import nl.rls.composer.domain.message.MessageStatus;
-import nl.rls.composer.repository.ActivityInTrainRepository;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.repository.CompositIdentifierOperationalTypeRepository;
 import nl.rls.composer.repository.JourneySectionRepository;
 import nl.rls.composer.repository.LocationIdentRepository;
-import nl.rls.composer.repository.LocomotiveInTrainRepository;
-import nl.rls.composer.repository.LocomotiveRepository;
 import nl.rls.composer.repository.OperationalTrainNumberIdentifierRepository;
 import nl.rls.composer.repository.ResponsibilityRepository;
+import nl.rls.composer.repository.TractionInTrainRepository;
 import nl.rls.composer.repository.TractionModeRepository;
+import nl.rls.composer.repository.TractionRepository;
 import nl.rls.composer.repository.TractionTypeRepository;
 import nl.rls.composer.repository.TrainActivityTypeRepository;
 import nl.rls.composer.repository.TrainCompositionJourneySectionRepository;
@@ -83,8 +80,6 @@ public class Main {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private ActivityInTrainRepository activityInTrainRepository;
-	@Autowired
 	private JourneySectionRepository journeySectionRepository;
 	@Autowired
 	private LocationIdentRepository locationIdentRepository;
@@ -93,9 +88,9 @@ public class Main {
 	@Autowired
 	private CompositIdentifierOperationalTypeRepository compositIdentifierOperationalTypeRepository;
 	@Autowired
-	private LocomotiveRepository locomotiveRepository;
+	private TractionRepository tractionRepository;
 	@Autowired
-	private LocomotiveInTrainRepository locomotiveInTrainRepository;
+	private TractionInTrainRepository tractionInTrainRepository;
 	@Autowired
 	private OperationalTrainNumberIdentifierRepository operationalTrainNumberIdentifierRepository;
 	@Autowired
@@ -255,38 +250,47 @@ public class Main {
 			TrainRunningData trainRunningData = new TrainRunningData(ownerId);
 			trainRunningData.setDangerousGoodsIndicator(false);
 			trainRunningData.setExceptionalGaugingInd(false);;
-			Optional<TrainActivityType> trainActivityType = trainActivityTypeRepository.findByCode("0003");
-			ActivityInTrain activity = new ActivityInTrain();
-			activity.setTrainActivityType(trainActivityType.get());
-			activity.setActivityLocationIdent(journeySectionDestination.get());
-			activityInTrainRepository.save(activity);
-			trainRunningData.getActivities().add(activity);
 			trainRunningData.setTrainType(2);
 			trainRunningData.setTrainMaxSpeed(100);
 
 			/*
-			 * LocoIdent Locomotive
+			 * LocoIdent Traction
 			 */
 			System.out.println("trainCompositionMessage 1.8");
-			Locomotive locomotive = new Locomotive(ownerId);
+			Traction traction1 = new Traction(ownerId);
 			Optional<TractionType> tractionType = tractionTypeRepository.findByCode("11");
-			locomotive.setTractionType(tractionType.get());
-			locomotive.setLocoNumber("928422031023");
-			locomotive.setLocoTypeNumber("123456");
+			traction1.setTractionType(tractionType.get());
+			traction1.setLocoNumber("928422031023");
+			traction1.setLocoTypeNumber("123456");
 			Optional<TractionMode> tractionMode = tractionModeRepository.findByCode("11");
-			locomotive.setTractionMode(tractionMode.get());
-//			locomotive.setDriverIndication(1);
-//			locomotive.setTractionPositionInTrain(1);
-			locomotive.setLengthOverBuffers(3000);
-			locomotive.setWeight(55000);
-			locomotive.setNumberOfAxles(6);
-			locomotiveRepository.save(locomotive);
-			LocomotiveInTrain locomotiveInTrain = new LocomotiveInTrain();
-			locomotiveInTrain.setDriverIndication(1);
-			locomotiveInTrain.setTractionPositionInTrain(1);
-			locomotiveInTrain.setLocomotive(locomotive);
-			locomotiveInTrainRepository.save(locomotiveInTrain);
-			/*
+			traction1.setTractionMode(tractionMode.get());
+			traction1.setLengthOverBuffers(3000);
+			traction1.setWeight(55000);
+			traction1.setNumberOfAxles(6);
+			tractionRepository.save(traction1);
+			TractionInTrain tractionInTrain1 = new TractionInTrain();
+			tractionInTrain1.setDriverIndication(1);
+			tractionInTrain1.setTractionPositionInTrain(1);
+			tractionInTrain1.setTraction(traction1);
+			tractionInTrainRepository.save(tractionInTrain1);
+
+			Traction traction2 = new Traction(ownerId);
+			tractionType = tractionTypeRepository.findByCode("11");
+			traction2.setTractionType(tractionType.get());
+			traction2.setLocoNumber("92842203456");
+			traction2.setLocoTypeNumber("123455");
+			tractionMode = tractionModeRepository.findByCode("11");
+			traction2.setTractionMode(tractionMode.get());
+			traction2.setLengthOverBuffers(3000);
+			traction2.setWeight(55000);
+			traction2.setNumberOfAxles(6);
+			tractionRepository.save(traction2);
+			TractionInTrain tractionInTrain2 = new TractionInTrain();
+			tractionInTrain2.setDriverIndication(0);
+			tractionInTrain2.setTractionPositionInTrain(2);
+			tractionInTrain2.setTraction(traction2);
+			tractionInTrainRepository.save(tractionInTrain2);
+/*
 			 * WagonData
 			 */
 			System.out.println("trainCompositionMessage 1.9");
@@ -313,15 +317,18 @@ public class Main {
 			TrainCompositionJourneySection trainCompositionJourneySection = new TrainCompositionJourneySection(ownerId);
 			trainCompositionJourneySection.setLivestockOrPeopleIndicator(0);
 			trainCompositionJourneySection.setJourneySection(journeySection);
-			// trainRunningData.setTrain(trainCompositionJourneySection);
-			// trainRunningDataRepository.save(trainRunningData);
 
 			trainCompositionJourneySection.setTrainRunningData(trainRunningData);
-			trainCompositionJourneySection.getLocomotives().add(locomotiveInTrain);
+			trainCompositionJourneySection.getTractions().add(tractionInTrain1);
+			trainCompositionJourneySection.getTractions().add(tractionInTrain2);
 			trainCompositionJourneySection.getWagons().add(wagonInTrain);
-			trainCompositionMessage.getTrainCompositionJourneySection().add(trainCompositionJourneySection);
+			Optional<TrainActivityType> trainActivityType = trainActivityTypeRepository.findByCode("0003");
+			if (!trainCompositionJourneySection.addActivity(trainActivityType.get())) {
+				System.out.println("trainActivityType already added to journey: "+trainActivityType.get().getCode());
+			};
+			System.out.println("trainCompositionJourneySection.save(): "+trainCompositionJourneySection);
 			trainCompositionJourneySectionRepository.save(trainCompositionJourneySection);
-			System.out.println(trainCompositionJourneySection);
+			trainCompositionMessage.getTrainCompositionJourneySection().add(trainCompositionJourneySection);
 
 			trainCompositionMessageRepository.save(trainCompositionMessage);
 			System.out.println("trainCompositionMessage 2");

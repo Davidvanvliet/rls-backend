@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.code.TractionMode;
 import nl.rls.composer.repository.TractionModeRepository;
 import nl.rls.composer.rest.dto.TractionModeDto;
 import nl.rls.composer.rest.dto.mapper.TractionModeDtoMapper;
 
 @RestController
-@RequestMapping("/api/v1/tractionmodes")
+@RequestMapping(BaseURL.BASE_PATH+"tractionmodes")
 public class TractionModeController {
 	@Autowired
 	private TractionModeRepository tractionModeRepository;

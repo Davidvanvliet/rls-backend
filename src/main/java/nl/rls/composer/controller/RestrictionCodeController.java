@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.code.RestrictionCode;
 import nl.rls.composer.repository.RestrictionCodeRepository;
 import nl.rls.composer.rest.dto.RestrictionCodeDto;
 import nl.rls.composer.rest.dto.mapper.RestrictionCodeDtoMapper;
 
 @RestController
-@RequestMapping("/api/v1/restrictioncodes")
+@RequestMapping(BaseURL.BASE_PATH+"restrictioncodes")
 public class RestrictionCodeController {
 	@Autowired
 	private RestrictionCodeRepository restrictionCodeRepository;

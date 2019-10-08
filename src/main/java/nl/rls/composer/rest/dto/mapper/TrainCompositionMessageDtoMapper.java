@@ -24,7 +24,6 @@ public class TrainCompositionMessageDtoMapper {
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
 				mapping(TrainCompositionMessage.class, TrainCompositionMessageDto.class)
-				.fields("operationalTrainNumberIdentifier.operationalTrainNumber", "operationalTrainNumber")
 				.fields("sender.code", "sender")
 				.fields("recipient.code", "recipient")
 				;

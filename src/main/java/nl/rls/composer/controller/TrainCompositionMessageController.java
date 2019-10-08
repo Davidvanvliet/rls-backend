@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import nl.rls.ci.aa.domain.Owner;
 import nl.rls.ci.aa.repository.OwnerRepository;
 import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Company;
 import nl.rls.composer.domain.JourneySection;
@@ -55,7 +56,7 @@ import nl.rls.composer.rest.dto.mapper.TrainCompositionMessageDtoMapper;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 
 @RestController
-@RequestMapping("/api/v1/traincompositionmessages")
+@RequestMapping(BaseURL.BASE_PATH+"traincompositionmessages")
 public class TrainCompositionMessageController {
 	@Autowired
 	private TrainCompositionMessageRepository trainCompositionMessageRepository;

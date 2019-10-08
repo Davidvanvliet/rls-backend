@@ -14,26 +14,21 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.JourneySection;
-import nl.rls.composer.domain.LocationIdent;
 import nl.rls.composer.repository.JourneySectionRepository;
-import nl.rls.composer.repository.LocationIdentRepository;
 import nl.rls.composer.rest.dto.JourneySectionDto;
 import nl.rls.composer.rest.dto.mapper.JourneySectionDtoMapper;
 
 @RestController
-@RequestMapping("/api/v1/journeysections")
+@RequestMapping(BaseURL.BASE_PATH+"journeysections")
 public class JourneySectionController {
 	@Autowired
 	private JourneySectionRepository journeySectionRepository;
-	@Autowired
-	private LocationIdentRepository locationIdentRepository;
 	@Autowired
 	private SecurityContext securityContext;
 
@@ -60,30 +55,30 @@ public class JourneySectionController {
 		for (JourneySection journeySection : journeySectionList) {
 			journeySectionDtoList.add(JourneySectionDtoMapper.map(journeySection));
 		}
-		Link journeySectionsLink = linkTo(methodOn(LocationIdentController.class).getAll()).withSelfRel();
+		Link selfLink = linkTo(methodOn(LocationIdentController.class).getAllQuery("", "")).withSelfRel();
 		Resources<JourneySectionDto> locations = new Resources<JourneySectionDto>(journeySectionDtoList,
-				journeySectionsLink);
+				selfLink);
 		return ResponseEntity.ok(locations);
 	}
 
-	@PutMapping(value = "/{id}/origin")
-	public ResponseEntity<JourneySectionDto> setOriginByCode(@PathVariable("id") Integer id, @RequestParam("code") String code) {
-		int ownerId = securityContext.getOwnerId();
-
-		Optional<JourneySection> journeySectionOptional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
-		if (!journeySectionOptional.isPresent()) {
-		
-		}
-		Optional<LocationIdent> locationIdentOptional = locationIdentRepository.findByCode(code);
-		if (!locationIdentOptional.isPresent()) {
-			
-		}
-		JourneySection journeySection = journeySectionOptional.get();
-		journeySection.setJourneySectionOrigin(locationIdentOptional.get());
-		journeySectionRepository.save(journeySection);
-		JourneySectionDto journeySectionDto = JourneySectionDtoMapper.map(journeySection);
-		return ResponseEntity.ok(journeySectionDto);
-	}
-
+//	@PutMapping(value = "/{id}/origin")
+//	public ResponseEntity<JourneySectionDto> setOriginById(@PathVariable("id") Integer id, @RequestParam("code") String code) {
+//		int ownerId = securityContext.getOwnerId();
+//
+//		Optional<JourneySection> journeySectionOptional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
+//		if (!journeySectionOptional.isPresent()) {
+//		
+//		}
+//		Optional<LocationIdent> locationIdentOptional = locationIdentRepository.findById(code);
+//		if (!locationIdentOptional.isPresent()) {
+//			
+//		}
+//		JourneySection journeySection = journeySectionOptional.get();
+//		journeySection.setJourneySectionOrigin(locationIdentOptional.get());
+//		journeySectionRepository.save(journeySection);
+//		JourneySectionDto journeySectionDto = JourneySectionDtoMapper.map(journeySection);
+//		return ResponseEntity.ok(journeySectionDto);
+//	}
+//
 
 }

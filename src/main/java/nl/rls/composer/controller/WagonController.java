@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Wagon;
 import nl.rls.composer.domain.WagonIdent;
@@ -30,7 +31,7 @@ import nl.rls.composer.rest.dto.WagonDto;
 import nl.rls.composer.rest.dto.mapper.WagonDtoMapper;
 
 @RestController
-@RequestMapping("/api/v1/wagons")
+@RequestMapping(BaseURL.BASE_PATH+"wagons")
 public class WagonController {
 	@Autowired
 	private WagonRepository wagonRepository;

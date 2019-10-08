@@ -9,8 +9,8 @@ import lombok.Setter;
 @XmlRootElement
 @NoArgsConstructor
 @Getter @Setter
-public class LocomotiveAddDto {
-	private String locomotive;
+public class TractionAddDto {
+	private String traction;
 	private int tractionPositionInTrain;
 	private int driverIndication;
 

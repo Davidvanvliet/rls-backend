@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LocomotiveInTrain {
+public class TractionInTrain {
 	@Id 	
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Integer id;
@@ -28,6 +28,8 @@ public class LocomotiveInTrain {
 	 */
 	private Integer tractionPositionInTrain;
     @ManyToOne
-    private Locomotive locomotive;
+    private Traction traction;
+    @ManyToOne
+    private TrainCompositionJourneySection trainCompositionJourneySection;
 
 }

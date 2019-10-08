@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.WagonTechData;
 import nl.rls.composer.repository.WagonTechDataRepository;
 import nl.rls.composer.rest.dto.WagonTechDataDto;
 import nl.rls.composer.rest.dto.mapper.WagonTechDataDtoMapper;
 
 @RestController
-@RequestMapping("/api/v1/wagontechdata")
+@RequestMapping(BaseURL.BASE_PATH+"wagontechdata")
 public class WagonTechDataController {
 	@Autowired
 	private WagonTechDataRepository wagonTechDataRepository;

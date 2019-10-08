@@ -9,6 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ActivityInTrainDto extends ResourceSupport {
-    private TrainActivityTypeDto trainActivityType;
+public class TractionDto extends ResourceSupport {
+	protected TractionTypeDto tractionType;
+	protected String locoTypeNumber;
+	protected String locoNumber;
+	protected TractionModeDto tractionMode;
 }

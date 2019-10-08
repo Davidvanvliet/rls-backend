@@ -9,7 +9,7 @@ import lombok.Setter;
 @XmlRootElement
 @NoArgsConstructor
 @Getter @Setter
-public class LocomotiveCreateDto {
+public class TractionCreateDto {
 	private String tractionType;
 	private String tractionMode;
 	private String locoTypeNumber;

@@ -18,8 +18,8 @@ import nl.rls.composer.domain.code.TractionType;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Locomotive extends OwnedEntity {
-	public Locomotive(Integer ownerId) {
+public class Traction extends OwnedEntity {
+	public Traction(Integer ownerId) {
 		super(ownerId);
 	}
 	@ManyToOne

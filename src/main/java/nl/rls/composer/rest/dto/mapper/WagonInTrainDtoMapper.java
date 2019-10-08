@@ -6,7 +6,7 @@ import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.dozer.loader.api.FieldsMappingOptions;
 
-import nl.rls.composer.controller.TrainCompositionJourneySectionController;
+import nl.rls.composer.controller.WagonInTrainController;
 import nl.rls.composer.domain.WagonInTrain;
 import nl.rls.composer.rest.dto.WagonInTrainDto;
 
@@ -24,7 +24,7 @@ public class WagonInTrainDtoMapper {
 		};
 		mapper.addMapping(mappingBuilder);		
 		WagonInTrainDto dto = mapper.map(entity, WagonInTrainDto.class);
-		dto.add(linkTo(methodOn(TrainCompositionJourneySectionController.class).getWagonInTrain(entity.getTrainCompositionJourneySection().getId(), entity.getId())).withSelfRel());
+		dto.add(linkTo(methodOn(WagonInTrainController.class).getWagonInTrain(entity.getTrainCompositionJourneySection().getId(), entity.getId())).withSelfRel());
 		return dto;
 	}
 

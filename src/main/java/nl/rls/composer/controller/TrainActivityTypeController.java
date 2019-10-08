@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.code.TrainActivityType;
 import nl.rls.composer.repository.TrainActivityTypeRepository;
 import nl.rls.composer.rest.dto.TrainActivityTypeDto;
 import nl.rls.composer.rest.dto.mapper.TrainActivityTypeDtoMapper;
 
 @RestController
-@RequestMapping("/api/v1/trainactivitytypes")
+@RequestMapping(BaseURL.BASE_PATH+"trainactivitytypes")
 public class TrainActivityTypeController {
 	@Autowired
 	private TrainActivityTypeRepository trainActivityTypeRepository;

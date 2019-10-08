@@ -31,12 +31,13 @@ import nl.rls.ci.domain.UicHeader;
 import nl.rls.ci.domain.UicRequest;
 import nl.rls.ci.repository.CiRepository;
 import nl.rls.ci.service.CiHostName;
+import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.TrainCompositionMessage;
 import nl.rls.composer.repository.TrainCompositionMessageRepository;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 
 @RestController
-@RequestMapping("/api/v1/ci/tcm")
+@RequestMapping(BaseURL.BASE_PATH+"ci/tcm")
 public class TcmController {
 	@Autowired
 	private TrainCompositionMessageRepository trainCompositionMessageRepository;

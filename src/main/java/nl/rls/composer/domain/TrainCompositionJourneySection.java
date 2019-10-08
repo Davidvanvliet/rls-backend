@@ -15,6 +15,7 @@ import javax.persistence.OrderBy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rls.composer.domain.code.TrainActivityType;
 
 /**
  * @author berend.wilkens Defines the make up of a train for each section of its
@@ -34,10 +35,6 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	@OneToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "train_running_data_id")
 	private TrainRunningData trainRunningData;
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "train_composition_journey_section_id")
-	@OrderBy("tractionPositionInTrain")
-	private List<LocomotiveInTrain> locomotives = new ArrayList<LocomotiveInTrain>();
 	/**
 	 * Indicates that livestock and people (other than train crew) will be carried.
 	 * Coding: if live animals or people are transported = 1, in opposite case = 0.
@@ -46,10 +43,20 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	 * Load or Damage has to include code '09.'
 	 */
 	private int livestockOrPeopleIndicator;
+	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "train_composition_journey_section_id")
 	@OrderBy("wagonTrainPosition")
 	private List<WagonInTrain> wagons = new ArrayList<WagonInTrain>();
+	
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "train_composition_journey_section_id")
+	@OrderBy("tractionPositionInTrain")
+	private List<TractionInTrain> tractions = new ArrayList<TractionInTrain>();
+
+	@OneToMany(cascade = {CascadeType.MERGE })
+	@JoinColumn(name = "train_composition_journey_section_id")
+	private List<TrainActivityType> activities = new ArrayList<>();
 
 	public WagonInTrain getWagonById(Integer wagonId) {
 		for (WagonInTrain wit : wagons) {
@@ -60,8 +67,18 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 		return null;
 	}
 
-	public void removeWagonById(Integer wagonId) {
-		wagons.remove(getWagonById(wagonId));
+	public boolean removeWagonById(int wagonInTrainId) {
+		WagonInTrain entity = getWagonById(wagonInTrainId);
+		if (entity != null) {
+			removeWagon(entity);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void removeWagon(WagonInTrain wagonInTrain) {
+		wagons.remove(wagonInTrain);
 		int pos = 1;
 		for (WagonInTrain wit : wagons) {
 			if (wit.getWagonTrainPosition() != pos) {
@@ -82,8 +99,101 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 				wit.setWagonTrainPosition(pos);
 			}
 			pos++;
-			
 		}
 	}
 
+	public void moveWagonById(int wagonInTrainId, int position) {
+		moveWagon(getWagonById(wagonInTrainId), position);
+	}
+
+	public void moveWagon(WagonInTrain wagonInTrain, int position) {
+		removeWagon(wagonInTrain);
+		wagonInTrain.setWagonTrainPosition(position);
+		addWagon(wagonInTrain);
+	}
+	
+	public TractionInTrain getTractionById(Integer id) {
+		for (TractionInTrain tit : tractions) {
+			if (tit.getId() == id) {
+				return tit;
+			}
+		}
+		return null;
+	}
+	public void addTraction(TractionInTrain entity) {
+		if (entity.getTractionPositionInTrain() <= 0 || entity.getTractionPositionInTrain() > wagons.size()) {
+			entity.setTractionPositionInTrain(1);
+		}
+		tractions.add(entity.getTractionPositionInTrain()-1, entity);
+		int pos = 1;
+		for (WagonInTrain wit : wagons) {
+			if (wit.getWagonTrainPosition() != pos) {
+				wit.setWagonTrainPosition(pos);
+			}
+			pos++;
+		}
+	}
+
+	public void moveTractionById(int id, int position) {
+		moveTraction(getTractionById(id), position);
+	}
+
+	public void moveTraction(TractionInTrain entity, int position) {
+		removeTraction(entity);
+		entity.setTractionPositionInTrain(position);
+		addTraction(entity);
+	}
+
+	public boolean removeTractionById(int id) {
+		TractionInTrain entity = getTractionById(id);
+		if (entity != null) {
+			removeTraction(entity);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void removeTraction(TractionInTrain entity) {
+		tractions.remove(entity);
+		int pos = 1;
+		for (TractionInTrain tit : tractions) {
+			if (tit.getTractionPositionInTrain() != pos) {
+				tit.setTractionPositionInTrain(pos);
+			}
+			pos++;
+		}
+	}
+
+	
+	public TrainActivityType getActivityById(Integer id) {
+		for (TrainActivityType ait : activities) {
+			if (ait.getId() == id) {
+				return ait;
+			}
+		}
+		return null;
+	}
+	public boolean addActivity(TrainActivityType entity) {
+		if (!activities.contains(entity)) {
+			activities.add(entity);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean removeActivityById(int id) {
+		TrainActivityType entity = getActivityById(id);
+		if (entity != null) {
+			removeActivity(entity);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void removeActivity(TrainActivityType entity) {
+		activities.remove(entity);
+	}
 }

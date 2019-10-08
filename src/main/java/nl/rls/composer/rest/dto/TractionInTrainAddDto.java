@@ -1,4 +1,7 @@
 package nl.rls.composer.rest.dto;
+
+import org.springframework.hateoas.ResourceSupport;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -6,8 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LocomotiveInTrainDto {
+public class TractionInTrainAddDto extends ResourceSupport {
+	private int tractionTrainPosition;
 	private int driverIndication;
-	private int tractionPositionInTrain;
-    private LocomotiveDto locomotive;
+	private String traction;
 }

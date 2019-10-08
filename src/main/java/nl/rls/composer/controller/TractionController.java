@@ -20,22 +20,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
-import nl.rls.composer.domain.Locomotive;
+import nl.rls.composer.domain.Traction;
 import nl.rls.composer.domain.code.TractionMode;
 import nl.rls.composer.domain.code.TractionType;
-import nl.rls.composer.repository.LocomotiveRepository;
+import nl.rls.composer.repository.TractionRepository;
 import nl.rls.composer.repository.TractionModeRepository;
 import nl.rls.composer.repository.TractionTypeRepository;
-import nl.rls.composer.rest.dto.LocomotiveCreateDto;
-import nl.rls.composer.rest.dto.LocomotiveDto;
-import nl.rls.composer.rest.dto.mapper.LocomotiveDtoMapper;
+import nl.rls.composer.rest.dto.TractionCreateDto;
+import nl.rls.composer.rest.dto.TractionDto;
+import nl.rls.composer.rest.dto.mapper.TractionDtoMapper;
 
 @RestController
-@RequestMapping("/api/v1/locomotives")
-public class LocomotiveController {
+@RequestMapping(BaseURL.BASE_PATH+"tractions")
+public class TractionController {
 	@Autowired
-	private LocomotiveRepository locomotiveRepository;
+	private TractionRepository tractionRepository;
 	@Autowired
 	private TractionTypeRepository tractionTypeRepository;
 	@Autowired
@@ -44,31 +45,31 @@ public class LocomotiveController {
 	private SecurityContext securityContext;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<Resources<LocomotiveDto>> getAll() {
+	public ResponseEntity<Resources<TractionDto>> getAll() {
 		int ownerId = securityContext.getOwnerId();
-		Iterable<Locomotive> locomotiveList = locomotiveRepository.findByOwnerId(ownerId);
-		List<LocomotiveDto> dtoList = new ArrayList<>();
-		for (Locomotive locomotive : locomotiveList) {
-			LocomotiveDto dto = LocomotiveDtoMapper.map(locomotive);
+		Iterable<Traction> tractionList = tractionRepository.findByOwnerId(ownerId);
+		List<TractionDto> dtoList = new ArrayList<>();
+		for (Traction traction : tractionList) {
+			TractionDto dto = TractionDtoMapper.map(traction);
 			dtoList.add(dto);
 		}
 		Link dtoLink = linkTo(methodOn(this.getClass()).getAll()).withSelfRel();
-		Resources<LocomotiveDto> locomotiveDtoList = new Resources<LocomotiveDto>(dtoList, dtoLink);
-		return ResponseEntity.ok(locomotiveDtoList);
+		Resources<TractionDto> tractionDtoList = new Resources<TractionDto>(dtoList, dtoLink);
+		return ResponseEntity.ok(tractionDtoList);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<LocomotiveDto> getById(@PathVariable Integer id) {
+	public ResponseEntity<TractionDto> getById(@PathVariable Integer id) {
 		int ownerId = securityContext.getOwnerId();
-		LocomotiveDto dto = LocomotiveDtoMapper
-				.map(locomotiveRepository.findByIdAndOwnerId(id,ownerId).orElseThrow(() -> new LocomotiveNotFoundException(id)));
+		TractionDto dto = TractionDtoMapper
+				.map(tractionRepository.findByIdAndOwnerId(id,ownerId).orElseThrow(() -> new TractionNotFoundException(id)));
 		return ResponseEntity.ok(dto);
 	}
 	
 	@PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<LocomotiveDto> create(@RequestBody LocomotiveCreateDto dto) {
+	public ResponseEntity<TractionDto> create(@RequestBody TractionCreateDto dto) {
 		int ownerId = securityContext.getOwnerId();
-		Locomotive entity = LocomotiveDtoMapper.map(dto);
+		Traction entity = TractionDtoMapper.map(dto);
 		entity.setOwnerId(ownerId);
 		
 		int tractionTypeId = DecodePath.decodeInteger(dto.getTractionType(), "tractiontypes");
@@ -81,10 +82,10 @@ public class LocomotiveController {
 		if (tractionMode.isPresent()) {
 			entity.setTractionMode(tractionMode.get());
 		}
-		locomotiveRepository.save(entity);
-		System.out.println("Locomotive: "+entity);
-		LocomotiveDto resultDto = LocomotiveDtoMapper.map(entity);
-		return ResponseEntity.created(linkTo(methodOn(LocomotiveController.class).getById(entity.getId()))
+		tractionRepository.save(entity);
+		System.out.println("Traction: "+entity);
+		TractionDto resultDto = TractionDtoMapper.map(entity);
+		return ResponseEntity.created(linkTo(methodOn(TractionController.class).getById(entity.getId()))
 				.toUri()).body(resultDto);
 	}
 
