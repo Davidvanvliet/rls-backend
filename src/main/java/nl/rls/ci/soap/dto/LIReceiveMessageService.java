@@ -17,10 +17,12 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "LIReceiveMessageService", targetNamespace = "http://uic.cc.org/UICMessage", wsdlLocation = "file:/C:/workspace/trains24/trains24_ci_client/src/main/resources/UICCCMessageProcessingInboundWS.wsdl")
-public class LIReceiveMessageService
-    extends Service
-{
+@WebServiceClient(
+		name = "LIReceiveMessageService", 
+		targetNamespace = "http://uic.cc.org/UICMessage", 
+		wsdlLocation = "src/main/resources/UICCCMessageProcessingInboundWS.wsdl"
+	)
+public class LIReceiveMessageService extends Service {
 
     private final static URL LIRECEIVEMESSAGESERVICE_WSDL_LOCATION;
     private final static Logger logger = Logger.getLogger(nl.rls.ci.soap.dto.LIReceiveMessageService.class.getName());
@@ -30,9 +32,9 @@ public class LIReceiveMessageService
         try {
             URL baseUrl;
             baseUrl = nl.rls.ci.soap.dto.LIReceiveMessageService.class.getResource(".");
-            url = new URL(baseUrl, "file:/C:/workspace/trains24/trains24_ci_client/src/main/resources/UICCCMessageProcessingInboundWS.wsdl");
+            url = new URL(baseUrl, "src/main/resources/UICCCMessageProcessingInboundWS.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'file:/C:/workspace/trains24/trains24_ci_client/src/main/resources/UICCCMessageProcessingInboundWS.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'src/main/resources/UICCCMessageProcessingInboundWS.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         LIRECEIVEMESSAGESERVICE_WSDL_LOCATION = url;

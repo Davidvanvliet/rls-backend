@@ -8,40 +8,43 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.domain.CiMessage;
-import nl.rls.ci.domain.UicHeader;
-import nl.rls.ci.domain.UicRequest;
+import nl.rls.ci.domain.UicResponse;
 import nl.rls.ci.repository.CiRepository;
 import nl.rls.ci.rest.dto.CiDto;
 import nl.rls.ci.rest.dto.CiPostDto;
 import nl.rls.ci.rest.dto.mapper.CiDtoMapper;
-import nl.rls.ci.service.CiHostName;
 import nl.rls.ci.service.CiService;
+import nl.rls.ci.url.BaseURL;
 
 /**
  * @author berend.wilkens
  * Genereert XML berichten voor de common interface
  */
 @RestController
-@RequestMapping(value = "/api/v1/ci/messages")
+@RequestMapping(BaseURL.BASE_PATH+CiController.PATH)
 public class CiController {
+	public static final String PATH = "messages";
 	@Autowired
 	private CiRepository ciRepository;
 	@Autowired
@@ -51,12 +54,8 @@ public class CiController {
 
 	private static final Logger log = LoggerFactory.getLogger(CiController.class);
 
-	@RequestMapping(value = "/hello", method = RequestMethod.GET)
-	public ResponseEntity<String> getHello() {
-		return ResponseEntity.ok("Hello world");
-	}
-
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Gets a all stored messages for a client, no filtering")
 	public ResponseEntity<Resources<CiDto>> getAll() {
 		int ownerId = securityContext.getOwnerId();
 		List<CiMessage> ciMessages = ciRepository.findByOwnerId(ownerId);
@@ -69,7 +68,8 @@ public class CiController {
 		return ResponseEntity.ok(resourceList);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Gets an idividual stored message.")
 	public ResponseEntity<CiDto> getMessage(@PathVariable Integer id) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<CiMessage> ciMessage = ciRepository.findByIdAndOwnerId(id, ownerId);
@@ -87,36 +87,16 @@ public class CiController {
 	 * @return de link naar het CI object/resource
 	 */
 	@Transactional
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
+	@ApiOperation(value = "Stores a CI (XML-)message for a client (UicRequest). This message is not send.")
 	public ResponseEntity<?> postMessage(@RequestBody String messageXml) {
-		int ownerId = securityContext.getOwnerId();
-		// maak de wrapper voor het bericht
-		CiMessage ciMessage = new CiMessage();
-		ciMessage.setOwnerId(ownerId);
-		/*
-		 * maak de het bericht voor de common interface = SOAP body
-		 */
-		UicRequest uicRequest = new UicRequest();
-		// zet het specifieke bericht, bijv TCM, dit komt van de client
-		System.out.println("postMessage XML message: "+ messageXml);
-		uicRequest.setMessage(messageXml);
-		uicRequest.setSignature("signature");
-		ciMessage.setUicRequest(uicRequest);
-
-		/*
-		 * maak de het bericht voor de common interface = SOAP header
-		 */
-		UicHeader uicHeader = new UicHeader();
-		uicHeader.setMessageIdentifier(UUID.randomUUID().toString());
-		uicHeader.setMessageLiHost(CiHostName.getPublicHostName());
-		ciMessage.setUicHeader(uicHeader);
-		ciMessage.setCreateDate(new Date());
-		ciMessage = ciRepository.save(ciMessage);
+		CiMessage ciMessage = ciService.makeCiMessage(messageXml);
 		return ResponseEntity.created(linkTo(methodOn(CiController.class).getMessage(ciMessage.getId())).toUri())
 				.build();
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@PutMapping(value = "/{id}")
+	@ApiOperation(value = "Updates a CI (XML-)message for a client (UicRequest). This message is not send.")
 	public ResponseEntity<Object> putMessage(@PathVariable int id, @RequestBody CiPostDto ciPostDto)
 			throws URISyntaxException {
 		CiMessage ciMessage = CiDtoMapper.map(ciPostDto);
@@ -131,8 +111,9 @@ public class CiController {
 	 * @return
 	 */
 	@Transactional
-	@RequestMapping(value = "/{id}/", method = RequestMethod.POST)
-	public ResponseEntity<?> sendMessage(@PathVariable int id, @RequestParam(required = true) String action) {
+	@PostMapping(value = "/{id}/")
+	@ApiOperation(value = "Sends a previously stored CI (XML-)message to the Common Interface (UicRequest).")
+	public ResponseEntity<UicResponse> sendMessage(@PathVariable int id, @RequestParam(required = true) String action) {
 		log.debug("sendMessage: "+id+" "+action);
 		Optional<CiMessage> optional = ciRepository.findById(id);
 		if (!optional.isPresent()) {

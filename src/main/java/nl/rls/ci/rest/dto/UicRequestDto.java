@@ -11,7 +11,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter @Setter
 public class UicRequestDto extends ResourceSupport {
-	private String message;
 	private String signature;
 	private String senderAlias;
 	private String encoding;

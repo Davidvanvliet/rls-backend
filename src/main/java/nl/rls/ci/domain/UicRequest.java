@@ -1,15 +1,14 @@
 package nl.rls.ci.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import nl.rls.composer.domain.OwnedEntity;
 
 /**
  * @author berend.wilkens
@@ -20,21 +19,17 @@ import lombok.ToString;
  *         (xmlns:uicm=http://uic.cc.org/UICMessage ). The UICMessage contains
  *         four elements as described below.
  */
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
-public class UicRequest {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+public class UicRequest extends OwnedEntity {
 	/**
 	 * This element contains the actual TAF/TAPTSI message. If the message is
 	 * compressed, encrypted or singed, then it should be base64 encoded.
 	 */
-	@Lob
-	private String message;
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	private XmlMessage message;
 	/**
 	 * Message can be digitally signed for security purpose. For signing, you have
 	 * to obtain a client certificate from RNE. If messages are signed, then the

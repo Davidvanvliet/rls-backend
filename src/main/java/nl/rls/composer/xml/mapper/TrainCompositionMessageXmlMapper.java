@@ -2,14 +2,10 @@ package nl.rls.composer.xml.mapper;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
-
 import nl.rls.composer.domain.LocationSubsidiaryIdentification;
-import info.taf_jsg.schemes.TrainCompositionJourneySection;
 import info.taf_jsg.schemes.TrainCompositionMessage;
-import info.taf_jsg.schemes.TrainRunningData;
 
 public class TrainCompositionMessageXmlMapper {
-
 	public static TrainCompositionMessage map(nl.rls.composer.domain.TrainCompositionMessage tcm) {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
@@ -75,5 +71,4 @@ public class TrainCompositionMessageXmlMapper {
 		TrainCompositionMessage xmlTcm = mapper.map(tcm, TrainCompositionMessage.class);
 		return xmlTcm;
 	}
-
 }
