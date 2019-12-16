@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import nl.rls.composer.domain.Wagon;
 
 public interface WagonRepository extends CrudRepository<Wagon, Integer> {
-	Optional<Wagon> findByIdAndOwnerId(int id, int ownerId);
 	Iterable<Wagon> findByOwnerId(int ownerId);
+	Optional<Wagon> findByOwnerIdAndId(int ownerId, Integer id);
+	Optional<Wagon> findByOwnerIdAndNumberFreight(int ownerId, String string);
 }

@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import nl.rls.ci.url.BaseURL;
-import nl.rls.composer.domain.DangerLabel;
+import nl.rls.composer.domain.code.DangerLabel;
 import nl.rls.composer.repository.DangerLabelRepository;
 import nl.rls.composer.rest.dto.DangerLabelDto;
 import nl.rls.composer.rest.dto.mapper.DangerLabelDtoMapper;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH+"dangerlabels/")
-@Api(description = "All Danger Label of this dangerous good according to the RID chapter 3.2, table A, column 5, excepting the shunting labels Model 13 and 15 (CODE: OTIF RID-Specification).")
+@Api(description = "All Danger Labels of dangerous good according to the RID chapter 3.2, table A, column 5, excepting the shunting labels Model 13 and 15 (CODE: OTIF RID-Specification).")
 public class DangerLabelController {
 	@Autowired
 	private DangerLabelRepository dangerLabelRepository;

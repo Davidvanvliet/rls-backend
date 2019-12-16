@@ -13,10 +13,10 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @Getter @Setter
-public class LocationIdent {
+public class Location {
 	@Id 	
     private int locationPrimaryCode;
-    private String countryIso;
+    private String countryCodeIso;
     private String code;
     /**
      * Location Name in an official language of the Country using the ISO Unicode alphabet

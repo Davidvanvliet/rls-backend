@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="60f5b379-f3c9-445f-bd91-87a6be627ae2" activeEnvironment="Default" name="RLS" resourceRoot="" soapui-version="5.4.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="112b11b3-304d-4585-af36-168788d6a118" wsaVersion="NONE" name="LIReceiveMessageServiceSoapBinding" type="wsdl" bindingName="{http://uic.cc.org/UICMessage}LIReceiveMessageServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/workspace/trains24/trains24_ci_client/src/main/resources/UICCCMessageProcessingInboundWS.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\C:\workspace\trains24\trains24_ci_client\src\main\resources\UICCCMessageProcessingInboundWS.wsdl"><con:part><con:url>file:\C:\workspace\trains24\trains24_ci_client\src\main\resources\UICCCMessageProcessingInboundWS.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="LIReceiveMessageService" targetNamespace="http://uic.cc.org/UICMessage" xmlns:ns1="http://uic.cc.org/UICMessage/Header" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://uic.cc.org/UICMessage" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:documentation>This WSDL describes the communication protocol for sending TAF/TAP -TSI
+		messages with standard xml Header node according TAF/TAP TSI Common
+		Schema to partner using the Common Interface (CI).For more detailed
+		Information please refer to the specification document</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://uic.cc.org/UICMessage" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="UICMessage" type="tns:UICMessage"/>
+      <xs:element name="UICMessageResponse" type="tns:UICMessageResponse"/>
+      <xs:complexType name="UICMessage">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="message" type="xs:anyType"/>
+          <xs:element minOccurs="0" name="signature" type="xs:anyType"/>
+          <xs:element minOccurs="0" name="senderAlias" type="xs:anyType"/>
+          <xs:element minOccurs="0" name="encoding" type="xs:anyType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="UICMessageResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="xs:anyType"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://uic.cc.org/UICMessage/Header" xmlns="http://uic.cc.org/UICMessage/Header">
+      <xsd:element name="messageIdentifier" nillable="true" type="xsd:string"/>
+      <xsd:element name="messageLiHost" nillable="true" type="xsd:string"/>
+      <xsd:element name="compressed" nillable="true" type="xsd:boolean"/>
+      <xsd:element name="encrypted" nillable="true" type="xsd:boolean"/>
+      <xsd:element name="signed" nillable="true" type="xsd:boolean"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="UICMessage">
+    <wsdl:part element="tns:UICMessage" name="parameters"/>
+    <wsdl:part element="ns1:messageIdentifier" name="messageIdentifier"/>
+    <wsdl:part element="ns1:messageLiHost" name="messageLiHost"/>
+    <wsdl:part element="ns1:compressed" name="compressed"/>
+    <wsdl:part element="ns1:encrypted" name="encrypted"/>
+    <wsdl:part element="ns1:signed" name="signed"/>
+  </wsdl:message>
+  <wsdl:message name="UICMessageResponse">
+    <wsdl:part element="tns:UICMessageResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="UICReceiveMessage">
+    <wsdl:operation name="UICMessage">
+      <wsdl:documentation>This operation is used to send the message to the Remote CI.</wsdl:documentation>
+      <wsdl:input message="tns:UICMessage" name="UICMessage"></wsdl:input>
+      <wsdl:output message="tns:UICMessageResponse" name="UICMessageResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LIReceiveMessageServiceSoapBinding" type="tns:UICReceiveMessage">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="UICMessage">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="UICMessage">
+        <soap:header message="tns:UICMessage" part="messageIdentifier" use="literal"></soap:header>
+        <soap:header message="tns:UICMessage" part="messageLiHost" use="literal"></soap:header>
+        <soap:header message="tns:UICMessage" part="compressed" use="literal"></soap:header>
+        <soap:header message="tns:UICMessage" part="encrypted" use="literal"></soap:header>
+        <soap:header message="tns:UICMessage" part="signed" use="literal"></soap:header>
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="UICMessageResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LIReceiveMessageService">
+    <wsdl:port binding="tns:LIReceiveMessageServiceSoapBinding" name="UICReceiveMessagePort">
+      <soap:address location="http://localhost:8082/ws/ci"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8082/ws/ci</con:endpoint></con:endpoints><con:operation id="1cb577c7-8076-4cb2-aa64-8b471a312e33" isOneWay="false" action="" name="UICMessage" bindingOperationName="UICMessage" type="Request-Response" outputName="UICMessageResponse" inputName="UICMessage" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="55b44557-f7db-4263-bc76-3744d013b3f5" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8082/ws/ci</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://uic.cc.org/UICMessage/Header" xmlns:uic="http://uic.cc.org/UICMessage">\r
+   <soapenv:Header>\r
+      <head:signed>?</head:signed>\r
+      <head:encrypted>?</head:encrypted>\r
+      <head:compressed>?</head:compressed>\r
+      <head:messageLiHost>?</head:messageLiHost>\r
+      <head:messageIdentifier>?</head:messageIdentifier>\r
+   </soapenv:Header>\r
+   <soapenv:Body>\r
+      <uic:UICMessage>\r
+         <!--Optional:-->\r
+         <message>?</message>\r
+         <!--Optional:-->\r
+         <signature>?</signature>\r
+         <!--Optional:-->\r
+         <senderAlias>?</senderAlias>\r
+         <!--Optional:-->\r
+         <encoding>?</encoding>\r
+      </uic:UICMessage>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://uic.cc.org/UICMessage/UICReceiveMessage/UICMessage"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

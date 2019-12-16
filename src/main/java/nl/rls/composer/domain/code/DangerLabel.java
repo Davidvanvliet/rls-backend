@@ -1,4 +1,4 @@
-package nl.rls.composer.domain;
+package nl.rls.composer.domain.code;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +43,7 @@ public class DangerLabel {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;	
-	private String value;
+	private String code;
 	private String description;
 
 		

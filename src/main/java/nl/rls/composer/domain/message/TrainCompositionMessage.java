@@ -1,4 +1,4 @@
-package nl.rls.composer.domain;
+package nl.rls.composer.domain.message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,9 @@ import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rls.composer.domain.CompositIdentifierOperationalType;
+import nl.rls.composer.domain.GenericMessage;
+import nl.rls.composer.domain.Train;
 
 /**
  * @author berend.wilkens
@@ -59,18 +62,8 @@ public class TrainCompositionMessage extends GenericMessage {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "train_composition_message_id")
 	private List<CompositIdentifierOperationalType> compositIdentifierOperationalType = new ArrayList<CompositIdentifierOperationalType>();
-	@ManyToOne
-	private OperationalTrainNumberIdentifier operationalTrainNumberIdentifier;
-	@ManyToOne
-	private LocationIdent transferPoint;
-	/**
-	 * Next IM
-	 */
-	@ManyToOne
-	private Company transfereeIM;
-	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "train_composition_message_id")
-	private List<TrainCompositionJourneySection> trainCompositionJourneySection = new ArrayList<TrainCompositionJourneySection>();
+	@ManyToOne(cascade=CascadeType.DETACH)
+	private Train train;
 	
 	
 

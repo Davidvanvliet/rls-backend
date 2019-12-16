@@ -5,11 +5,11 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.composer.domain.LocationIdent;
+import nl.rls.composer.domain.Location;
 
-public interface LocationIdentRepository extends CrudRepository<LocationIdent, Integer> {
-	Optional<LocationIdent> findByLocationPrimaryCode(Integer id);
+public interface LocationIdentRepository extends CrudRepository<Location, Integer> {
+	Optional<Location> findByLocationPrimaryCode(Integer id);
 //	@Query("select li from LocationIdent li where LOWER(li.code) = LOWER(?1)")
-	List<LocationIdent> findByCodeIgnoreCase(String code);
-	List<LocationIdent> findByPrimaryLocationNameContainingIgnoreCase(String name);
+	List<Location> findByCodeIgnoreCase(String code);
+	List<Location> findByPrimaryLocationNameContainingIgnoreCase(String name);
 }

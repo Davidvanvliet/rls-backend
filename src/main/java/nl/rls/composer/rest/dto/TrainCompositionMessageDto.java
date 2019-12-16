@@ -12,6 +12,5 @@ import lombok.Setter;
 @Setter
 public class TrainCompositionMessageDto extends GenericMessageDto  {
 	private List<CompositIdentifierOperationalTypeDto> compositIdentifierOperationalType = new ArrayList<CompositIdentifierOperationalTypeDto>();
-	private OperationalTrainNumberIdentifierDto operationalTrainNumberIdentifier;
-	private List<TrainCompositionJourneySectionDto> trainCompositionJourneySection = new ArrayList<TrainCompositionJourneySectionDto>();
+	private TrainDto train;
 }

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="54784996-d28b-46bd-8508-5ddcb53d0dfe" activeEnvironment="Default" name="rls-prorail" resourceRoot="" soapui-version="5.4.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="870e1e83-66fa-4367-a140-867922fb2f30" wsaVersion="NONE" name="LIReceiveMessageServiceSoapBinding" type="wsdl" bindingName="{http://uic.cc.org/UICMessage}LIReceiveMessageServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="https://ci-bpr.prorail.nl/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://ci-bpr.prorail.nl/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS?wsdl"><con:part><con:url>https://ci-bpr.prorail.nl/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="LIReceiveMessageService" targetNamespace="http://uic.cc.org/UICMessage" xmlns:ns1="http://uic.cc.org/UICMessage/Header" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://uic.cc.org/UICMessage" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:documentation>This WSDL describes the communication protocol for
+		sending TAF/TAP -TSI messages with standard xml Header node according
+		TAF/TAP TSI Common Schema to partner using the Common Interface
+		(CI).For more detailed Information please refer to the specification
+		document</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://uic.cc.org/UICMessage" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="UICMessage" type="tns:UICMessage"/>
+      <xs:element name="UICMessageResponse" type="tns:UICMessageResponse"/>
+      <xs:complexType name="UICMessage">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="message" type="xs:anyType"/>
+          <xs:element minOccurs="0" name="signature" type="xs:anyType"/>
+          <xs:element minOccurs="0" name="senderAlias" type="xs:anyType"/>
+          <xs:element minOccurs="0" name="encoding" type="xs:anyType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="UICMessageResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="xs:anyType"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://uic.cc.org/UICMessage/Header" xmlns="http://uic.cc.org/UICMessage/Header">
+      <xsd:element name="messageIdentifier" nillable="true" type="xsd:string"/>
+      <xsd:element name="messageLiHost" nillable="true" type="xsd:string"/>
+      <xsd:element name="compressed" nillable="true" type="xsd:boolean"/>
+      <xsd:element name="encrypted" nillable="true" type="xsd:boolean"/>
+      <xsd:element name="signed" nillable="true" type="xsd:boolean"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="UICMessage">
+    <wsdl:part element="tns:UICMessage" name="parameters"></wsdl:part>
+    <wsdl:part element="ns1:messageIdentifier" name="messageIdentifier"></wsdl:part>
+    <wsdl:part element="ns1:messageLiHost" name="messageLiHost"></wsdl:part>
+    <wsdl:part element="ns1:compressed" name="compressed"></wsdl:part>
+    <wsdl:part element="ns1:encrypted" name="encrypted"></wsdl:part>
+    <wsdl:part element="ns1:signed" name="signed"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UICMessageResponse">
+    <wsdl:part element="tns:UICMessageResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="UICReceiveMessage">
+    <wsdl:operation name="UICMessage">
+      <wsdl:documentation>This operation is used to send the message to the
+				Remote CI.</wsdl:documentation>
+      <wsdl:input message="tns:UICMessage" name="UICMessage"></wsdl:input>
+      <wsdl:output message="tns:UICMessageResponse" name="UICMessageResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LIReceiveMessageServiceSoapBinding" type="tns:UICReceiveMessage">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="UICMessage">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="UICMessage">
+        <soap:header message="tns:UICMessage" part="messageIdentifier" use="literal"></soap:header>
+        <soap:header message="tns:UICMessage" part="messageLiHost" use="literal"></soap:header>
+        <soap:header message="tns:UICMessage" part="compressed" use="literal"></soap:header>
+        <soap:header message="tns:UICMessage" part="encrypted" use="literal"></soap:header>
+        <soap:header message="tns:UICMessage" part="signed" use="literal"></soap:header>
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="UICMessageResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LIReceiveMessageService">
+    <wsdl:port binding="tns:LIReceiveMessageServiceSoapBinding" name="UICReceiveMessagePort">
+      <soap:address location="https://ci-bpr.prorail.nl/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>https://ci-bpr.prorail.nl/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS</con:endpoint></con:endpoints><con:operation id="e7074bc2-454f-49f3-b1fb-7c77f4ff97e3" isOneWay="false" action="" name="UICMessage" bindingOperationName="UICMessage" type="Request-Response" outputName="UICMessageResponse" inputName="UICMessage" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f079ce08-e514-4739-a03a-6ec8b1f28f47" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://ci-bpr.prorail.nl/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://uic.cc.org/UICMessage/Header" xmlns:uic="http://uic.cc.org/UICMessage">\r
+   <soapenv:Header>\r
+      <head:signed>flase</head:signed>\r
+      <head:encrypted>false</head:encrypted>\r
+      <head:compressed>false</head:compressed>\r
+      <head:messageLiHost>?</head:messageLiHost>\r
+      <head:messageIdentifier>45d0c713-111f-4a84-bdfd-3a32c9012860</head:messageIdentifier>\r
+   </soapenv:Header>\r
+   <soapenv:Body>\r
+      <uic:UICMessage>\r
+         <!--Optional:-->\r
+         <message><TrainCompositionMessage xmlns:ns2="http://taf-jsg.info/schemes">
+    <MessageHeader>
+        <MessageReference>
+            <MessageType>3003</MessageType>
+            <MessageTypeVersion>2.1.6</MessageTypeVersion>
+            <MessageIdentifier>Vrije tekst?</MessageIdentifier>
+            <MessageDateTime>2019-12-14T22:11:26.582+01:00</MessageDateTime>
+        </MessageReference>
+        <SenderReference>test bericht</SenderReference>
+        <Sender>9001</Sender>
+        <Recipient>84</Recipient>
+    </MessageHeader>
+    <MessageStatus>1</MessageStatus>
+    <TransportOperationalIdentifiers>
+        <ObjectType>TR</ObjectType>
+        <Company>3502</Company>
+        <Core>041350222700</Core>
+        <Variant>00</Variant>
+        <TimetableYear>2019</TimetableYear>
+        <StartDate>2019-12-14+01:00</StartDate>
+    </TransportOperationalIdentifiers>
+    <OperationalTrainNumberIdentifier>
+        <OperationalTrainNumber>123456789</OperationalTrainNumber>
+        <ScheduledTimeAtHandover>2019-12-14T22:11:26.373+01:00</ScheduledTimeAtHandover>
+    </OperationalTrainNumberIdentifier>
+    <OperationalTrainNumber>123456789</OperationalTrainNumber>
+    <TransfereeIM>84</TransfereeIM>
+    <TrainCompositionJourneySection>
+        <JourneySection>
+            <JourneySectionOrigin>
+                <CountryCodeISO>NL</CountryCodeISO>
+                <LocationPrimaryCode>621</LocationPrimaryCode>
+                <PrimaryLocationName>Utrecht Centraal</PrimaryLocationName>
+            </JourneySectionOrigin>
+            <JourneySectionDestination>
+                <CountryCodeISO>NL</CountryCodeISO>
+                <LocationPrimaryCode>263</LocationPrimaryCode>
+                <PrimaryLocationName>Groningen</PrimaryLocationName>
+            </JourneySectionDestination>
+            <ResponsibilityActualSection>
+                <ResponsibleRU>3502</ResponsibleRU>
+                <ResponsibleIM>84</ResponsibleIM>
+            </ResponsibilityActualSection>
+            <ResponsibilityNextSection>
+                <ResponsibleRU>3502</ResponsibleRU>
+                <ResponsibleIM>84</ResponsibleIM>
+            </ResponsibilityNextSection>
+        </JourneySection>
+        <TrainRunningData>
+            <ExceptionalGaugingInd>false</ExceptionalGaugingInd>
+            <DangerousGoodsIndicator>false</DangerousGoodsIndicator>
+            <Activities/>
+        </TrainRunningData>
+        <LocoIdent>
+            <TractionType>11</TractionType>
+            <LocoTypeNumber>123456</LocoTypeNumber>
+            <LocoNumber>928422031023</LocoNumber>
+            <TractionMode>11</TractionMode>
+            <DriverIndication>1</DriverIndication>
+            <TractionPositionInTrain>1</TractionPositionInTrain>
+        </LocoIdent>
+        <LocoIdent>
+            <TractionType>11</TractionType>
+            <LocoTypeNumber>123455</LocoTypeNumber>
+            <LocoNumber>92842203456</LocoNumber>
+            <TractionMode>11</TractionMode>
+            <DriverIndication>0</DriverIndication>
+            <TractionPositionInTrain>2</TractionPositionInTrain>
+        </LocoIdent>
+        <LivestockOrPeopleIndicator>0</LivestockOrPeopleIndicator>
+        <WagonData>
+            <WagonNumberFreight>335249561341</WagonNumberFreight>
+            <WagonTrainPosition>1</WagonTrainPosition>
+            <WagonOperationalData>
+                <BrakeType>G</BrakeType>
+                <BrakeWeight>10000</BrakeWeight>
+                <WagonMaxSpeed>100</WagonMaxSpeed>
+                <TotalLoadWeight>13000</TotalLoadWeight>
+            </WagonOperationalData>
+            <WagonTechData>
+                <LengthOverBuffers>964</LengthOverBuffers>
+                <WagonNumberOfAxles>2</WagonNumberOfAxles>
+                <HandBrakeBrakedWeight>0</HandBrakeBrakedWeight>
+                <WagonWeightEmpty>10340</WagonWeightEmpty>
+            </WagonTechData>
+        </WagonData>
+    </TrainCompositionJourneySection>
+</TrainCompositionMessage></message>\r
+          <senderAlias>Berend</senderAlias>\r
+      </uic:UICMessage>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://uic.cc.org/UICMessage/UICReceiveMessage/UICMessage"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

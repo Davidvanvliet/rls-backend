@@ -1,6 +1,7 @@
 package nl.rls.ci.service;
 
 import java.io.File;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.UUID;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +25,12 @@ import nl.rls.ci.domain.UicResponse;
 import nl.rls.ci.domain.XmlMessage;
 import nl.rls.ci.repository.CiRepository;
 import nl.rls.ci.soap.dto.LIReceiveMessageService;
+import nl.rls.ci.soap.dto.LITechnicalAck;
 import nl.rls.ci.soap.dto.UICMessage;
 import nl.rls.ci.soap.dto.UICMessageResponse;
 import nl.rls.ci.soap.dto.UICReceiveMessage;
 import nl.rls.ci.soap.dto.mapper.CiDtoMapper;
-import nl.rls.composer.domain.TrainCompositionMessage;
+import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.repository.XmlMessageRepository;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 
@@ -43,29 +46,31 @@ public class CiService {
 
 	@Transactional
 	public boolean sendMessage(CiMessage ciMessage) {
-		log.info("sendMessage (ciMessage): " + ciMessage);
+		log.info("sendMessage 1 (ciMessage): " + ciMessage);
 		UICMessage uicMessage = CiDtoMapper.map(ciMessage.getUicRequest());
-		log.info("sendMessage (uicMessage): " + uicMessage);
+		log.info("sendMessage 2 (uicMessage): " + uicMessage);
+		System.out.println("WSDL_LOCATION: " + LIReceiveMessageService.LIRECEIVEMESSAGESERVICE_WSDL_LOCATION);
+
 		LIReceiveMessageService liReceiveMessageService = new LIReceiveMessageService();
 		UICReceiveMessage uicReceiveMessage = liReceiveMessageService.getUICReceiveMessagePort();
-		UICMessageResponse uicMessageResponse = uicReceiveMessage.uicMessage(
-				uicMessage,
-				ciMessage.getUicHeader().getMessageIdentifier(), 
-				ciMessage.getUicHeader().getMessageLiHost(),
-				ciMessage.getUicHeader().isCompressed(), 
-				ciMessage.getUicHeader().isEncrypted(),
+		UICMessageResponse uicMessageResponse = uicReceiveMessage.uicMessage(uicMessage,
+				ciMessage.getUicHeader().getMessageIdentifier(), ciMessage.getUicHeader().getMessageLiHost(),
+				ciMessage.getUicHeader().isCompressed(), ciMessage.getUicHeader().isEncrypted(),
 				ciMessage.getUicHeader().isSigned());
-		log.info("sendMessage (uicMessageResponse): " + uicMessageResponse.getReturn());
-		UicResponse uicResponse = CiDtoMapper.map(uicMessageResponse);
+		log.info("sendMessage 3 (uicMessageResponse): " + uicMessageResponse.getReturn());
+		LITechnicalAck technicalAck = unMarshallResponse(uicMessageResponse.getReturn().toString());
+		UicResponse uicResponse = CiDtoMapper.map(technicalAck);
 		ciMessage.setUicResponse(uicResponse);
-		log.info("sendMessage (uicResponse): " + uicResponse);
+		log.info("sendMessage 4 (uicResponse): " + uicResponse);
 		ciMessage.setPosted(true);
+		ciMessage.setPostDate(new Date());
 		ciRepository.save(ciMessage);
 		return true;
 	}
-	
+
 	public String makeXmlMessage(TrainCompositionMessage trainCompositionMessage) {
-		info.taf_jsg.schemes.TrainCompositionMessage trainCompositionXmlMessage = TrainCompositionMessageXmlMapper.map(trainCompositionMessage);
+		info.taf_jsg.schemes.TrainCompositionMessage trainCompositionXmlMessage = TrainCompositionMessageXmlMapper
+				.map(trainCompositionMessage);
 		StringWriter xmlMessage = new StringWriter();
 		try {
 			File file = new File("train_composition_message.xml");
@@ -73,10 +78,10 @@ public class CiService {
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
 			// output pretty printed
-//			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+			// jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
 			jaxbMarshaller.marshal(trainCompositionXmlMessage, file);
 			jaxbMarshaller.marshal(trainCompositionXmlMessage, System.out);
-			
+
 			jaxbMarshaller.marshal(trainCompositionXmlMessage, xmlMessage);
 
 		} catch (JAXBException e) {
@@ -97,7 +102,7 @@ public class CiService {
 		UicRequest uicRequest = new UicRequest();
 		uicRequest.setOwnerId(ownerId);
 		// zet het specifieke bericht, bijv TCM, dit komt van de client
-		System.out.println("postMessage XML message: "+ messageXml);
+		System.out.println("postMessage XML message: " + messageXml);
 		XmlMessage xmlMessage = new XmlMessage();
 		xmlMessage.setOwnerId(ownerId);
 		xmlMessage.setMessage(messageXml.toString());
@@ -117,4 +122,20 @@ public class CiService {
 		ciMessage = ciRepository.save(ciMessage);
 		return ciMessage;
 	}
+
+	private LITechnicalAck unMarshallResponse(String xmlString) {
+		LITechnicalAck technicalAck = null;
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(LITechnicalAck.class);
+
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			technicalAck = (LITechnicalAck) jaxbUnmarshaller.unmarshal(new StringReader(xmlString));
+			System.out.println(technicalAck);
+
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return technicalAck;
+	}
+
 }

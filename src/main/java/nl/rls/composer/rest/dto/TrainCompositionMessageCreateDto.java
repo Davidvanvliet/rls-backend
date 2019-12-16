@@ -7,6 +7,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter @Setter
 public class TrainCompositionMessageCreateDto {
-	private String transferPoint;
-	private String operationalTrainNumber;
+	private String train;
 }

@@ -26,11 +26,11 @@ import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.TrainCompositionJourneySection;
-import nl.rls.composer.domain.Wagon;
 import nl.rls.composer.domain.WagonInTrain;
+import nl.rls.composer.domain.WagonLoad;
 import nl.rls.composer.repository.TrainCompositionJourneySectionRepository;
 import nl.rls.composer.repository.WagonInTrainRepository;
-import nl.rls.composer.repository.WagonRepository;
+import nl.rls.composer.repository.WagonLoadRepository;
 import nl.rls.composer.rest.dto.TrainCompositionJourneySectionDto;
 import nl.rls.composer.rest.dto.WagonInTrainAddDto;
 import nl.rls.composer.rest.dto.WagonInTrainDto;
@@ -44,7 +44,7 @@ public class WagonInTrainController {
 	@Autowired
 	private SecurityContext securityContext;
 	@Autowired
-	private WagonRepository wagonRepository;
+	private WagonLoadRepository wagonLoadRepository;
 	@Autowired
 	private WagonInTrainRepository wagonInTrainRepository;
 	@Autowired
@@ -52,7 +52,7 @@ public class WagonInTrainController {
 	@Autowired
 	private TrainCompositionJourneySectionRepository trainCompositionJourneySectionRepository;
 
-	@GetMapping(value = "{id}/wagons/", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "{id}/wagonintrains", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Resources<WagonInTrainDto>> getAllWagonInTrain(@PathVariable Integer id) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
@@ -72,7 +72,7 @@ public class WagonInTrainController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(value = "{id}/wagons/{wagonId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "{id}/wagonintrains/{wagonId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<WagonInTrainDto> getWagonInTrain(@PathVariable Integer id, @PathVariable Integer wagonId) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
@@ -87,21 +87,21 @@ public class WagonInTrainController {
 	}
 
 
-	@PostMapping(value = "{id}/wagons", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "{id}/wagonintrains", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TrainCompositionJourneySectionDto> addWagon(@PathVariable int id,
 			@RequestBody WagonInTrainAddDto dto) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
 				.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
-			int wagonId = DecodePath.decodeInteger(dto.getWagon(), "wagons");
-			Optional<Wagon> wagon = wagonRepository.findByIdAndOwnerId(wagonId, ownerId);
-			if (wagon.isPresent()) {
+			int wagonLoadId = DecodePath.decodeInteger(dto.getWagonLoad(), "wagonloads");
+			Optional<WagonLoad> wagonLoad = wagonLoadRepository.findByIdAndOwnerId(wagonLoadId, ownerId);
+			if (wagonLoad.isPresent()) {
 				TrainCompositionJourneySection trainCompositionJourneySection = optional.get();
 				
 				WagonInTrain wagonInTrain = new WagonInTrain();
-				wagonInTrain.setWagon(wagon.get());
-				wagonInTrain.setWagonTrainPosition(dto.getWagonTrainPosition());
+				wagonInTrain.setWagonLoad(wagonLoad.get());
+				wagonInTrain.setPosition(dto.getPosition());
 				trainCompositionJourneySectionService.addWagonToTrain(trainCompositionJourneySection, wagonInTrain);
 				TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper
 						.map(trainCompositionJourneySection);
@@ -114,7 +114,7 @@ public class WagonInTrainController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PutMapping(value = "{id}/wagons/{wagonId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "{id}/wagonintrains/{wagonInTrainId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TrainCompositionJourneySectionDto> moveWagon(@PathVariable int id,
 			@PathVariable int wagonInTrainId, @RequestParam("position") int position) {
 		int ownerId = securityContext.getOwnerId();
@@ -130,15 +130,15 @@ public class WagonInTrainController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@DeleteMapping(value = "{id}/wagons/{wagonId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "{id}/wagonintrains/{wagonInTrainId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TrainCompositionJourneySectionDto> removeWagon(@PathVariable int id,
-			@PathVariable int wagonId) {
+			@PathVariable int wagonInTrainId) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
 				.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
 			TrainCompositionJourneySection trainCompositionJourneySection = optional.get();
-			trainCompositionJourneySection.removeWagonById(wagonId);
+			trainCompositionJourneySection.removeWagonById(wagonInTrainId);
 			wagonInTrainRepository.saveAll(trainCompositionJourneySection.getWagons());
 			trainCompositionJourneySectionRepository.save(trainCompositionJourneySection);
 			TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper

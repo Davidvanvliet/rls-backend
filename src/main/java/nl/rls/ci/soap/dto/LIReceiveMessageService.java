@@ -24,7 +24,7 @@ import javax.xml.ws.WebServiceFeature;
 	)
 public class LIReceiveMessageService extends Service {
 
-    private final static URL LIRECEIVEMESSAGESERVICE_WSDL_LOCATION;
+    public final static URL LIRECEIVEMESSAGESERVICE_WSDL_LOCATION;
     private final static Logger logger = Logger.getLogger(nl.rls.ci.soap.dto.LIReceiveMessageService.class.getName());
 
     static {
@@ -32,7 +32,9 @@ public class LIReceiveMessageService extends Service {
         try {
             URL baseUrl;
             baseUrl = nl.rls.ci.soap.dto.LIReceiveMessageService.class.getResource(".");
-            url = new URL(baseUrl, "src/main/resources/UICCCMessageProcessingInboundWS.wsdl");
+            
+            url = new URL(baseUrl, "UICCCMessageProcessingInboundWS.wsdl");
+            System.out.println("url: "+url.toString());
         } catch (MalformedURLException e) {
             logger.warning("Failed to create URL for the wsdl Location: 'src/main/resources/UICCCMessageProcessingInboundWS.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
@@ -45,7 +47,7 @@ public class LIReceiveMessageService extends Service {
     }
 
     public LIReceiveMessageService() {
-        super(LIRECEIVEMESSAGESERVICE_WSDL_LOCATION, new QName("http://uic.cc.org/UICMessage", "LIReceiveMessageService"));
+         super(LIRECEIVEMESSAGESERVICE_WSDL_LOCATION, new QName("http://uic.cc.org/UICMessage", "LIReceiveMessageService"));
     }
 
     /**

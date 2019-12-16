@@ -5,7 +5,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
@@ -87,7 +85,7 @@ public class CiController {
 	 * @return de link naar het CI object/resource
 	 */
 	@Transactional
-	@PostMapping
+	@PostMapping(value = "/")
 	@ApiOperation(value = "Stores a CI (XML-)message for a client (UicRequest). This message is not send.")
 	public ResponseEntity<?> postMessage(@RequestBody String messageXml) {
 		CiMessage ciMessage = ciService.makeCiMessage(messageXml);
@@ -111,26 +109,22 @@ public class CiController {
 	 * @return
 	 */
 	@Transactional
-	@PostMapping(value = "/{id}/")
+	@PostMapping(value = "/{id}")
 	@ApiOperation(value = "Sends a previously stored CI (XML-)message to the Common Interface (UicRequest).")
-	public ResponseEntity<UicResponse> sendMessage(@PathVariable int id, @RequestParam(required = true) String action) {
-		log.debug("sendMessage: "+id+" "+action);
+	public ResponseEntity<UicResponse> sendMessage(@PathVariable int id) {
+		log.debug("sendMessage: "+id);
 		Optional<CiMessage> optional = ciRepository.findById(id);
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		System.out.println("sendMessage XML message: "+ optional.get().getUicRequest().getMessage());
 		if (ciService.sendMessage(optional.get())) {
-			optional.get().setPosted(true);
-			optional.get().setPostDate(new Date());
+			return ResponseEntity.accepted().build();
 		} else {
-			optional.get().setPosted(false);
-			optional.get().setPostDate(null);
+			return ResponseEntity.status(406).build();
+			
 		}
-		ciRepository.save(optional.get());
 
-		return ResponseEntity.created(linkTo(methodOn(CiController.class).getMessage(optional.get().getId())).toUri())
-				.build();
 	}
 
 }

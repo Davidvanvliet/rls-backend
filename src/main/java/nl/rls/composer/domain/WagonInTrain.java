@@ -22,9 +22,9 @@ public class WagonInTrain {
 	 * Identifies the position of a wagon within a train.  
 	 * Sequential number starting with the first wagon at the front of train as N°1.
 	 */
-    private int wagonTrainPosition;
+    private int position;
     @ManyToOne
-    private Wagon wagon;
+    private WagonLoad wagonLoad;
     @ManyToOne
     private TrainCompositionJourneySection trainCompositionJourneySection;
 

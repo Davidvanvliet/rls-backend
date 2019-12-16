@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.composer.domain.TrainCompositionMessage;
+import nl.rls.composer.domain.message.TrainCompositionMessage;
 
 public interface TrainCompositionMessageRepository  extends CrudRepository<TrainCompositionMessage, Integer> {
 	Optional<TrainCompositionMessage> findByIdAndOwnerId(int id, int ownerId);

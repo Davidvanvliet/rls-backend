@@ -1,4 +1,4 @@
-package nl.rls.composer.domain;
+package nl.rls.composer.domain.code;
 
 /**
  * @author berend.wilkens

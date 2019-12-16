@@ -2,12 +2,12 @@ package nl.rls.composer.rest.dto.mapper;
 
 import org.dozer.CustomConverter;
 
-import nl.rls.composer.domain.WagonIdent;
+import nl.rls.composer.domain.WagonLoad;
 
-public class WagonIdentConverter implements CustomConverter {
+public class WagonLoadConverter implements CustomConverter {
 	@Override
 	public Object convert(Object dto, Object entity, Class<?> destinationClass,
 			Class<?> sourceClass) {
-		return WagonIdentDtoMapper.map((WagonIdent)entity);
+		return WagonLoadDtoMapper.map((WagonLoad)entity);
 	}
 }

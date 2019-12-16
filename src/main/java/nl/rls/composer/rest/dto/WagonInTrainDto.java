@@ -10,6 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class WagonInTrainDto extends ResourceSupport {
-    private int wagonTrainPosition;
-    private WagonDto wagon;
+    private int position;
+    private WagonLoadDto wagonLoad;
 }

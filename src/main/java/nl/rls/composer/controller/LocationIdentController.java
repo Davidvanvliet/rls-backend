@@ -22,21 +22,21 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import nl.rls.ci.url.BaseURL;
-import nl.rls.composer.domain.LocationIdent;
+import nl.rls.composer.domain.Location;
 import nl.rls.composer.repository.LocationIdentRepository;
 import nl.rls.composer.rest.dto.LocationIdentDto;
 import nl.rls.composer.rest.dto.mapper.LocationIdentDtoMapper;
 
-@Api(value = "Access to LocationIdent. ")
+@Api(value = "Access to Locations. ")
 @RestController
-@RequestMapping(BaseURL.BASE_PATH+"locationidents")
+@RequestMapping(BaseURL.BASE_PATH+"locations")
 public class LocationIdentController {
 	@Autowired
 	private LocationIdentRepository locationIdentRepository;
-	@ApiOperation(value = "Get a locationIdent based on an id, which is the TSI.locationPrimaryCode")
+	@ApiOperation(value = "Get a location based on an id, which is the TSI.locationPrimaryCode")
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<LocationIdentDto> getById(@PathVariable Integer id) {
-		Optional<LocationIdent> optional = locationIdentRepository.findByLocationPrimaryCode(id);
+		Optional<Location> optional = locationIdentRepository.findByLocationPrimaryCode(id);
 		if (optional.isPresent()) {
 			LocationIdentDto locationIdentDto = LocationIdentDtoMapper.map(optional.get());
 			return ResponseEntity.ok(locationIdentDto);
@@ -63,7 +63,7 @@ public class LocationIdentController {
 			@RequestParam(name = "name", required = false) String name, 
 			@ApiParam(value = "shortname can also be a fragement of the shortName [Optional]")
 			@RequestParam(name= "shortname", required = false) String shortname) {
-		Iterable<LocationIdent> locationList = null;
+		Iterable<Location> locationList = null;
 		if (name != null) {
 			if (name.length() >= 3) {
 				locationList = locationIdentRepository.findByPrimaryLocationNameContainingIgnoreCase(name);
@@ -77,7 +77,7 @@ public class LocationIdentController {
 		}
 		List<LocationIdentDto> locationDtoList = new ArrayList<>();
 
-		for (LocationIdent locationIdent : locationList) {
+		for (Location locationIdent : locationList) {
 			locationDtoList.add(LocationIdentDtoMapper.map(locationIdent));
 		}
 		Link locationsLink = linkTo(methodOn(LocationIdentController.class).getAllQuery(name, shortname)).withSelfRel();

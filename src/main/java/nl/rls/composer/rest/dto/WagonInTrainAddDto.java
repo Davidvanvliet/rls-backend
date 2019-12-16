@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter @Setter
 public class WagonInTrainAddDto {
-    private int wagonTrainPosition;
-	private String wagon;
+    private int position;
+	private String wagonLoad;
 }

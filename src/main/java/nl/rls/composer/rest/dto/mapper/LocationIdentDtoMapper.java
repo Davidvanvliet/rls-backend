@@ -8,12 +8,12 @@ import org.dozer.loader.api.BeanMappingBuilder;
 
 import nl.rls.composer.controller.CompanyController;
 import nl.rls.composer.controller.LocationIdentController;
-import nl.rls.composer.domain.LocationIdent;
+import nl.rls.composer.domain.Location;
 import nl.rls.composer.rest.dto.LocationIdentDto;
 
 public class LocationIdentDtoMapper {
 
-	public static LocationIdentDto map(LocationIdent locationIdent) {
+	public static LocationIdentDto map(Location locationIdent) {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {

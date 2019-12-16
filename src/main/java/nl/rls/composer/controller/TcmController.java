@@ -19,7 +19,7 @@ import nl.rls.ci.controller.CiController;
 import nl.rls.ci.domain.CiMessage;
 import nl.rls.ci.service.CiService;
 import nl.rls.ci.url.BaseURL;
-import nl.rls.composer.domain.TrainCompositionMessage;
+import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.repository.TrainCompositionMessageRepository;
 
 @RestController

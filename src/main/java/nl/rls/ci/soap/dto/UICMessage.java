@@ -5,6 +5,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * <p>Java class for UICMessage complex type.
@@ -35,107 +38,10 @@ import javax.xml.bind.annotation.XmlType;
     "senderAlias",
     "encoding"
 })
+@Getter @Setter
 public class UICMessage {
-
-    protected Object message;
-    protected Object signature;
-    protected Object senderAlias;
-    protected Object encoding;
-
-    /**
-     * Gets the value of the message property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
-     */
-    public Object getMessage() {
-        return message;
-    }
-
-    /**
-     * Sets the value of the message property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
-     */
-    public void setMessage(Object value) {
-        this.message = value;
-    }
-
-    /**
-     * Gets the value of the signature property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
-     */
-    public Object getSignature() {
-        return signature;
-    }
-
-    /**
-     * Sets the value of the signature property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
-     */
-    public void setSignature(Object value) {
-        this.signature = value;
-    }
-
-    /**
-     * Gets the value of the senderAlias property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
-     */
-    public Object getSenderAlias() {
-        return senderAlias;
-    }
-
-    /**
-     * Sets the value of the senderAlias property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
-     */
-    public void setSenderAlias(Object value) {
-        this.senderAlias = value;
-    }
-
-    /**
-     * Gets the value of the encoding property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
-     */
-    public Object getEncoding() {
-        return encoding;
-    }
-
-    /**
-     * Sets the value of the encoding property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
-     */
-    public void setEncoding(Object value) {
-        this.encoding = value;
-    }
-
+    protected String message;
+    protected String signature;
+    protected String senderAlias;
+    protected String encoding;
 }

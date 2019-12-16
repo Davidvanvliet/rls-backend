@@ -35,7 +35,7 @@ public interface UICReceiveMessage {
      * @param messageLiHost
      * @param parameters
      * @return
-     *     returns nl.trains24.ci.soapinterface.UICMessageResponse
+     *     returns nl.rls.ci.soap.UICMessageResponse
      */
     @WebMethod(operationName = "UICMessage")
     @WebResult(name = "UICMessageResponse", targetNamespace = "http://uic.cc.org/UICMessage", partName = "parameters")

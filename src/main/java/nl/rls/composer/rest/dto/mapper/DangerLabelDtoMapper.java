@@ -6,7 +6,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.dozer.DozerBeanMapper;
 
 import nl.rls.composer.controller.DangerLabelController;
-import nl.rls.composer.domain.DangerLabel;
+import nl.rls.composer.domain.code.DangerLabel;
 import nl.rls.composer.rest.dto.DangerLabelDto;
 
 public class DangerLabelDtoMapper {

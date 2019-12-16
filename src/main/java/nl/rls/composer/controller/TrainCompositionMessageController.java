@@ -33,23 +33,13 @@ import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Company;
-import nl.rls.composer.domain.JourneySection;
-import nl.rls.composer.domain.LocationIdent;
-import nl.rls.composer.domain.OperationalTrainNumberIdentifier;
-import nl.rls.composer.domain.Responsibility;
-import nl.rls.composer.domain.TrainCompositionJourneySection;
-import nl.rls.composer.domain.TrainCompositionMessage;
-import nl.rls.composer.domain.TrainRunningData;
+import nl.rls.composer.domain.Train;
 import nl.rls.composer.domain.code.MessageType;
 import nl.rls.composer.domain.message.MessageStatus;
+import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.repository.CompanyRepository;
-import nl.rls.composer.repository.JourneySectionRepository;
-import nl.rls.composer.repository.LocationIdentRepository;
-import nl.rls.composer.repository.OperationalTrainNumberIdentifierRepository;
-import nl.rls.composer.repository.ResponsibilityRepository;
-import nl.rls.composer.repository.TrainCompositionJourneySectionRepository;
 import nl.rls.composer.repository.TrainCompositionMessageRepository;
-import nl.rls.composer.rest.dto.TrainCompositionJourneySectionPostDto;
+import nl.rls.composer.repository.TrainRepository;
 import nl.rls.composer.rest.dto.TrainCompositionMessageCreateDto;
 import nl.rls.composer.rest.dto.TrainCompositionMessageDto;
 import nl.rls.composer.rest.dto.mapper.TrainCompositionMessageDtoMapper;
@@ -63,17 +53,9 @@ public class TrainCompositionMessageController {
 	@Autowired
 	private CompanyRepository companyRepository;
 	@Autowired
-	private ResponsibilityRepository responsibilityRepository;
-	@Autowired
-	private LocationIdentRepository locationIdentRepository;
-	@Autowired
 	private OwnerRepository ownerRepository;
 	@Autowired
-	private TrainCompositionJourneySectionRepository trainCompositionJourneySectionRepository;
-	@Autowired
-	private JourneySectionRepository journeySectionRepository;
-	@Autowired
-	private OperationalTrainNumberIdentifierRepository operationalTrainNumberIdentifierRepository;
+	private TrainRepository trainRepository;
 
 	@Autowired
 	private SecurityContext securityContext;
@@ -154,18 +136,11 @@ public class TrainCompositionMessageController {
 		trainCompositionMessage.setMessageTypeVersion(MessageType.TRAIN_COMPOSITION_MESSAGE.version());
 		trainCompositionMessage.setMessageStatus(MessageStatus.creation.getValue());
 		trainCompositionMessage.setSenderReference(UUID.randomUUID().toString());
-		
-		OperationalTrainNumberIdentifier operationalTrainNumberIdentifier = new OperationalTrainNumberIdentifier(
-				"41350", new Date(), new Date());
-		operationalTrainNumberIdentifier.setOwnerId(ownerId);
-		operationalTrainNumberIdentifierRepository.save(operationalTrainNumberIdentifier);
-		trainCompositionMessage.setOperationalTrainNumberIdentifier(operationalTrainNumberIdentifier);
 
 		/* ProRail = 0084 */
 		List<Company> recipient = companyRepository.findByCode("0084");
 		if (recipient.size() == 1) {
 			trainCompositionMessage.setRecipient(recipient.get(0));
-			trainCompositionMessage.setTransfereeIM(recipient.get(0));
 		}
 
 		Optional<Owner> owner = ownerRepository.findById(ownerId);
@@ -175,11 +150,12 @@ public class TrainCompositionMessageController {
 				trainCompositionMessage.setSender(sender.get(0));
 			}
 		}
-
-		Integer locationId = DecodePath.decodeInteger(dto.getTransferPoint(), "locationidents");
-		Optional<LocationIdent> locationIdent = locationIdentRepository.findById(locationId);
-		if (locationIdent.isPresent()) {
-			trainCompositionMessage.setTransferPoint(locationIdent.get());
+		
+		Integer trainId = DecodePath.decodeInteger(dto.getTrain(), "trains");
+		Optional<Train> optional = trainRepository.findByIdAndOwnerId(trainId, ownerId);
+		if (optional.isPresent()) {
+			trainCompositionMessage.setTrain(optional.get());
+			optional.get().getTrainCompositionMessages().add(trainCompositionMessage);
 		}
 
 		trainCompositionMessage = trainCompositionMessageRepository.save(trainCompositionMessage);
@@ -217,57 +193,4 @@ public class TrainCompositionMessageController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping(value = "{id}/journeysections/", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TrainCompositionMessageDto> createSection(@PathVariable Integer id, 
-			@RequestBody TrainCompositionJourneySectionPostDto dto) {
-		int ownerId = securityContext.getOwnerId();
-		Optional<TrainCompositionMessage> tcm = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
-		if (!tcm.isPresent()) {
-			ResponseEntity.notFound();
-		}
-		TrainCompositionJourneySection entity = new TrainCompositionJourneySection(ownerId);
-		entity.setLivestockOrPeopleIndicator(dto.getLivestockOrPeopleIndicator());
-		TrainRunningData trainRunningData = new TrainRunningData(ownerId);
-		trainRunningData.setDangerousGoodsIndicator(dto.getDangerousGoodsIndicator() == 1);
-		trainRunningData.setExceptionalGaugingInd(dto.getExceptionalGaugingInd() == 1);
-		trainRunningData.setTrainType(dto.getTrainType());
-		trainRunningData.setTrainMaxSpeed(100);
-		trainRunningData.setTrain(entity);
-		entity.setTrainRunningData(trainRunningData);
-		entity.setLivestockOrPeopleIndicator(dto.getLivestockOrPeopleIndicator());
-
-		JourneySection journeySection = new JourneySection(ownerId);
-		Integer locationIdentId = DecodePath.decodeInteger(dto.getJourneySectionOrigin(), "locationidents");
-		Optional<LocationIdent> optional = locationIdentRepository.findByLocationPrimaryCode(locationIdentId);
-		if (optional.isPresent()) {
-			journeySection.setJourneySectionOrigin(optional.get());
-		}
-
-		locationIdentId = DecodePath.decodeInteger(dto.getJourneySectionDestination(), "locationidents");
-		optional = locationIdentRepository.findByLocationPrimaryCode(locationIdentId);
-		if (optional.isPresent()) {
-			journeySection.setJourneySectionDestination(optional.get());
-		}
-		Responsibility responsibility = responsibilityRepository.findByOwnerId(ownerId);
-		journeySection.setResponsibilityActualSection(responsibility);
-		journeySection.setResponsibilityNextSection(responsibility);
-		journeySectionRepository.save(journeySection);
-		entity.setJourneySection(journeySection);
-
-		entity.setTrainRunningData(trainRunningData);
-		entity = trainCompositionJourneySectionRepository.save(entity);
-		tcm.get().getTrainCompositionJourneySection().add(entity);
-		TrainCompositionMessage trainCompositionMessage = trainCompositionMessageRepository.save(tcm.get());
-		
-		if (trainCompositionMessage != null) {
-			TrainCompositionMessageDto resultDto = TrainCompositionMessageDtoMapper.map(trainCompositionMessage);
-
-			return ResponseEntity.created(
-					linkTo(methodOn(TrainCompositionJourneySectionController.class).getById(entity.getId()))
-							.toUri())
-					.body(resultDto);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
 }

@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
-import org.dozer.loader.api.FieldsMappingOptions;
 
 import nl.rls.composer.controller.CompanyController;
 import nl.rls.composer.controller.LocationIdentController;
@@ -16,6 +15,7 @@ import nl.rls.composer.controller.TractionInTrainController;
 import nl.rls.composer.controller.TrainCompositionJourneySectionController;
 import nl.rls.composer.controller.WagonInTrainController;
 import nl.rls.composer.domain.TractionInTrain;
+import nl.rls.composer.domain.Train;
 import nl.rls.composer.domain.TrainCompositionJourneySection;
 import nl.rls.composer.domain.WagonInTrain;
 import nl.rls.composer.domain.code.TrainActivityType;
@@ -23,6 +23,7 @@ import nl.rls.composer.rest.dto.TractionInTrainDto;
 import nl.rls.composer.rest.dto.TrainActivityTypeDto;
 import nl.rls.composer.rest.dto.TrainCompositionJourneySectionDto;
 import nl.rls.composer.rest.dto.TrainCompositionJourneySectionPostDto;
+import nl.rls.composer.rest.dto.TrainDto;
 import nl.rls.composer.rest.dto.WagonInTrainDto;
 
 public class TrainCompositionJourneySectionDtoMapper {
@@ -32,10 +33,11 @@ public class TrainCompositionJourneySectionDtoMapper {
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
 				mapping(TrainCompositionJourneySection.class, TrainCompositionJourneySectionDto.class)
-				.fields("trainRunningData.exceptionalGaugingInd", "exceptionalGaugingInd")
-				.fields("trainRunningData.dangerousGoodsIndicator", "dangerousGoodsIndicator")
-				.fields("trainRunningData", "trainRunningData", FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.mapper.TrainRunningDataConverter"))
-
+				.fields("exceptionalGaugingInd", "exceptionalGaugingInd")
+				.fields("dangerousGoodsIndicator", "dangerousGoodsIndicator")
+				;
+				mapping(Train.class, TrainDto.class)
+					.fields("transferPoint.primaryLocationName", "transferPoint")
 				;
 			}
 		};
@@ -67,12 +69,12 @@ public class TrainCompositionJourneySectionDtoMapper {
 		}
 		dto.setActivities(trainActivityTypeDtoList);
 
-		dto.add(linkTo(methodOn(CompanyController.class).getById(entity.getJourneySection().getResponsibilityActualSection().getResponsibleRU().getId())).withRel("responsibilityActualSectionRU").withTitle(entity.getJourneySection().getResponsibilityActualSection().getResponsibleRU().getName()));
-		dto.add(linkTo(methodOn(CompanyController.class).getById(entity.getJourneySection().getResponsibilityActualSection().getResponsibleIM().getId())).withRel("responsibilityActualSectionIM").withTitle(entity.getJourneySection().getResponsibilityActualSection().getResponsibleIM().getName()));
-		dto.add(linkTo(methodOn(CompanyController.class).getById(entity.getJourneySection().getResponsibilityNextSection().getResponsibleRU().getId())).withRel("responsibilityNextSectionRU").withTitle(entity.getJourneySection().getResponsibilityNextSection().getResponsibleRU().getName()));
-		dto.add(linkTo(methodOn(CompanyController.class).getById(entity.getJourneySection().getResponsibilityNextSection().getResponsibleIM().getId())).withRel("responsibilityNextSectionIM").withTitle(entity.getJourneySection().getResponsibilityNextSection().getResponsibleIM().getName()));
-		dto.add(linkTo(methodOn(LocationIdentController.class).getById(entity.getJourneySection().getJourneySectionOrigin().getLocationPrimaryCode())).withRel("journeySectionOrigin").withTitle(entity.getJourneySection().getJourneySectionOrigin().getPrimaryLocationName()));
-		dto.add(linkTo(methodOn(LocationIdentController.class).getById(entity.getJourneySection().getJourneySectionDestination().getLocationPrimaryCode())).withRel("journeySectionDestination").withTitle(entity.getJourneySection().getJourneySectionDestination().getPrimaryLocationName()));
+		dto.add(linkTo(methodOn(CompanyController.class).getById(entity.getResponsibilityActualSection().getResponsibleRU().getId())).withRel("responsibilityActualSectionRU").withTitle(entity.getResponsibilityActualSection().getResponsibleRU().getName()));
+		dto.add(linkTo(methodOn(CompanyController.class).getById(entity.getResponsibilityActualSection().getResponsibleIM().getId())).withRel("responsibilityActualSectionIM").withTitle(entity.getResponsibilityActualSection().getResponsibleIM().getName()));
+		dto.add(linkTo(methodOn(CompanyController.class).getById(entity.getResponsibilityNextSection().getResponsibleRU().getId())).withRel("responsibilityNextSectionRU").withTitle(entity.getResponsibilityNextSection().getResponsibleRU().getName()));
+		dto.add(linkTo(methodOn(CompanyController.class).getById(entity.getResponsibilityNextSection().getResponsibleIM().getId())).withRel("responsibilityNextSectionIM").withTitle(entity.getResponsibilityNextSection().getResponsibleIM().getName()));
+		dto.add(linkTo(methodOn(LocationIdentController.class).getById(entity.getJourneySectionOrigin().getLocationPrimaryCode())).withRel("journeySectionOrigin").withTitle(entity.getJourneySectionOrigin().getPrimaryLocationName()));
+		dto.add(linkTo(methodOn(LocationIdentController.class).getById(entity.getJourneySectionDestination().getLocationPrimaryCode())).withRel("journeySectionDestination").withTitle(entity.getJourneySectionDestination().getPrimaryLocationName()));
 
 		dto.add(linkTo(methodOn(WagonInTrainController.class).getAllWagonInTrain(entity.getId())).withRel("wagons"));
 		dto.add(linkTo(methodOn(TractionInTrainController.class).getAllTractionInTrain(entity.getId())).withRel("tractions"));

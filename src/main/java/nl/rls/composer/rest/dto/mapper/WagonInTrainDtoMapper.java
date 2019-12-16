@@ -17,8 +17,8 @@ public class WagonInTrainDtoMapper {
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
 				mapping(WagonInTrain.class, WagonInTrainDto.class)
-				.fields("wagon", "wagon",
-						FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.mapper.WagonConverter"))
+				.fields("wagonLoad", "wagonLoad",
+						FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.mapper.WagonLoadConverter"))
 				;
 			}
 		};

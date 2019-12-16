@@ -9,8 +9,8 @@ import lombok.Setter;
 @XmlRootElement
 @NoArgsConstructor
 @Getter @Setter
-public class WagonCreateDto {
-	private String wagonIdent;
+public class WagonLoadCreateDto {
+	private String wagon;
 	private String brakeType;
 	private int totalLoadWeight;
 	private int brakeWeight;

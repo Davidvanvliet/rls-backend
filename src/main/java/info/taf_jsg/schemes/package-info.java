@@ -5,5 +5,7 @@
 // Generated on: 2019.09.22 at 09:30:01 PM CEST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://taf-jsg.info/schemes", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(xmlns = {
+        @javax.xml.bind.annotation.XmlNs(prefix = "",
+                namespaceURI="http://taf-jsg.info/schemes")})
 package info.taf_jsg.schemes;

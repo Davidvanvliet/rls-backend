@@ -4,6 +4,6 @@ package nl.rls.composer.controller;
 public class WagonIdentNotFoundException extends RuntimeException {
 
 	public WagonIdentNotFoundException(Integer id) {
-        super("WagonTechData id not found : " + id);
+        super("Wagon id not found : " + id);
 	}
 }
