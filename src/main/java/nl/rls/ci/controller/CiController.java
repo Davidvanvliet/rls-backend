@@ -111,14 +111,15 @@ public class CiController {
 	@Transactional
 	@PostMapping(value = "/{id}")
 	@ApiOperation(value = "Sends a previously stored CI (XML-)message to the Common Interface (UicRequest).")
-	public ResponseEntity<UicResponse> sendMessage(@PathVariable int id) {
+	public ResponseEntity<String> sendMessage(@PathVariable int id) {
 		log.debug("sendMessage: "+id);
 		Optional<CiMessage> optional = ciRepository.findById(id);
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		System.out.println("sendMessage XML message: "+ optional.get().getUicRequest().getMessage());
-		if (ciService.sendMessage(optional.get())) {
+		String message = ciService.sendMessage(optional.get());
+		if (message != null) {
 			return ResponseEntity.accepted().build();
 		} else {
 			return ResponseEntity.status(406).build();

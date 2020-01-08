@@ -23,7 +23,7 @@ public class TrainCompositionMessageXmlMapper {
 					.fields("messageTypeVersion", "messageHeader.messageReference.messageTypeVersion")
 					.fields("messageDateTime", "messageHeader.messageReference.messageDateTime")
 					.fields("train.transfereeIM.code", "transfereeIM")
-					.fields("train.trainCompositionJourneySections", field("trainCompositionJourneySection").accessible(true))
+					.fields("train.journeySections", field("trainCompositionJourneySection").accessible(true))
 					.fields("train.operationalTrainNumber", "operationalTrainNumberIdentifier.operationalTrainNumber")
 					.fields("train.scheduledTimeAtHandover", "operationalTrainNumberIdentifier.scheduledTimeAtHandover")
 					.fields("train.operationalTrainNumber", "operationalTrainNumber");
@@ -72,7 +72,7 @@ public class TrainCompositionMessageXmlMapper {
 				mapping(nl.rls.composer.domain.TractionInTrain.class,
 						info.taf_jsg.schemes.TrainCompositionJourneySection.LocoIdent.class)
 								.fields("driverIndication", "driverIndication")
-								.fields("tractionPositionInTrain", "tractionPositionInTrain")
+								.fields("position", "tractionPositionInTrain")
 								.fields("traction.tractionType.code", "tractionType")
 								.fields("traction.tractionMode.code", "tractionMode")
 								.fields("traction.locoTypeNumber", "locoTypeNumber")

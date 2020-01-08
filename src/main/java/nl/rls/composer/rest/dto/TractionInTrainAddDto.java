@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TractionInTrainAddDto extends ResourceSupport {
-	private int tractionTrainPosition;
+	private int position;
 	private int driverIndication;
 	private String traction;
 }

@@ -1,5 +1,5 @@
 
-package nl.rls.ci.soap.dto;
+package nl.rls.ci.soapinterface;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

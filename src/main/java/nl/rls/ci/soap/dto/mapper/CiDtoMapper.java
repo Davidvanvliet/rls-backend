@@ -4,13 +4,11 @@ import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.dozer.loader.api.FieldsMappingOptions;
 
+import nl.rls.ci.domain.MessageReference;
 import nl.rls.ci.domain.UicRequest;
 import nl.rls.ci.domain.UicResponse;
 import nl.rls.ci.soap.dto.LITechnicalAck;
-import nl.rls.ci.soap.dto.UICMessage;
-import nl.rls.ci.soap.dto.UICMessageResponse;
-import nl.rls.composer.domain.TractionInTrain;
-import nl.rls.composer.rest.dto.TractionInTrainDto;
+import nl.rls.ci.soapinterface.UICMessage;
 
 public class CiDtoMapper {
 
@@ -24,8 +22,8 @@ public class CiDtoMapper {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
-				mapping(LITechnicalAck.class, UicResponse.class)
-				.fields("responseStatus", "responseStatus")
+				mapping(nl.rls.ci.soap.dto.MessageReference.class, MessageReference.class)
+				.fields("messageType", "messageType", FieldsMappingOptions.customConverter("nl.rls.ci.soap.dto.mapper.MessageTypeConverter"))
 				;
 			}
 		};

@@ -72,22 +72,16 @@
   </wsdl:service>
 </wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8082/ws/ci</con:endpoint></con:endpoints><con:operation id="1cb577c7-8076-4cb2-aa64-8b471a312e33" isOneWay="false" action="" name="UICMessage" bindingOperationName="UICMessage" type="Request-Response" outputName="UICMessageResponse" inputName="UICMessage" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="55b44557-f7db-4263-bc76-3744d013b3f5" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8082/ws/ci</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://uic.cc.org/UICMessage/Header" xmlns:uic="http://uic.cc.org/UICMessage">\r
    <soapenv:Header>\r
-      <head:signed>?</head:signed>\r
-      <head:encrypted>?</head:encrypted>\r
-      <head:compressed>?</head:compressed>\r
+      <head:signed>false</head:signed>\r
+      <head:encrypted>false</head:encrypted>\r
+      <head:compressed>false</head:compressed>\r
       <head:messageLiHost>?</head:messageLiHost>\r
-      <head:messageIdentifier>?</head:messageIdentifier>\r
+      <head:messageIdentifier>Hallo Berend</head:messageIdentifier>\r
    </soapenv:Header>\r
    <soapenv:Body>\r
       <uic:UICMessage>\r
          <!--Optional:-->\r
-         <message>?</message>\r
-         <!--Optional:-->\r
-         <signature>?</signature>\r
-         <!--Optional:-->\r
-         <senderAlias>?</senderAlias>\r
-         <!--Optional:-->\r
-         <encoding>?</encoding>\r
-      </uic:UICMessage>\r
+         <message><tcm>Hoi</tcm></message>\r
+     </uic:UICMessage>\r
    </soapenv:Body>\r
 </soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://uic.cc.org/UICMessage/UICReceiveMessage/UICMessage"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

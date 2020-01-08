@@ -18,9 +18,6 @@ import nl.rls.composer.domain.code.BrakeType;
 @Setter
 public class WagonLoad extends OwnedEntity {
 	public WagonLoad(Integer ownerId) {super(ownerId);}
-	/**
-	 * Identifies uniquely the freight wagon by its number
-	 */
 	@ManyToOne
 	private Wagon wagon;
     /**

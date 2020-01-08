@@ -100,7 +100,7 @@ public class TractionInTrainController {
 				
 				TractionInTrain tractionInTrain = new TractionInTrain();
 				tractionInTrain.setTraction(traction.get());
-				tractionInTrain.setTractionPositionInTrain(dto.getTractionTrainPosition());
+				tractionInTrain.setPosition(dto.getPosition());
 				tractionInTrain.setDriverIndication(dto.getDriverIndication());
 				trainCompositionJourneySectionService.addTractionToTrain(trainCompositionJourneySection, tractionInTrain);
 				TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper

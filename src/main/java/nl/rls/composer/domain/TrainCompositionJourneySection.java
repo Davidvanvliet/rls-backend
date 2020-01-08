@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -83,20 +82,23 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	 */
 	private int livestockOrPeopleIndicator;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "train_composition_journey_section_id")
 	@OrderBy("position")
 	private List<WagonInTrain> wagons = new ArrayList<WagonInTrain>();
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "train_composition_journey_section_id")
-	@OrderBy("tractionPositionInTrain")
+	@OrderBy("position")
 	private List<TractionInTrain> tractions = new ArrayList<TractionInTrain>();
 
 	@OneToMany(cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "train_composition_journey_section_id")
 	private List<TrainActivityType> activities = new ArrayList<>();
 
+	@ManyToOne
+	private Train train;
+	
 	public WagonInTrain getWagonById(Integer wagonId) {
 		for (WagonInTrain wit : wagons) {
 			if (wit.getId() == wagonId) {
@@ -117,6 +119,7 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	}
 
 	public void removeWagon(WagonInTrain wagonInTrain) {
+		wagonInTrain.setTrainCompositionJourneySection(null);
 		wagons.remove(wagonInTrain);
 		int pos = 1;
 		for (WagonInTrain wit : wagons) {
@@ -132,6 +135,7 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 			wagonInTrain.setPosition(1);
 		}
 		wagons.add(wagonInTrain.getPosition() - 1, wagonInTrain);
+		wagonInTrain.setTrainCompositionJourneySection(this);
 		int pos = 1;
 		for (WagonInTrain wit : wagons) {
 			if (wit.getPosition() != pos) {
@@ -161,14 +165,15 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	}
 
 	public void addTraction(TractionInTrain entity) {
-		if (entity.getTractionPositionInTrain() <= 0 || entity.getTractionPositionInTrain() > wagons.size()) {
-			entity.setTractionPositionInTrain(1);
+		if (entity.getPosition() <= 0 || entity.getPosition() > tractions.size()) {
+			entity.setPosition(1);
 		}
-		tractions.add(entity.getTractionPositionInTrain() - 1, entity);
+		tractions.add(entity.getPosition() - 1, entity);
+		entity.setTrainCompositionJourneySection(this);
 		int pos = 1;
-		for (WagonInTrain wit : wagons) {
-			if (wit.getPosition() != pos) {
-				wit.setPosition(pos);
+		for (TractionInTrain tit : tractions) {
+			if (tit.getPosition() != pos) {
+				tit.setPosition(pos);
 			}
 			pos++;
 		}
@@ -180,26 +185,24 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 
 	public void moveTraction(TractionInTrain entity, int position) {
 		removeTraction(entity);
-		entity.setTractionPositionInTrain(position);
+		entity.setPosition(position);
 		addTraction(entity);
 	}
 
-	public boolean removeTractionById(int id) {
+	public void removeTractionById(int id) {
 		TractionInTrain entity = getTractionById(id);
 		if (entity != null) {
 			removeTraction(entity);
-			return true;
-		} else {
-			return false;
 		}
 	}
 
 	public void removeTraction(TractionInTrain entity) {
+		entity.setTrainCompositionJourneySection(null);
 		tractions.remove(entity);
 		int pos = 1;
 		for (TractionInTrain tit : tractions) {
-			if (tit.getTractionPositionInTrain() != pos) {
-				tit.setTractionPositionInTrain(pos);
+			if (tit.getPosition() != pos) {
+				tit.setPosition(pos);
 			}
 			pos++;
 		}

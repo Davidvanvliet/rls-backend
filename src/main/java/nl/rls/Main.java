@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -52,7 +53,6 @@ import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.repository.CompositIdentifierOperationalTypeRepository;
 import nl.rls.composer.repository.LocationIdentRepository;
 import nl.rls.composer.repository.ResponsibilityRepository;
-import nl.rls.composer.repository.TractionInTrainRepository;
 import nl.rls.composer.repository.TractionModeRepository;
 import nl.rls.composer.repository.TractionRepository;
 import nl.rls.composer.repository.TractionTypeRepository;
@@ -86,8 +86,6 @@ public class Main {
 	@Autowired
 	private TractionRepository tractionRepository;
 	@Autowired
-	private TractionInTrainRepository tractionInTrainRepository;
-	@Autowired
 	private ResponsibilityRepository responsibilityRepository;
 	@Autowired
 	private TractionModeRepository tractionModeRepository;
@@ -105,8 +103,6 @@ public class Main {
 	private WagonLoadRepository wagonLoadRepository;
 	@Autowired
 	private WagonRepository wagonRepository;
-	@Autowired
-	private WagonInTrainRepository wagonInTrainRepository;
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
 
 	public static void main(String[] args) {
@@ -185,14 +181,14 @@ public class Main {
 			 * JourneySection
 			 */
 			System.out.println("trainCompositionMessage 1.4");
-			TrainCompositionJourneySection trainCompositionJourneySection = new TrainCompositionJourneySection(ownerId);
+			TrainCompositionJourneySection journeySection = new TrainCompositionJourneySection(ownerId);
 			Optional<Location> journeySectionOrigin = locationIdentRepository.findById(621);
 			if (journeySectionOrigin.isPresent()) {
-				trainCompositionJourneySection.setJourneySectionOrigin(journeySectionOrigin.get());
+				journeySection.setJourneySectionOrigin(journeySectionOrigin.get());
 			}
 			Optional<Location> journeySectionDestination = locationIdentRepository.findById(263);
 			if (journeySectionDestination.isPresent()) {
-				trainCompositionJourneySection.setJourneySectionDestination(journeySectionDestination.get());
+				journeySection.setJourneySectionDestination(journeySectionDestination.get());
 			}
 
 			System.out.println("trainCompositionMessage 1.5");
@@ -202,8 +198,8 @@ public class Main {
 			Company responsibleRU = companyRepository.findByCode("3502").get(0);
 			responsibility.setResponsibleRU(responsibleRU);
 			responsibilityRepository.save(responsibility);
-			trainCompositionJourneySection.setResponsibilityActualSection(responsibility);
-			trainCompositionJourneySection.setResponsibilityNextSection(responsibility);
+			journeySection.setResponsibilityActualSection(responsibility);
+			journeySection.setResponsibilityNextSection(responsibility);
 			/*
 			 * TrainRunningTechData
 			 */
@@ -212,11 +208,11 @@ public class Main {
 			 * TrainRunningData
 			 */
 			System.out.println("trainCompositionMessage 1.7");
-			trainCompositionJourneySection.setDangerousGoodsIndicator(false);
-			trainCompositionJourneySection.setExceptionalGaugingInd(false);;
-			trainCompositionJourneySection.setTrainType(2);
-			trainCompositionJourneySection.setTrainMaxSpeed(100);
-			trainCompositionJourneySection.setLivestockOrPeopleIndicator(0);
+			journeySection.setDangerousGoodsIndicator(false);
+			journeySection.setExceptionalGaugingInd(false);;
+			journeySection.setTrainType(2);
+			journeySection.setTrainMaxSpeed(100);
+			journeySection.setLivestockOrPeopleIndicator(0);
 
 			/*
 			 * LocoIdent Traction
@@ -235,9 +231,10 @@ public class Main {
 			tractionRepository.save(traction1);
 			TractionInTrain tractionInTrain1 = new TractionInTrain();
 			tractionInTrain1.setDriverIndication(1);
-			tractionInTrain1.setTractionPositionInTrain(1);
+			tractionInTrain1.setPosition(1);
 			tractionInTrain1.setTraction(traction1);
-			tractionInTrainRepository.save(tractionInTrain1);
+			journeySection.addTraction(tractionInTrain1);
+//			tractionInTrainRepository.save(tractionInTrain1);
 
 			Traction traction2 = new Traction(ownerId);
 			tractionType = tractionTypeRepository.findByCode("11");
@@ -252,9 +249,10 @@ public class Main {
 			tractionRepository.save(traction2);
 			TractionInTrain tractionInTrain2 = new TractionInTrain();
 			tractionInTrain2.setDriverIndication(0);
-			tractionInTrain2.setTractionPositionInTrain(2);
+			tractionInTrain2.setPosition(2);
 			tractionInTrain2.setTraction(traction2);
-			tractionInTrainRepository.save(tractionInTrain2);
+			journeySection.addTraction(tractionInTrain2);
+//			tractionInTrainRepository.save(tractionInTrain2);
 /*
 			 * WagonData
 			 */
@@ -273,23 +271,21 @@ public class Main {
 			WagonInTrain wagonInTrain = new WagonInTrain();
 			wagonInTrain.setWagonLoad(wagonLoad);
 			wagonInTrain.setPosition(1);
-			wagonInTrainRepository.save(wagonInTrain);
+//			wagonInTrainRepository.save(wagonInTrain);
 
 			/*
 			 * TrainCompositionJourneySection
 			 */
 			System.out.println("trainCompositionMessage 1.10");
 
-			trainCompositionJourneySection.getTractions().add(tractionInTrain1);
-			trainCompositionJourneySection.getTractions().add(tractionInTrain2);
-			trainCompositionJourneySection.getWagons().add(wagonInTrain);
+			journeySection.getWagons().add(wagonInTrain);
 			Optional<TrainActivityType> trainActivityType = trainActivityTypeRepository.findByCode("0003");
-			if (!trainCompositionJourneySection.addActivity(trainActivityType.get())) {
+			if (!journeySection.addActivity(trainActivityType.get())) {
 				System.out.println("trainActivityType already added to journey: "+trainActivityType.get().getCode());
 			};
-			System.out.println("trainCompositionJourneySection.save(): "+trainCompositionJourneySection);
-			trainCompositionJourneySectionRepository.save(trainCompositionJourneySection);
-			train.getTrainCompositionJourneySections().add(trainCompositionJourneySection);
+			System.out.println("trainCompositionJourneySection.save(): "+journeySection);
+			trainCompositionJourneySectionRepository.save(journeySection);
+			train.addJourneySection(journeySection);
 
 			System.out.println("trainCompositionMessage 1");
 			TrainCompositionMessage trainCompositionMessage = new TrainCompositionMessage(ownerId);
@@ -355,10 +351,10 @@ public class Main {
 
 	private void addMessageHeader(GenericMessage message) {
 		message.setMessageDateTime(new Date());
-		message.setMessageIdentifier("Vrije tekst?");
+		message.setMessageIdentifier(UUID.randomUUID().toString());
 		message.setMessageType(MessageType.TRAIN_COMPOSITION_MESSAGE.code());
 		message.setMessageTypeVersion(MessageType.TRAIN_COMPOSITION_MESSAGE.version());
-		message.setSenderReference("test bericht");
+		message.setSenderReference(UUID.randomUUID().toString());
 		Company recipient = companyRepository.findByCode("0084").get(0);
 		Company sender = companyRepository.findByCode("9001").get(0);
 		message.setRecipient(recipient);

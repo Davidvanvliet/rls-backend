@@ -49,7 +49,7 @@ public class TrainCompositionJourneySectionDtoMapper {
 			TractionInTrainDto tractionInTrainDto = new TractionInTrainDto();
 			tractionInTrainDto.setLocomotive(TractionDtoMapper.map(tractionInTrain.getTraction()));
 			tractionInTrainDto.setDriverIndication(tractionInTrain.getDriverIndication());
-			tractionInTrainDto.setTractionPositionInTrain(tractionInTrain.getTractionPositionInTrain());
+			tractionInTrainDto.setPosition(tractionInTrain.getPosition());
 			dtoList.add(tractionInTrainDto);
 		}
 		dto.setTractions(dtoList);

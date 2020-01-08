@@ -52,7 +52,7 @@ public class WagonInTrainController {
 	@Autowired
 	private TrainCompositionJourneySectionRepository trainCompositionJourneySectionRepository;
 
-	@GetMapping(value = "{id}/wagonintrains", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "{id}/wagons", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Resources<WagonInTrainDto>> getAllWagonInTrain(@PathVariable Integer id) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
@@ -72,7 +72,7 @@ public class WagonInTrainController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(value = "{id}/wagonintrains/{wagonId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "{id}/wagons/{wagonId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<WagonInTrainDto> getWagonInTrain(@PathVariable Integer id, @PathVariable Integer wagonId) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
@@ -87,7 +87,7 @@ public class WagonInTrainController {
 	}
 
 
-	@PostMapping(value = "{id}/wagonintrains", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "{id}/wagons", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TrainCompositionJourneySectionDto> addWagon(@PathVariable int id,
 			@RequestBody WagonInTrainAddDto dto) {
 		int ownerId = securityContext.getOwnerId();
@@ -114,7 +114,7 @@ public class WagonInTrainController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PutMapping(value = "{id}/wagonintrains/{wagonInTrainId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "{id}/wagons/{wagonInTrainId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TrainCompositionJourneySectionDto> moveWagon(@PathVariable int id,
 			@PathVariable int wagonInTrainId, @RequestParam("position") int position) {
 		int ownerId = securityContext.getOwnerId();
@@ -130,7 +130,7 @@ public class WagonInTrainController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@DeleteMapping(value = "{id}/wagonintrains/{wagonInTrainId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "{id}/wagons/{wagonInTrainId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TrainCompositionJourneySectionDto> removeWagon(@PathVariable int id,
 			@PathVariable int wagonInTrainId) {
 		int ownerId = securityContext.getOwnerId();
@@ -139,7 +139,7 @@ public class WagonInTrainController {
 		if (optional.isPresent()) {
 			TrainCompositionJourneySection trainCompositionJourneySection = optional.get();
 			trainCompositionJourneySection.removeWagonById(wagonInTrainId);
-			wagonInTrainRepository.saveAll(trainCompositionJourneySection.getWagons());
+//			wagonInTrainRepository.saveAll(trainCompositionJourneySection.getWagons());
 			trainCompositionJourneySectionRepository.save(trainCompositionJourneySection);
 			TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper
 					.map(trainCompositionJourneySection);

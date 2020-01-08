@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,10 +44,30 @@ public class Train extends OwnedEntity {
 	private Company transfereeIM;
 	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "train_id")
-	private List<TrainCompositionJourneySection> trainCompositionJourneySections = new ArrayList<TrainCompositionJourneySection>();
+	private List<TrainCompositionJourneySection> journeySections = new ArrayList<TrainCompositionJourneySection>();
 
 	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "train_id")
 	private List<TrainCompositionMessage> trainCompositionMessages = new ArrayList<TrainCompositionMessage>();
+
+	@Transient
+	public TrainCompositionJourneySection getJourneySectionById(int id) {
+		for (TrainCompositionJourneySection trainCompositionJourneySection : journeySections) {
+			if (trainCompositionJourneySection.getId() == id) {
+				return trainCompositionJourneySection;
+			}
+		}
+		return null;
+	}
+	
+	public void addJourneySection(TrainCompositionJourneySection journeySection) {
+		journeySections.add(journeySection);
+//        comment.setPost(this);
+    }
+ 
+    public void removeJourneySection(TrainCompositionJourneySection journeySection) {
+    	journeySections.remove(journeySection);
+//        comment.setPost(null);
+    }
 
 }

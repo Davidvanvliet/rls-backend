@@ -1,5 +1,5 @@
 
-package nl.rls.ci.soap.dto;
+package nl.rls.ci.soapinterface;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,25 +18,25 @@ import javax.xml.ws.WebServiceFeature;
  * 
  */
 @WebServiceClient(
-		name = "LIReceiveMessageService", 
-		targetNamespace = "http://uic.cc.org/UICMessage", 
-		wsdlLocation = "src/main/resources/UICCCMessageProcessingInboundWS.wsdl"
-	)
-public class LIReceiveMessageService extends Service {
+	name = "LIReceiveMessageService", 
+	targetNamespace = "http://uic.cc.org/UICMessage", 
+	wsdlLocation = "src/main/java/nl/rls/ci/soapinterface/UICCCMessageProcessingInboundWS.wsdl"
+)
+public class LIReceiveMessageService
+    extends Service
+{
 
     public final static URL LIRECEIVEMESSAGESERVICE_WSDL_LOCATION;
-    private final static Logger logger = Logger.getLogger(nl.rls.ci.soap.dto.LIReceiveMessageService.class.getName());
+    private final static Logger logger = Logger.getLogger(nl.rls.ci.soapinterface.LIReceiveMessageService.class.getName());
 
     static {
         URL url = null;
         try {
             URL baseUrl;
-            baseUrl = nl.rls.ci.soap.dto.LIReceiveMessageService.class.getResource(".");
-            
+            baseUrl = nl.rls.ci.soapinterface.LIReceiveMessageService.class.getResource(".");
             url = new URL(baseUrl, "UICCCMessageProcessingInboundWS.wsdl");
-            System.out.println("url: "+url.toString());
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'src/main/resources/UICCCMessageProcessingInboundWS.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'src/main/java/nl/rls/ci/soapinterface/UICCCMessageProcessingInboundWS.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         LIRECEIVEMESSAGESERVICE_WSDL_LOCATION = url;
@@ -47,7 +47,7 @@ public class LIReceiveMessageService extends Service {
     }
 
     public LIReceiveMessageService() {
-         super(LIRECEIVEMESSAGESERVICE_WSDL_LOCATION, new QName("http://uic.cc.org/UICMessage", "LIReceiveMessageService"));
+        super(LIRECEIVEMESSAGESERVICE_WSDL_LOCATION, new QName("http://uic.cc.org/UICMessage", "LIReceiveMessageService"));
     }
 
     /**
@@ -57,6 +57,9 @@ public class LIReceiveMessageService extends Service {
      */
     @WebEndpoint(name = "UICReceiveMessagePort")
     public UICReceiveMessage getUICReceiveMessagePort() {
+    	System.out.println("UICReceiveMessagePort "+this.getServiceName());
+    	System.out.println("getWSDLDocumentLocation "+this.getWSDLDocumentLocation());
+   		System.out.println("getPorts().next(): "+this.getPorts().next());    		
         return super.getPort(new QName("http://uic.cc.org/UICMessage", "UICReceiveMessagePort"), UICReceiveMessage.class);
     }
 

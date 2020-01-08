@@ -1,8 +1,7 @@
 package nl.rls;
 
-import com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper;
+import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
-@SuppressWarnings("restriction")
 public class MyNamespaceMapper extends NamespacePrefixMapper {
 
     private static final String FOO_PREFIX = ""; // DEFAULT NAMESPACE

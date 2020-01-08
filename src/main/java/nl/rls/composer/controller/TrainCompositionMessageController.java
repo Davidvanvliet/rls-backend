@@ -27,8 +27,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import nl.rls.ci.aa.domain.Owner;
-import nl.rls.ci.aa.repository.OwnerRepository;
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
@@ -52,8 +50,6 @@ public class TrainCompositionMessageController {
 	private TrainCompositionMessageRepository trainCompositionMessageRepository;
 	@Autowired
 	private CompanyRepository companyRepository;
-	@Autowired
-	private OwnerRepository ownerRepository;
 	@Autowired
 	private TrainRepository trainRepository;
 
@@ -143,12 +139,9 @@ public class TrainCompositionMessageController {
 			trainCompositionMessage.setRecipient(recipient.get(0));
 		}
 
-		Optional<Owner> owner = ownerRepository.findById(ownerId);
-		if (owner.isPresent()) {
-			List<Company> sender = companyRepository.findByCode(owner.get().getCode());
-			if (sender.size() == 1) {
-				trainCompositionMessage.setSender(sender.get(0));
-			}
+		List<Company> sender = companyRepository.findByCode("9001");
+		if (sender.size() == 1) {
+			trainCompositionMessage.setSender(sender.get(0));
 		}
 		
 		Integer trainId = DecodePath.decodeInteger(dto.getTrain(), "trains");

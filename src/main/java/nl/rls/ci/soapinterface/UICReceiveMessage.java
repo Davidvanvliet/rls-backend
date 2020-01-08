@@ -1,5 +1,5 @@
 
-package nl.rls.ci.soap.dto;
+package nl.rls.ci.soapinterface;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;

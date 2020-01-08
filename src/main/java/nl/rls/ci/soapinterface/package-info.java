@@ -7,4 +7,5 @@
  * 	
  * 
  */
-package nl.rls.ci.soap.dto;
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://uic.cc.org/UICMessage")
+package nl.rls.ci.soapinterface;
