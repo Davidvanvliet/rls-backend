@@ -1,15 +1,10 @@
 package nl.rls.composer.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,16 +50,16 @@ public class TractionModeController {
 	}
 	
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<TractionModeDto>> getAll() {
+	public ResponseEntity<List<TractionModeDto>> getAll() {
 		Iterable<TractionMode> tractionModeList = tractionModeRepository.findAll();
 		List<TractionModeDto> tractionModeDtoList = new ArrayList<>();
 
 		for (TractionMode tractionMode : tractionModeList) {
 			tractionModeDtoList.add(TractionModeDtoMapper.map(tractionMode));
 		}
-		Link tractionModesLink = linkTo(methodOn(TractionModeController.class).getAll()).withSelfRel();
-		Resources<TractionModeDto> tractionModes = new Resources<TractionModeDto>(tractionModeDtoList, tractionModesLink);
-		return ResponseEntity.ok(tractionModes);
+//		Link tractionModesLink = linkTo(methodOn(TractionModeController.class).getAll()).withSelfRel();
+//		Resources<TractionModeDto> tractionModes = new Resources<TractionModeDto>(tractionModeDtoList, tractionModesLink);
+		return ResponseEntity.ok(tractionModeDtoList);
 	}
 
 }

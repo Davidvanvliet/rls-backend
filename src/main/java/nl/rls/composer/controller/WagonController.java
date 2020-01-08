@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +40,7 @@ public class WagonController {
 	private SecurityContext securityContext;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<WagonDto>> getAll() {
+	public ResponseEntity<List<WagonDto>> getAll() {
 		int ownerId = securityContext.getOwnerId();
 		Iterable<Wagon> wagonList = wagonRepository.findByOwnerId(ownerId);
 		List<WagonDto> wagonDtoList = new ArrayList<>();
@@ -50,9 +48,9 @@ public class WagonController {
 			WagonDto wagonDto = WagonDtoMapper.map(wagon);
 			wagonDtoList.add(wagonDto);
 		}
-		Link wagonLink = linkTo(methodOn(WagonController.class).getAll()).withSelfRel();
-		Resources<WagonDto> locations = new Resources<WagonDto>(wagonDtoList, wagonLink);
-		return ResponseEntity.ok(locations);
+//		Link wagonLink = linkTo(methodOn(WagonController.class).getAll()).withSelfRel();
+//		Resources<WagonDto> locations = new Resources<WagonDto>(wagonDtoList, wagonLink);
+		return ResponseEntity.ok(wagonDtoList);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

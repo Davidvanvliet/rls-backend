@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,7 +51,7 @@ public class WagonInTrainController {
 	private TrainCompositionJourneySectionRepository trainCompositionJourneySectionRepository;
 
 	@GetMapping(value = "{id}/wagons", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<WagonInTrainDto>> getAllWagonInTrain(@PathVariable Integer id) {
+	public ResponseEntity<List<WagonInTrainDto>> getAllWagonInTrain(@PathVariable Integer id) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
 				.findByIdAndOwnerId(id, ownerId);
@@ -64,10 +62,10 @@ public class WagonInTrainController {
 				WagonInTrainDto wagonInTrainDto = WagonInTrainDtoMapper.map(wagonInTrain);
 				wagonInTrainDtoList.add(wagonInTrainDto);
 			}
-			Link link = linkTo(methodOn(WagonInTrainController.class).getAllWagonInTrain(id))
-					.withSelfRel();
-			Resources<WagonInTrainDto> wagonInTrainDtos = new Resources<WagonInTrainDto>(wagonInTrainDtoList, link);
-			return ResponseEntity.ok(wagonInTrainDtos);
+//			Link link = linkTo(methodOn(WagonInTrainController.class).getAllWagonInTrain(id))
+//					.withSelfRel();
+//			Resources<WagonInTrainDto> wagonInTrainDtos = new Resources<WagonInTrainDto>(wagonInTrainDtoList, link);
+			return ResponseEntity.ok(wagonInTrainDtoList);
 		}
 		return ResponseEntity.notFound().build();
 	}

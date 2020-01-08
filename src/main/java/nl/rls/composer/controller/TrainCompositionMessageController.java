@@ -15,8 +15,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,7 +60,7 @@ public class TrainCompositionMessageController {
 	}
 
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<TrainCompositionMessageDto>> getAll() {
+	public ResponseEntity<List<TrainCompositionMessageDto>> getAll() {
 		int ownerId = securityContext.getOwnerId();
 		System.out.println("TrainCompositionMessageController " + ownerId);
 		Iterable<TrainCompositionMessage> trainCompositionMessageList = trainCompositionMessageRepository
@@ -73,11 +71,11 @@ public class TrainCompositionMessageController {
 		for (TrainCompositionMessage trainCompositionMessage : trainCompositionMessageList) {
 			trainCompositionMessageDtoList.add(TrainCompositionMessageDtoMapper.map(trainCompositionMessage));
 		}
-		Link trainCompositionMessagesLink = linkTo(methodOn(TrainCompositionMessageController.class).getAll())
-				.withSelfRel();
-		Resources<TrainCompositionMessageDto> trainCompositionMessages = new Resources<TrainCompositionMessageDto>(
-				trainCompositionMessageDtoList, trainCompositionMessagesLink);
-		return ResponseEntity.ok(trainCompositionMessages);
+//		Link trainCompositionMessagesLink = linkTo(methodOn(TrainCompositionMessageController.class).getAll())
+//				.withSelfRel();
+//		Resources<TrainCompositionMessageDto> trainCompositionMessages = new Resources<TrainCompositionMessageDto>(
+//				trainCompositionMessageDtoList, trainCompositionMessagesLink);
+		return ResponseEntity.ok(trainCompositionMessageDtoList);
 	}
 
 	//

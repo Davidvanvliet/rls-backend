@@ -34,7 +34,7 @@ public class TrainDtoMapper {
 		for (TrainCompositionJourneySection listItem : entity.getJourneySections()) {
 			dtoList.add(TrainCompositionJourneySectionDtoMapper.map(listItem));
 		}
-		dto.setTrainCompositionJourneySection(dtoList);
+		dto.setTrainCompositionJourneySections(dtoList);
 		
 		dto.add(linkTo(methodOn(TrainController.class).getById(entity.getId())).withSelfRel());
 		dto.add(linkTo(methodOn(CompanyController.class).getById(entity.getTransfereeIM().getId())).withRel("transfereeIM").withTitle(entity.getTransfereeIM().getName()));

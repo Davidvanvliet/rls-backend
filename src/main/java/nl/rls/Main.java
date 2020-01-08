@@ -39,9 +39,9 @@ import nl.rls.composer.domain.Traction;
 import nl.rls.composer.domain.TractionInTrain;
 import nl.rls.composer.domain.Train;
 import nl.rls.composer.domain.TrainCompositionJourneySection;
-import nl.rls.composer.domain.WagonLoad;
 import nl.rls.composer.domain.Wagon;
 import nl.rls.composer.domain.WagonInTrain;
+import nl.rls.composer.domain.WagonLoad;
 import nl.rls.composer.domain.code.BrakeType;
 import nl.rls.composer.domain.code.MessageType;
 import nl.rls.composer.domain.code.TractionMode;
@@ -60,9 +60,8 @@ import nl.rls.composer.repository.TrainActivityTypeRepository;
 import nl.rls.composer.repository.TrainCompositionJourneySectionRepository;
 import nl.rls.composer.repository.TrainCompositionMessageRepository;
 import nl.rls.composer.repository.TrainRepository;
-import nl.rls.composer.repository.WagonRepository;
-import nl.rls.composer.repository.WagonInTrainRepository;
 import nl.rls.composer.repository.WagonLoadRepository;
+import nl.rls.composer.repository.WagonRepository;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })

@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,7 +65,7 @@ public class TractionInTrainController {
 	}
 
 	@GetMapping(value = "{id}/tractions/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<TractionInTrainDto>> getAllTractionInTrain(@PathVariable Integer id) {
+	public ResponseEntity<List<TractionInTrainDto>> getAllTractionInTrain(@PathVariable Integer id) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
 				.findByIdAndOwnerId(id, ownerId);
@@ -78,10 +76,10 @@ public class TractionInTrainController {
 				TractionInTrainDto tractionInTrainDto = TractionInTrainDtoMapper.map(tractionInTrain);
 				tractionInTrainDtoList.add(tractionInTrainDto);
 			}
-			Link link = linkTo(methodOn(TractionInTrainController.class).getAllTractionInTrain(id))
-					.withSelfRel();
-			Resources<TractionInTrainDto> tractionInTrainDtos = new Resources<TractionInTrainDto>(tractionInTrainDtoList, link);
-			return ResponseEntity.ok(tractionInTrainDtos);
+//			Link link = linkTo(methodOn(TractionInTrainController.class).getAllTractionInTrain(id))
+//					.withSelfRel();
+//			Resources<TractionInTrainDto> tractionInTrainDtos = new Resources<TractionInTrainDto>(tractionInTrainDtoList, link);
+			return ResponseEntity.ok(tractionInTrainDtoList);
 		}
 		return ResponseEntity.notFound().build();
 	}

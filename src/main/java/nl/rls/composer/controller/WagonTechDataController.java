@@ -1,14 +1,9 @@
 package nl.rls.composer.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,16 +24,16 @@ public class WagonTechDataController {
 	private WagonTechDataRepository wagonTechDataRepository;
 
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<WagonTechDataDto>> getAll() {
+	public ResponseEntity<List<WagonTechDataDto>> getAll() {
 		Iterable<WagonTechData> entityList = wagonTechDataRepository.findAll();
 		List<WagonTechDataDto> dtoList = new ArrayList<>();
 		for (WagonTechData entity : entityList) {
 			WagonTechDataDto dto = WagonTechDataDtoMapper.map(entity);
 			dtoList.add(dto);
 		}
-		Link selfLink = linkTo(methodOn(WagonTechDataController.class).getAll()).withSelfRel();
-		Resources<WagonTechDataDto> dtos = new Resources<WagonTechDataDto>(dtoList, selfLink);
-		return ResponseEntity.ok(dtos);
+//		Link selfLink = linkTo(methodOn(WagonTechDataController.class).getAll()).withSelfRel();
+//		Resources<WagonTechDataDto> dtos = new Resources<WagonTechDataDto>(dtoList, selfLink);
+		return ResponseEntity.ok(dtoList);
 	}
 
 

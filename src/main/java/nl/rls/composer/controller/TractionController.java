@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +24,8 @@ import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Traction;
 import nl.rls.composer.domain.code.TractionMode;
 import nl.rls.composer.domain.code.TractionType;
-import nl.rls.composer.repository.TractionRepository;
 import nl.rls.composer.repository.TractionModeRepository;
+import nl.rls.composer.repository.TractionRepository;
 import nl.rls.composer.repository.TractionTypeRepository;
 import nl.rls.composer.rest.dto.TractionCreateDto;
 import nl.rls.composer.rest.dto.TractionDto;
@@ -46,7 +44,7 @@ public class TractionController {
 	private SecurityContext securityContext;
 
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<TractionDto>> getAll() {
+	public ResponseEntity<List<TractionDto>> getAll() {
 		int ownerId = securityContext.getOwnerId();
 		Iterable<Traction> tractionList = tractionRepository.findByOwnerId(ownerId);
 		List<TractionDto> dtoList = new ArrayList<>();
@@ -54,9 +52,9 @@ public class TractionController {
 			TractionDto dto = TractionDtoMapper.map(traction);
 			dtoList.add(dto);
 		}
-		Link dtoLink = linkTo(methodOn(this.getClass()).getAll()).withSelfRel();
-		Resources<TractionDto> tractionDtoList = new Resources<TractionDto>(dtoList, dtoLink);
-		return ResponseEntity.ok(tractionDtoList);
+//		Link dtoLink = linkTo(methodOn(this.getClass()).getAll()).withSelfRel();
+//		Resources<TractionDto> tractionDtoList = new Resources<TractionDto>(dtoList, dtoLink);
+		return ResponseEntity.ok(dtoList);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")

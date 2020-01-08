@@ -1,15 +1,10 @@
 package nl.rls.composer.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,16 +51,16 @@ public class RestrictionCodeController {
 	
 
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<RestrictionCodeDto>> getAll() {
+	public ResponseEntity<List<RestrictionCodeDto>> getAll() {
 		Iterable<RestrictionCode> restrictionCodeList = restrictionCodeRepository.findAll();
 		List<RestrictionCodeDto> restrictionCodeDtoList = new ArrayList<>();
 
 		for (RestrictionCode restrictionCode : restrictionCodeList) {
 			restrictionCodeDtoList.add(RestrictionCodeDtoMapper.map(restrictionCode));
 		}
-		Link restrictionCodesLink = linkTo(methodOn(RestrictionCodeController.class).getAll()).withSelfRel();
-		Resources<RestrictionCodeDto> restrictionCodes = new Resources<RestrictionCodeDto>(restrictionCodeDtoList, restrictionCodesLink);
-		return ResponseEntity.ok(restrictionCodes);
+//		Link restrictionCodesLink = linkTo(methodOn(RestrictionCodeController.class).getAll()).withSelfRel();
+//		Resources<RestrictionCodeDto> restrictionCodes = new Resources<RestrictionCodeDto>(restrictionCodeDtoList, restrictionCodesLink);
+		return ResponseEntity.ok(restrictionCodeDtoList);
 	}
 
 }

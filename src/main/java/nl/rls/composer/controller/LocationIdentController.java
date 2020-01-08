@@ -1,15 +1,10 @@
 package nl.rls.composer.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,7 +53,7 @@ public class LocationIdentController {
 
 	@ApiOperation(value = "Get a list of locationIdent based on name, shortname of all")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<LocationIdentDto>> getAllQuery(
+	public ResponseEntity<List<LocationIdentDto>> getAllQuery(
 			@ApiParam(value = "name can also be a fragement of the name (TSI.primaryLocationName) [Optional]")
 			@RequestParam(name = "name", required = false) String name, 
 			@ApiParam(value = "shortname can also be a fragement of the shortName [Optional]")
@@ -80,9 +75,9 @@ public class LocationIdentController {
 		for (Location locationIdent : locationList) {
 			locationDtoList.add(LocationIdentDtoMapper.map(locationIdent));
 		}
-		Link locationsLink = linkTo(methodOn(LocationIdentController.class).getAllQuery(name, shortname)).withSelfRel();
-		Resources<LocationIdentDto> locations = new Resources<LocationIdentDto>(locationDtoList, locationsLink);
-		return ResponseEntity.ok(locations);
+//		Link locationsLink = linkTo(methodOn(LocationIdentController.class).getAllQuery(name, shortname)).withSelfRel();
+//		Resources<LocationIdentDto> locations = new Resources<LocationIdentDto>(locationDtoList, locationsLink);
+		return ResponseEntity.ok(locationDtoList);
 	}
 
 //	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)

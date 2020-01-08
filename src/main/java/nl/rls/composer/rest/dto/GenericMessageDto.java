@@ -2,10 +2,9 @@ package nl.rls.composer.rest.dto;
 
 import java.util.Date;
 
-import org.springframework.hateoas.ResourceSupport;
-
 import lombok.Getter;
 import lombok.Setter;
+import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 
 @Getter 
 @Setter

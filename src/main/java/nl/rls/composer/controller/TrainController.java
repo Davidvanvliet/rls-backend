@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -58,7 +56,7 @@ public class TrainController {
 	private SecurityContext securityContext;
 
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<TrainDto>> getAll() {
+	public ResponseEntity<List<TrainDto>> getAll() {
 		int ownerId = securityContext.getOwnerId();
 		System.out.println("TrainController " + ownerId);
 		Iterable<Train> trainList = trainRepository.findByOwnerId(ownerId);
@@ -68,9 +66,9 @@ public class TrainController {
 		for (Train train : trainList) {
 			trainDtoList.add(TrainDtoMapper.map(train));
 		}
-		Link trainsLink = linkTo(methodOn(TrainController.class).getAll()).withSelfRel();
-		Resources<TrainDto> trains = new Resources<TrainDto>(trainDtoList, trainsLink);
-		return ResponseEntity.ok(trains);
+//		Link trainsLink = linkTo(methodOn(TrainController.class).getAll()).withSelfRel();
+//		Resources<TrainDto> trains = new Resources<TrainDto>(trainDtoList, trainsLink);
+		return ResponseEntity.ok(trainDtoList);
 	}
 
 	//
@@ -135,7 +133,7 @@ public class TrainController {
 	}
 
 	@GetMapping(value = "{id}/journeysections/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<TrainCompositionJourneySectionDto>> getAllJourneySections(@PathVariable int id) {
+	public ResponseEntity<List<TrainCompositionJourneySectionDto>> getAllJourneySections(@PathVariable int id) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
@@ -148,10 +146,10 @@ public class TrainController {
 			for (TrainCompositionJourneySection entity : sectionList) {
 				journeySectionDtoList.add(TrainCompositionJourneySectionDtoMapper.map(entity));
 			}
-			Link trainsLink = linkTo(methodOn(TrainController.class).getAllJourneySections(id)).withSelfRel();
-			Resources<TrainCompositionJourneySectionDto> trains = new Resources<TrainCompositionJourneySectionDto>(
-					journeySectionDtoList, trainsLink);
-			return ResponseEntity.ok(trains);
+//			Link trainsLink = linkTo(methodOn(TrainController.class).getAllJourneySections(id)).withSelfRel();
+//			Resources<TrainCompositionJourneySectionDto> trains = new Resources<TrainCompositionJourneySectionDto>(
+//					journeySectionDtoList, trainsLink);
+			return ResponseEntity.ok(journeySectionDtoList);
 		} else {
 			return ResponseEntity.notFound().build();
 		}

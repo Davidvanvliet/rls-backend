@@ -1,15 +1,10 @@
 package nl.rls.composer.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,16 +50,16 @@ public class TrainActivityTypeController {
 	}
 	
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<TrainActivityTypeDto>> getAll() {
+	public ResponseEntity<List<TrainActivityTypeDto>> getAll() {
 		Iterable<TrainActivityType> trainActivityTypeList = trainActivityTypeRepository.findAll();
 		List<TrainActivityTypeDto> trainActivityTypeDtoList = new ArrayList<>();
 
 		for (TrainActivityType trainActivityType : trainActivityTypeList) {
 			trainActivityTypeDtoList.add(TrainActivityTypeDtoMapper.map(trainActivityType));
 		}
-		Link trainActivityTypesLink = linkTo(methodOn(TrainActivityTypeController.class).getAll()).withSelfRel();
-		Resources<TrainActivityTypeDto> trainActivityTypes = new Resources<TrainActivityTypeDto>(trainActivityTypeDtoList, trainActivityTypesLink);
-		return ResponseEntity.ok(trainActivityTypes);
+//		Link trainActivityTypesLink = linkTo(methodOn(TrainActivityTypeController.class).getAll()).withSelfRel();
+//		Resources<TrainActivityTypeDto> trainActivityTypes = new Resources<TrainActivityTypeDto>(trainActivityTypeDtoList, trainActivityTypesLink);
+		return ResponseEntity.ok(trainActivityTypeDtoList);
 	}
 
 }

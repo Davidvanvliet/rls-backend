@@ -1,15 +1,10 @@
 package nl.rls.composer.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +38,7 @@ public class DangerLabelController {
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<DangerLabelDto>> getAll() {
+	public ResponseEntity<List<DangerLabelDto>> getAll() {
 		Iterable<DangerLabel> entityList = dangerLabelRepository.findAll();
 
 		List<DangerLabelDto> dtoList = new ArrayList<>();
@@ -51,8 +46,8 @@ public class DangerLabelController {
 			dtoList.add(DangerLabelDtoMapper.map(entity));
 		}
 
-		Link link = linkTo(methodOn(LocationIdentController.class).getAllQuery("", "")).withSelfRel();
-		Resources<DangerLabelDto> dtos = new Resources<DangerLabelDto>(dtoList, link);
-		return ResponseEntity.ok(dtos);
+//		Link link = linkTo(methodOn(LocationIdentController.class).getAllQuery("", "")).withSelfRel();
+//		Resources<DangerLabelDto> dtos = new Resources<DangerLabelDto>(dtoList, link);
+		return ResponseEntity.ok(dtoList);
 	}
 }

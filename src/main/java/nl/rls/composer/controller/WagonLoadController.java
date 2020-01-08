@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +39,7 @@ public class WagonLoadController {
 	private SecurityContext securityContext;
 
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<WagonLoadDto>> getAll() {
+	public ResponseEntity<List<WagonLoadDto>> getAll() {
 		int ownerId = securityContext.getOwnerId();
 		Iterable<WagonLoad> wagonList = wagonLoadRepository.findByOwnerId(ownerId);
 		List<WagonLoadDto> dtoList = new ArrayList<>();
@@ -49,9 +47,9 @@ public class WagonLoadController {
 			WagonLoadDto dto = WagonLoadDtoMapper.map(wagonLoad);
 			dtoList.add(dto);
 		}
-		Link dtoLink = linkTo(methodOn(WagonLoadController.class).getAll()).withSelfRel();
-		Resources<WagonLoadDto> wagonLoadDtoList = new Resources<WagonLoadDto>(dtoList, dtoLink);
-		return ResponseEntity.ok(wagonLoadDtoList);
+//		Link dtoLink = linkTo(methodOn(WagonLoadController.class).getAll()).withSelfRel();
+//		Resources<WagonLoadDto> wagonLoadDtoList = new Resources<WagonLoadDto>(dtoList, dtoLink);
+		return ResponseEntity.ok(dtoList);
 	}
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

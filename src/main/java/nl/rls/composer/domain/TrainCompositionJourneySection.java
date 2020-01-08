@@ -18,7 +18,7 @@ import nl.rls.composer.domain.code.TrainActivityType;
 /**
  * @author berend.wilkens
  * 
- * Defines the make up of a train for each section of its journey.
+ *         Defines the make up of a train for each section of its journey.
  * 
  */
 @Entity
@@ -82,12 +82,12 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	 */
 	private int livestockOrPeopleIndicator;
 
-	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "train_composition_journey_section_id")
 	@OrderBy("position")
 	private List<WagonInTrain> wagons = new ArrayList<WagonInTrain>();
 
-	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "train_composition_journey_section_id")
 	@OrderBy("position")
 	private List<TractionInTrain> tractions = new ArrayList<TractionInTrain>();
@@ -98,7 +98,7 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 
 	@ManyToOne
 	private Train train;
-	
+
 	public WagonInTrain getWagonById(Integer wagonId) {
 		for (WagonInTrain wit : wagons) {
 			if (wit.getId() == wagonId) {
@@ -146,7 +146,12 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	}
 
 	public void moveWagonById(int wagonInTrainId, int position) {
-		moveWagon(getWagonById(wagonInTrainId), position);
+		WagonInTrain wagonInTrain = getWagonById(wagonInTrainId);
+		if (wagonInTrain != null) {
+			moveWagon(wagonInTrain, position);
+		} else {
+			System.out.println("WagonInTrain does not extest " + wagonInTrainId);
+		}
 	}
 
 	public void moveWagon(WagonInTrain wagonInTrain, int position) {

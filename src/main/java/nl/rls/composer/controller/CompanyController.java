@@ -1,15 +1,10 @@
 package nl.rls.composer.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +39,7 @@ public class CompanyController {
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<CompanyDto>> getAll(
+	public ResponseEntity<List<CompanyDto>> getAll(
 		@RequestParam(name = "country", required = false) String countryIso, 
 		@RequestParam(name= "code", required = false) String code) {
 		Iterable<Company> companyList = null;
@@ -61,8 +56,8 @@ public class CompanyController {
 		for (Company company : companyList) {
 			companyDtoList.add(CompanyDtoMapper.map(company));
 		}
-		Link link = linkTo(methodOn(CompanyController.class).getAll(countryIso, code)).withSelfRel();
-		Resources<CompanyDto> locations = new Resources<CompanyDto>(companyDtoList, link);
-		return ResponseEntity.ok(locations);
+//		Link link = linkTo(methodOn(CompanyController.class).getAll(countryIso, code)).withSelfRel();
+//		Resources<CompanyDto> locations = new Resources<CompanyDto>(companyDtoList, link);
+		return ResponseEntity.ok(companyDtoList);
 	}
 }

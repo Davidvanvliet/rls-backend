@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.hateoas.ResourceSupport;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 
 @NoArgsConstructor
 @Getter @Setter
@@ -17,5 +16,5 @@ public class TrainDto extends ResourceSupport   {
 	private String transferPoint;
     private Date scheduledTimeAtHandover;
     private Date scheduledDateTimeAtTransfer;
-	private List<TrainCompositionJourneySectionDto> trainCompositionJourneySection = new ArrayList<TrainCompositionJourneySectionDto>();
+	private List<TrainCompositionJourneySectionDto> trainCompositionJourneySections = new ArrayList<TrainCompositionJourneySectionDto>();
 }

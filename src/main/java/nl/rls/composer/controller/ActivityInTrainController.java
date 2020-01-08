@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -58,7 +56,7 @@ public class ActivityInTrainController {
 	}
 
 	@GetMapping(value = "{id}/activities/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resources<TrainActivityTypeDto>> getAllActivityInTrain(@PathVariable Integer id) {
+	public ResponseEntity<List<TrainActivityTypeDto>> getAllActivityInTrain(@PathVariable Integer id) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
 				.findByIdAndOwnerId(id, ownerId);
@@ -69,10 +67,10 @@ public class ActivityInTrainController {
 				TrainActivityTypeDto trainActivityTypeDto = TrainActivityTypeDtoMapper.map(trainActivityType);
 				trainActivityTypeDtoList.add(trainActivityTypeDto);
 			}
-			Link link = linkTo(methodOn(ActivityInTrainController.class).getAllActivityInTrain(id))
-					.withSelfRel();
-			Resources<TrainActivityTypeDto> dtos = new Resources<TrainActivityTypeDto>(trainActivityTypeDtoList, link);
-			return ResponseEntity.ok(dtos);
+//			Link link = linkTo(methodOn(ActivityInTrainController.class).getAllActivityInTrain(id))
+//					.withSelfRel();
+//			Resources<TrainActivityTypeDto> dtos = new Resources<TrainActivityTypeDto>(trainActivityTypeDtoList, link);
+			return ResponseEntity.ok(trainActivityTypeDtoList);
 		}
 		return ResponseEntity.notFound().build();
 	}
