@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import nl.rls.composer.domain.TractionInTrain;
 import nl.rls.composer.domain.TrainCompositionJourneySection;
 import nl.rls.composer.domain.WagonInTrain;
+import nl.rls.composer.domain.code.TrainActivityType;
 import nl.rls.composer.repository.TractionInTrainRepository;
 import nl.rls.composer.repository.TrainCompositionJourneySectionRepository;
 import nl.rls.composer.repository.WagonInTrainRepository;
@@ -44,6 +45,38 @@ public class TrainCompositionJourneySectionService {
 		tcjs.moveWagonById(tractionInTrainId, position);
 		tractionInTrainRepository.saveAll(tcjs.getTractions());
 		trainCompositionJourneySectionRepository.save(tcjs);
+	}
+	
+	public TrainCompositionJourneySection copySection(TrainCompositionJourneySection section) {
+		TrainCompositionJourneySection newSection = new TrainCompositionJourneySection();
+		newSection.setTrain(section.getTrain());
+		newSection.setJourneySectionDestination(section.getJourneySectionDestination());
+		newSection.setJourneySectionOrigin(section.getJourneySectionOrigin());
+		newSection.setLivestockOrPeopleIndicator(section.getLivestockOrPeopleIndicator());
+		newSection.setOwnerId(section.getOwnerId());
+		newSection.setResponsibilityActualSection(section.getResponsibilityActualSection());
+		newSection.setResponsibilityNextSection(section.getResponsibilityNextSection());
+		newSection.setTrainMaxSpeed(section.getTrainMaxSpeed());
+		newSection.setTrainType(section.getTrainType());
+		for (TrainActivityType activity : section.getActivities()) {
+			newSection.addActivity(activity);
+		}
+		for (TractionInTrain tractionInTrain : section.getTractions()) {
+			TractionInTrain newTractionInTrain = new TractionInTrain();
+			newTractionInTrain.setDriverIndication(tractionInTrain.getDriverIndication());
+			newTractionInTrain.setPosition(tractionInTrain.getPosition());
+			newTractionInTrain.setTraction(tractionInTrain.getTraction());
+			newTractionInTrain.setTrainCompositionJourneySection(tractionInTrain.getTrainCompositionJourneySection());
+			newSection.addTraction(newTractionInTrain);
+		}
+		for (WagonInTrain wagonInTrain : section.getWagons()) {
+			WagonInTrain newWagonInTrain = new WagonInTrain();
+			newWagonInTrain.setPosition(wagonInTrain.getPosition());
+			newWagonInTrain.setTrainCompositionJourneySection(wagonInTrain.getTrainCompositionJourneySection());
+			newWagonInTrain.setWagonLoad(wagonInTrain.getWagonLoad());
+			newSection.addWagon(newWagonInTrain);
+		}
+		return newSection;
 	}
 
 }

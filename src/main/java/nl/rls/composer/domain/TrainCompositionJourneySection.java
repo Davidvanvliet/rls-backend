@@ -150,7 +150,7 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 		if (wagonInTrain != null) {
 			moveWagon(wagonInTrain, position);
 		} else {
-			System.out.println("WagonInTrain does not extest " + wagonInTrainId);
+			System.out.println("WagonInTrain does not extist " + wagonInTrainId);
 		}
 	}
 

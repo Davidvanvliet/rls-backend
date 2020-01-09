@@ -212,7 +212,7 @@ public class Main {
 			journeySection.setTrainType(2);
 			journeySection.setTrainMaxSpeed(100);
 			journeySection.setLivestockOrPeopleIndicator(0);
-
+			journeySection.setTrain(train);
 			/*
 			 * LocoIdent Traction
 			 */

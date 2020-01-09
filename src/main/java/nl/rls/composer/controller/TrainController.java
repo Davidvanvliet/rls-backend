@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
@@ -38,6 +39,7 @@ import nl.rls.composer.rest.dto.TrainCreateDto;
 import nl.rls.composer.rest.dto.TrainDto;
 import nl.rls.composer.rest.dto.mapper.TrainCompositionJourneySectionDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainDtoMapper;
+import nl.rls.composer.service.TrainCompositionJourneySectionService;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "trains")
@@ -52,6 +54,8 @@ public class TrainController {
 	private LocationIdentRepository locationIdentRepository;
 	@Autowired
 	private TrainCompositionJourneySectionRepository trainCompositionJourneySectionRepository;
+	@Autowired
+	TrainCompositionJourneySectionService trainCompositionJourneySectionService;
 	@Autowired
 	private SecurityContext securityContext;
 
@@ -220,4 +224,23 @@ public class TrainController {
 		}
 	}
 
+	@ApiOperation(value = "Copies or clones a complete JourneySection including activities, tractions and wagons.")
+	@GetMapping(value = "{id}/journeysections/{sectionId}/clone")
+	public ResponseEntity<TrainDto> copySection(@PathVariable Integer id,
+			@PathVariable Integer sectionId) {
+		int ownerId = securityContext.getOwnerId();
+		Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
+		if (!optional.isPresent()) {
+			ResponseEntity.notFound();
+		}
+		Train train = optional.get();
+		TrainCompositionJourneySection journeySection = train.getJourneySectionById(sectionId);
+		TrainCompositionJourneySection newJourneySection = trainCompositionJourneySectionService.copySection(journeySection);
+		train.addJourneySection(newJourneySection);
+		train = trainRepository.save(train);
+		TrainDto resultDto = TrainDtoMapper.map(train);
+		return ResponseEntity.created(linkTo(methodOn(TrainController.class).getById(train.getId())).toUri())
+				.body(resultDto);
+
+	}
 }

@@ -23,6 +23,7 @@ public class WagonInTrain {
 	 * Sequential number starting with the first wagon at the front of train as N°1.
 	 */
     private int position;
+    
     @ManyToOne
     private WagonLoad wagonLoad;
     @ManyToOne
