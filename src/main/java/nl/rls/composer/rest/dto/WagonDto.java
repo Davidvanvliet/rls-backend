@@ -14,5 +14,5 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @ApiModel(description = "Identification code of a freight wagon based on the TSI OPE and CEN Recommendations and CIS wagons coded according to OSJD-UIC leaflet 402, which allows the conversion from 8 digits to 12 digits and viceversa.")
 public class WagonDto extends ResourceSupport {
 	private String numberFreight;
-	private WagonTechDataDto wagonTechData;
+	private WagonTypeDto wagonType;
 }

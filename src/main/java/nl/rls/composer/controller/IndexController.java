@@ -26,7 +26,7 @@ public class IndexController {
 		indexDto.add(linkTo(methodOn(RestrictionCodeController.class).getAll()).withRel("restrictioncodes"));
 		indexDto.add(linkTo(methodOn(TractionModeController.class).getAll()).withRel("tractionmodes"));
 		indexDto.add(linkTo(methodOn(TrainActivityTypeController.class).getAll()).withRel("trainactivitycodes"));
-		indexDto.add(linkTo(methodOn(WagonTechDataController.class).getAll()).withRel("wagontechdata"));
+		indexDto.add(linkTo(methodOn(WagonTypeController.class).getAll()).withRel("wagontechdata"));
 		return ResponseEntity.ok(indexDto);
 	}
 

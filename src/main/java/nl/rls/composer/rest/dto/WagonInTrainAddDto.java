@@ -11,5 +11,10 @@ import lombok.Setter;
 @Getter @Setter
 public class WagonInTrainAddDto {
     private int position;
-	private String wagonLoad;
+	private String brakeType;
+	private int totalLoadWeight;
+	private int brakeWeight;
+	private int wagonMaxSpeed;
+	private String wagonUrl;
+	private String breakTypeUrl;
 }

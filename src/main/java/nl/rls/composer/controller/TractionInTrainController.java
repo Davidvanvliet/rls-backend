@@ -25,19 +25,19 @@ import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Traction;
 import nl.rls.composer.domain.TractionInTrain;
-import nl.rls.composer.domain.TrainCompositionJourneySection;
+import nl.rls.composer.domain.TrainComposition;
 import nl.rls.composer.repository.TractionInTrainRepository;
 import nl.rls.composer.repository.TractionRepository;
-import nl.rls.composer.repository.TrainCompositionJourneySectionRepository;
+import nl.rls.composer.repository.TrainCompositionRepository;
 import nl.rls.composer.rest.dto.TractionInTrainAddDto;
 import nl.rls.composer.rest.dto.TractionInTrainDto;
-import nl.rls.composer.rest.dto.TrainCompositionJourneySectionDto;
+import nl.rls.composer.rest.dto.TrainCompositionDto;
 import nl.rls.composer.rest.dto.mapper.TractionInTrainDtoMapper;
-import nl.rls.composer.rest.dto.mapper.TrainCompositionJourneySectionDtoMapper;
-import nl.rls.composer.service.TrainCompositionJourneySectionService;
+import nl.rls.composer.rest.dto.mapper.TrainCompositionDtoMapper;
+import nl.rls.composer.service.TrainCompositionService;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH+TrainCompositionJourneySectionController.PATH)
+@RequestMapping(BaseURL.BASE_PATH+TrainCompositionController.PATH)
 public class TractionInTrainController {
 	@Autowired
 	private SecurityContext securityContext;
@@ -46,17 +46,17 @@ public class TractionInTrainController {
 	@Autowired
 	private TractionInTrainRepository tractionInTrainRepository;
 	@Autowired
-	private TrainCompositionJourneySectionService trainCompositionJourneySectionService;
+	private TrainCompositionService trainCompositionService;
 	@Autowired
-	private TrainCompositionJourneySectionRepository trainCompositionJourneySectionRepository;
+	private TrainCompositionRepository trainCompositionRepository;
 
 	@GetMapping(value = "{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TractionInTrainDto> getTractionInTrain(@PathVariable Integer id, @PathVariable Integer tractionId) {
 		int ownerId = securityContext.getOwnerId();
-		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
+		Optional<TrainComposition> optional = trainCompositionRepository
 				.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
-			TrainCompositionJourneySection entity = optional.get();
+			TrainComposition entity = optional.get();
 			TractionInTrain tractionInTrain = entity.getTractionById(tractionId);
 			TractionInTrainDto tractionInTrainDto = TractionInTrainDtoMapper.map(tractionInTrain);
 			return ResponseEntity.ok(tractionInTrainDto);
@@ -67,10 +67,10 @@ public class TractionInTrainController {
 	@GetMapping(value = "{id}/tractions/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TractionInTrainDto>> getAllTractionInTrain(@PathVariable Integer id) {
 		int ownerId = securityContext.getOwnerId();
-		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
+		Optional<TrainComposition> optional = trainCompositionRepository
 				.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
-			TrainCompositionJourneySection entity = optional.get();
+			TrainComposition entity = optional.get();
 			List<TractionInTrainDto> tractionInTrainDtoList = new ArrayList<TractionInTrainDto>();
 			for (TractionInTrain tractionInTrain : entity.getTractions()) {
 				TractionInTrainDto tractionInTrainDto = TractionInTrainDtoMapper.map(tractionInTrain);
@@ -85,63 +85,63 @@ public class TractionInTrainController {
 	}
 
 	@PostMapping(value = "{id}/tractions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TrainCompositionJourneySectionDto> addTraction(@PathVariable int id,
+	public ResponseEntity<TrainCompositionDto> addTraction(@PathVariable int id,
 			@RequestBody TractionInTrainAddDto dto) {
 		int ownerId = securityContext.getOwnerId();
-		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
+		Optional<TrainComposition> optional = trainCompositionRepository
 				.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
 			int tractionId = DecodePath.decodeInteger(dto.getTraction(), "tractions");
 			Optional<Traction> traction = tractionRepository.findByIdAndOwnerId(tractionId, ownerId);
 			if (traction.isPresent()) {
-				TrainCompositionJourneySection trainCompositionJourneySection = optional.get();
+				TrainComposition trainComposition = optional.get();
 				
 				TractionInTrain tractionInTrain = new TractionInTrain();
 				tractionInTrain.setTraction(traction.get());
 				tractionInTrain.setPosition(dto.getPosition());
 				tractionInTrain.setDriverIndication(dto.getDriverIndication());
-				trainCompositionJourneySectionService.addTractionToTrain(trainCompositionJourneySection, tractionInTrain);
-				TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper
-						.map(trainCompositionJourneySection);
+				trainCompositionService.addTractionToTrain(trainComposition, tractionInTrain);
+				TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
+						.map(trainComposition);
 				return ResponseEntity
-						.created(linkTo(methodOn(TrainCompositionJourneySectionController.class)
-								.getById(trainCompositionJourneySection.getId())).toUri())
-						.body(trainCompositionJourneySectionDto);
+						.created(linkTo(methodOn(TrainCompositionController.class)
+								.getById(trainComposition.getId())).toUri())
+						.body(trainCompositionDto);
 			}
 		}
 		return ResponseEntity.notFound().build();
 	}
 
 	@PutMapping(value = "{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TrainCompositionJourneySectionDto> moveTraction(@PathVariable int id,
+	public ResponseEntity<TrainCompositionDto> moveTraction(@PathVariable int id,
 			@PathVariable int tractionInTrainId, @RequestParam("position") int position) {
 		int ownerId = securityContext.getOwnerId();
-		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
+		Optional<TrainComposition> optional = trainCompositionRepository
 				.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
-			TrainCompositionJourneySection trainCompositionJourneySection = optional.get();
-			trainCompositionJourneySectionService.moveTractionById(trainCompositionJourneySection, tractionInTrainId, position);
-			TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper
-					.map(trainCompositionJourneySection);
-			return ResponseEntity.ok(trainCompositionJourneySectionDto);
+			TrainComposition trainComposition = optional.get();
+			trainCompositionService.moveTractionById(trainComposition, tractionInTrainId, position);
+			TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
+					.map(trainComposition);
+			return ResponseEntity.ok(trainCompositionDto);
 		}
 		return ResponseEntity.notFound().build();
 	}
 	
 	@DeleteMapping(value = "{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TrainCompositionJourneySectionDto> removeTraction(@PathVariable int id,
+	public ResponseEntity<TrainCompositionDto> removeTraction(@PathVariable int id,
 			@PathVariable int tractionId) {
 		int ownerId = securityContext.getOwnerId();
-		Optional<TrainCompositionJourneySection> optional = trainCompositionJourneySectionRepository
+		Optional<TrainComposition> optional = trainCompositionRepository
 				.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
-			TrainCompositionJourneySection trainCompositionJourneySection = optional.get();
-			trainCompositionJourneySection.removeTractionById(tractionId);
-			tractionInTrainRepository.saveAll(trainCompositionJourneySection.getTractions());
-			trainCompositionJourneySectionRepository.save(trainCompositionJourneySection);
-			TrainCompositionJourneySectionDto trainCompositionJourneySectionDto = TrainCompositionJourneySectionDtoMapper
-					.map(trainCompositionJourneySection);
-			return ResponseEntity.ok(trainCompositionJourneySectionDto);
+			TrainComposition trainComposition = optional.get();
+			trainComposition.removeTractionById(tractionId);
+			tractionInTrainRepository.saveAll(trainComposition.getTractions());
+			trainCompositionRepository.save(trainComposition);
+			TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
+					.map(trainComposition);
+			return ResponseEntity.ok(trainCompositionDto);
 		}
 		return ResponseEntity.notFound().build();
 	}

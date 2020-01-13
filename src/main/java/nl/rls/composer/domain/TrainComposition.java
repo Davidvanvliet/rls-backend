@@ -13,7 +13,6 @@ import javax.persistence.OrderBy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.domain.code.TrainActivityType;
 
 /**
  * @author berend.wilkens
@@ -25,53 +24,26 @@ import nl.rls.composer.domain.code.TrainActivityType;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TrainCompositionJourneySection extends OwnedEntity {
-	public TrainCompositionJourneySection(Integer ownerId) {
+public class TrainComposition extends OwnedEntity {
+	public TrainComposition(Integer ownerId) {
 		super(ownerId);
 	}
 
-	/**
-	 * Origin of the section on which train composition is unchanged
-	 */
-	@ManyToOne
-	private Location journeySectionOrigin;
-	/**
-	 * Destination of the section on which train composition is unchanged
-	 */
-	@ManyToOne
-	private Location journeySectionDestination;
-	/**
-	 * This element identifies the responsible RU or IM for the actual path section
-	 */
-	@ManyToOne
-	private Responsibility responsibilityActualSection;
-	/**
-	 * This element identifies the responsible RU and IM for the following path
-	 * section
-	 */
-	@ManyToOne
-	private Responsibility responsibilityNextSection;
+	public Boolean getExceptionalGaugingIndicator() {
+		return false;
+	}
 
-	private Boolean exceptionalGaugingInd;
-	private Boolean dangerousGoodsIndicator;
-	/**
-	 * 1 Passenger train Commercial train with passenger coaches or trainsets Empty
-	 * run of Train with passenger coaches or trainsets Including Crew train (for
-	 * Train Crew Members) 2 Freight train Train with freight wagons 3 Light engine
-	 * (locomotive train) One or more engines without any carriages 4 Engineering
-	 * train Train for measurement, maintenance, instructions, homologation, etc 0
-	 * Other Train types that are not covered with the four codes given above can be
-	 * codified as "other" in the messages Passenger with Freight - military trains,
-	 * the Overnight Express; Royalty, Head of States
-	 */
-	private int trainType;
+	public Boolean getDangerousGoodsIndicator() {
+		return false;
+	}
+
 	// @ManyToMany
 	// private List<TrainCC_System> trainCCSystem;
 	// private TrainRadioSystem trainRadioSystem;
 	private int trainMaxSpeed;
 	// private BigDecimal maxAxleWeight;
-	// private String brakeType;
-	// private int brakeWeight;
+	private String brakeType;
+	private int brakeWeight;
 
 	/**
 	 * Indicates that livestock and people (other than train crew) will be carried.
@@ -83,21 +55,17 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	private int livestockOrPeopleIndicator;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "train_composition_journey_section_id")
+	@JoinColumn(name = "train_composition_id")
 	@OrderBy("position")
 	private List<WagonInTrain> wagons = new ArrayList<WagonInTrain>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "train_composition_journey_section_id")
+	@JoinColumn(name = "train_composition_id")
 	@OrderBy("position")
 	private List<TractionInTrain> tractions = new ArrayList<TractionInTrain>();
 
-	@OneToMany(cascade = { CascadeType.MERGE })
-	@JoinColumn(name = "train_composition_journey_section_id")
-	private List<TrainActivityType> activities = new ArrayList<>();
-
 	@ManyToOne
-	private Train train;
+	private JourneySection journeySection;
 
 	public WagonInTrain getWagonById(Integer wagonId) {
 		for (WagonInTrain wit : wagons) {
@@ -119,7 +87,7 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	}
 
 	public void removeWagon(WagonInTrain wagonInTrain) {
-		wagonInTrain.setTrainCompositionJourneySection(null);
+		wagonInTrain.setTrainComposition(null);
 		wagons.remove(wagonInTrain);
 		int pos = 1;
 		for (WagonInTrain wit : wagons) {
@@ -135,7 +103,7 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 			wagonInTrain.setPosition(1);
 		}
 		wagons.add(wagonInTrain.getPosition() - 1, wagonInTrain);
-		wagonInTrain.setTrainCompositionJourneySection(this);
+		wagonInTrain.setTrainComposition(this);
 		int pos = 1;
 		for (WagonInTrain wit : wagons) {
 			if (wit.getPosition() != pos) {
@@ -174,7 +142,7 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 			entity.setPosition(1);
 		}
 		tractions.add(entity.getPosition() - 1, entity);
-		entity.setTrainCompositionJourneySection(this);
+		entity.setTrainComposition(this);
 		int pos = 1;
 		for (TractionInTrain tit : tractions) {
 			if (tit.getPosition() != pos) {
@@ -202,7 +170,7 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	}
 
 	public void removeTraction(TractionInTrain entity) {
-		entity.setTrainCompositionJourneySection(null);
+		entity.setTrainComposition(null);
 		tractions.remove(entity);
 		int pos = 1;
 		for (TractionInTrain tit : tractions) {
@@ -213,46 +181,14 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 		}
 	}
 
-	public TrainActivityType getActivityById(Integer id) {
-		for (TrainActivityType ait : activities) {
-			if (ait.getId() == id) {
-				return ait;
-			}
-		}
-		return null;
-	}
-
-	public boolean addActivity(TrainActivityType entity) {
-		if (!activities.contains(entity)) {
-			activities.add(entity);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean removeActivityById(int id) {
-		TrainActivityType entity = getActivityById(id);
-		if (entity != null) {
-			removeActivity(entity);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public void removeActivity(TrainActivityType entity) {
-		activities.remove(entity);
-	}
-
 	/**
 	 * The sum of all weights of wagons and traction units
 	 */
 	public int getTrainWeight() {
 		int trainWeight = 0;
 		for (WagonInTrain wagon : getWagons()) {
-			trainWeight += wagon.getWagonLoad().getWagon().getWagonTechData().getWagonWeightEmpty();
-			trainWeight += wagon.getWagonLoad().getTotalLoadWeight();
+			trainWeight += wagon.getWagon().getWagonType().getWagonWeightEmpty();
+			trainWeight += wagon.getTotalLoadWeight();
 		}
 		for (TractionInTrain traction : getTractions()) {
 			trainWeight += traction.getTraction().getWeight();
@@ -267,14 +203,13 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	public int getTrainLength() {
 		int trainLength = 0;
 		for (WagonInTrain wagon : getWagons()) {
-			trainLength += wagon.getWagonLoad().getWagon().getWagonTechData().getLengthOverBuffers();
+			trainLength += wagon.getWagon().getWagonType().getLengthOverBuffers();
 		}
 		for (TractionInTrain traction : getTractions()) {
 			trainLength += traction.getTraction().getLengthOverBuffers();
 		}
 		return trainLength;
 	}
-
 	public int getNumberOfVehicles() {
 		int numberOfVehicles = getWagons().size();
 		numberOfVehicles += getTractions().size();
@@ -284,7 +219,7 @@ public class TrainCompositionJourneySection extends OwnedEntity {
 	public int getNumberOfAxles() {
 		int numberOfAxles = 0;
 		for (WagonInTrain wagon : getWagons()) {
-			numberOfAxles += wagon.getWagonLoad().getWagon().getWagonTechData().getWagonNumberOfAxles();
+			numberOfAxles += wagon.getWagon().getWagonType().getWagonNumberOfAxles();
 		}
 		for (TractionInTrain traction : getTractions()) {
 			numberOfAxles += traction.getTraction().getNumberOfAxles();

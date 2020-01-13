@@ -21,9 +21,9 @@ import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Wagon;
-import nl.rls.composer.domain.WagonTechData;
+import nl.rls.composer.domain.WagonType;
 import nl.rls.composer.repository.WagonRepository;
-import nl.rls.composer.repository.WagonTechDataRepository;
+import nl.rls.composer.repository.WagonTypeRepository;
 import nl.rls.composer.rest.dto.WagonDto;
 import nl.rls.composer.rest.dto.WagonPostDto;
 import nl.rls.composer.rest.dto.mapper.WagonDtoMapper;
@@ -34,7 +34,7 @@ public class WagonController {
 	@Autowired
 	private WagonRepository wagonRepository;
 	@Autowired
-	private WagonTechDataRepository wagonTechDataRepository;
+	private WagonTypeRepository wagonTypeRepository;
 
 	@Autowired
 	private SecurityContext securityContext;
@@ -71,11 +71,11 @@ public class WagonController {
 		Wagon entity = new Wagon();
 		entity.setOwnerId(ownerId);
 		entity.setNumberFreight(dto.getNumberFreight());
-		int locationId = DecodePath.decodeInteger(dto.getWagonTechData(), "wagontechdata");
-		System.out.println("URL: "+dto.getWagonTechData()+", "+locationId);
-		Optional<WagonTechData> wagonTechData = wagonTechDataRepository.findById(locationId);
-		if (wagonTechData.isPresent()) {
-			entity.setWagonTechData(wagonTechData.get());
+		int wagonTypeId = DecodePath.decodeInteger(dto.getWagonTypeUrl(), "wagontypes");
+		System.out.println("URL: "+dto.getWagonTypeUrl()+", "+wagonTypeId);
+		Optional<WagonType> wagonType = wagonTypeRepository.findById(wagonTypeId);
+		if (wagonType.isPresent()) {
+			entity.setWagonType(wagonType.get());
 		}
 		wagonRepository.save(entity);
 		WagonDto wagonDto = WagonDtoMapper.map(entity);

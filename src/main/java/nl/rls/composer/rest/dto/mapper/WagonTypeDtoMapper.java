@@ -7,21 +7,21 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 
-import nl.rls.composer.controller.WagonTechDataController;
-import nl.rls.composer.domain.WagonTechData;
-import nl.rls.composer.rest.dto.WagonTechDataDto;
+import nl.rls.composer.controller.WagonTypeController;
+import nl.rls.composer.domain.WagonType;
+import nl.rls.composer.rest.dto.WagonTypeDto;
 
-public class WagonTechDataDtoMapper {
+public class WagonTypeDtoMapper {
 
-	public static WagonTechDataDto map(WagonTechData entity) {
+	public static WagonTypeDto map(WagonType entity) {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
 			}
 		};
 		mapper.addMapping(mappingBuilder);
-		WagonTechDataDto dto = mapper.map(entity, WagonTechDataDto.class);
-	    dto.add(linkTo(methodOn(WagonTechDataController.class).getById(entity.getId())).withSelfRel());
+		WagonTypeDto dto = mapper.map(entity, WagonTypeDto.class);
+	    dto.add(linkTo(methodOn(WagonTypeController.class).getById(entity.getId())).withSelfRel());
 		return dto;
 	}
 

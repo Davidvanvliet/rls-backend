@@ -13,4 +13,5 @@ public class TrainCreateDto {
 	private String transferPoint;
     private Date scheduledTimeAtHandover;
     private Date scheduledDateTimeAtTransfer;
+	private Integer trainType;
 }

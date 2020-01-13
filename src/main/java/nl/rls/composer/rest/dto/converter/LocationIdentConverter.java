@@ -1,8 +1,9 @@
-package nl.rls.composer.rest.dto.mapper;
+package nl.rls.composer.rest.dto.converter;
 
 import org.dozer.CustomConverter;
 
 import nl.rls.composer.domain.Location;
+import nl.rls.composer.rest.dto.mapper.LocationIdentDtoMapper;
 
 public class LocationIdentConverter implements CustomConverter {
 	@Override

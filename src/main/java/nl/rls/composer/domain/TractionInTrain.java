@@ -30,7 +30,7 @@ public class TractionInTrain {
     @ManyToOne
     private Traction traction;
     @ManyToOne
-    private TrainCompositionJourneySection trainCompositionJourneySection;
+    private TrainComposition trainComposition;
 
 	@Override
 	public int hashCode() {

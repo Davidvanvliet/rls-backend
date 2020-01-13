@@ -13,7 +13,7 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @NoArgsConstructor
 @Getter
 @Setter
-public class WagonTechDataDto extends ResourceSupport {
+public class WagonTypeDto extends ResourceSupport {
 	private String name;
 	private String code;
 	private int lengthOverBuffers;

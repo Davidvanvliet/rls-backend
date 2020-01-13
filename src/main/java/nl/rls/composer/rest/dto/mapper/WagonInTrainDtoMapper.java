@@ -17,14 +17,14 @@ public class WagonInTrainDtoMapper {
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
 				mapping(WagonInTrain.class, WagonInTrainDto.class)
-				.fields("wagonLoad", "wagonLoad",
-						FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.mapper.WagonLoadConverter"))
+				.fields("wagon", "wagon",
+						FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.WagonConverter"))
 				;
 			}
 		};
 		mapper.addMapping(mappingBuilder);		
 		WagonInTrainDto dto = mapper.map(entity, WagonInTrainDto.class);
-		dto.add(linkTo(methodOn(WagonInTrainController.class).getWagonInTrain(entity.getTrainCompositionJourneySection().getId(), entity.getId())).withSelfRel());
+		dto.add(linkTo(methodOn(WagonInTrainController.class).getWagonInTrain(entity.getTrainComposition().getId(), entity.getId())).withSelfRel());
 		return dto;
 	}
 

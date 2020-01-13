@@ -7,11 +7,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TrainCompositionJourneySectionPostDto {
+public class JourneySectionPostDto {
 	private String journeySectionOrigin;
 	private String journeySectionDestination;
-	private Integer trainType;
-    private Integer exceptionalGaugingInd;
-    private Integer livestockOrPeopleIndicator;
-    private Integer dangerousGoodsIndicator;
 }

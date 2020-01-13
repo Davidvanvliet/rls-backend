@@ -34,26 +34,38 @@ public class TrainCompositionMessageXmlMapper {
 				mapping(nl.rls.composer.domain.Train.class, info.taf_jsg.schemes.OperationalTrainNumberIdentifier.class)
 					.fields("operationalTrainNumber", "operationalTrainNumber");
 
-				mapping(nl.rls.composer.domain.TrainCompositionJourneySection.class,
+				mapping(nl.rls.composer.domain.JourneySection.class,
 				info.taf_jsg.schemes.TrainCompositionJourneySection.class)
-					.fields("exceptionalGaugingInd", field("trainRunningData.exceptionalGaugingInd").accessible(true))
-					.fields("dangerousGoodsIndicator", field("trainRunningData.dangerousGoodsIndicator").accessible(true))
+					.fields("trainComposition.livestockOrPeopleIndicator", "livestockOrPeopleIndicator")
+					.fields("trainComposition.exceptionalGaugingIndicator", field("trainRunningData.exceptionalGaugingInd").accessible(true))
+					.fields("trainComposition.dangerousGoodsIndicator", field("trainRunningData.dangerousGoodsIndicator").accessible(true))
+					.fields("trainComposition.trainMaxSpeed", "trainRunningData.trainRunningTechData.trainMaxSpeed")
+					.fields("trainComposition.numberOfAxles", "trainRunningData.trainRunningTechData.numberOfAxles")
+					.fields("trainComposition.numberOfVehicles", "trainRunningData.trainRunningTechData.numberOfVehicles")
+					.fields("trainComposition.trainLength", "trainRunningData.trainRunningTechData.trainLength")
+					.fields("trainComposition.trainWeight", "trainRunningData.trainRunningTechData.trainWeight")
+					.fields("trainComposition.trainWeight", "trainRunningData.trainRunningTechData.trainWeight")
+					.fields("trainComposition.journeySection.train.trainType", "trainRunningData.trainRunningTechData.trainType")
+
 					.fields("journeySectionOrigin", field("journeySection.journeySectionOrigin").accessible(true))
 					.fields("journeySectionDestination", field("journeySection.journeySectionDestination").accessible(true))
 					.fields("responsibilityActualSection", field("journeySection.responsibilityActualSection").accessible(true))
 					.fields("responsibilityNextSection", field("journeySection.responsibilityNextSection").accessible(true))
 					.fields("activities", field("trainRunningData.activities").accessible(true))
-					.fields("tractions", field("locoIdent").accessible(true))
-					.fields("wagons", field("wagonData").accessible(true));
+					.fields("trainComposition.tractions", field("locoIdent").accessible(true))
+					.fields("trainComposition.wagons", field("wagonData").accessible(true));
 				
 				mapping(nl.rls.composer.domain.Location.class, info.taf_jsg.schemes.LocationIdent.class)
 					.fields("countryCodeIso", "countryCodeISO");
 
 				mapping(nl.rls.composer.domain.WagonInTrain.class, info.taf_jsg.schemes.WagonData.class)
 					.fields("position", "wagonTrainPosition")
-					.fields("wagonLoad.wagon.numberFreight", "wagonNumberFreight")
-					.fields("wagonLoad.wagon.wagonTechData", "wagonTechData")
-					.fields("wagonLoad", "wagonOperationalData");
+					.fields("wagon.numberFreight", "wagonNumberFreight")
+					.fields("wagon.wagonType", "wagonTechData")
+					.fields("totalLoadWeight", "wagonOperationalData.totalLoadWeight.")
+					.fields("brakeWeight", "wagonOperationalData.brakeWeight")
+					.fields("brakeType", "wagonOperationalData.brakeType")
+					.fields("wagonMaxSpeed", "wagonOperationalData.wagonMaxSpeed");
 
 				mapping(nl.rls.composer.domain.Responsibility.class,
 						info.taf_jsg.schemes.ResponsibilityActualSection.class)

@@ -10,5 +10,9 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Setter
 public class WagonInTrainDto extends ResourceSupport {
     private int position;
-    private WagonLoadDto wagonLoad;
+	private String brakeType;
+	private int totalLoadWeight;
+	private int brakeWeight;
+	private int wagonMaxSpeed;
+	private WagonDto wagon;
 }

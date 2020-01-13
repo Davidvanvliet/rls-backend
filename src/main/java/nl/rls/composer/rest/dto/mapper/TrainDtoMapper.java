@@ -13,8 +13,8 @@ import nl.rls.composer.controller.CompanyController;
 import nl.rls.composer.controller.LocationIdentController;
 import nl.rls.composer.controller.TrainController;
 import nl.rls.composer.domain.Train;
-import nl.rls.composer.domain.TrainCompositionJourneySection;
-import nl.rls.composer.rest.dto.TrainCompositionJourneySectionDto;
+import nl.rls.composer.domain.JourneySection;
+import nl.rls.composer.rest.dto.JourneySectionDto;
 import nl.rls.composer.rest.dto.TrainCreateDto;
 import nl.rls.composer.rest.dto.TrainDto;
 
@@ -30,9 +30,9 @@ public class TrainDtoMapper {
 		};
 		mapper.addMapping(mappingBuilder);
 		TrainDto dto = mapper.map(entity, TrainDto.class);
-		List<TrainCompositionJourneySectionDto> dtoList = new ArrayList<TrainCompositionJourneySectionDto>();
-		for (TrainCompositionJourneySection listItem : entity.getJourneySections()) {
-			dtoList.add(TrainCompositionJourneySectionDtoMapper.map(listItem));
+		List<JourneySectionDto> dtoList = new ArrayList<JourneySectionDto>();
+		for (JourneySection listItem : entity.getJourneySections()) {
+			dtoList.add(JourneySectionDtoMapper.map(listItem));
 		}
 		dto.setTrainCompositionJourneySections(dtoList);
 		

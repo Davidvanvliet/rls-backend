@@ -1,0 +1,74 @@
+package nl.rls.composer.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import nl.rls.composer.domain.TractionInTrain;
+import nl.rls.composer.domain.TrainComposition;
+import nl.rls.composer.domain.WagonInTrain;
+import nl.rls.composer.repository.TractionInTrainRepository;
+import nl.rls.composer.repository.TrainCompositionRepository;
+import nl.rls.composer.repository.WagonInTrainRepository;
+
+@Service
+public class TrainCompositionService {
+	@Autowired
+	private WagonInTrainRepository wagonInTrainRepository;
+	@Autowired
+	private TractionInTrainRepository tractionInTrainRepository;
+	@Autowired
+	private TrainCompositionRepository trainCompositionRepository;
+
+	public void addWagonToTrain(TrainComposition trainComposition, WagonInTrain wit) {
+		wagonInTrainRepository.save(wit);
+		wit.setTrainComposition(trainComposition);
+		trainComposition.addWagon(wit);
+		wagonInTrainRepository.saveAll(trainComposition.getWagons());
+		trainCompositionRepository.save(trainComposition);
+	}
+
+	public void moveWagonById(TrainComposition trainComposition, int wagonInTrainId, int position) {
+		trainComposition.moveWagonById(wagonInTrainId, position);
+		wagonInTrainRepository.saveAll(trainComposition.getWagons());
+		trainCompositionRepository.save(trainComposition);
+	}
+
+	public void addTractionToTrain(TrainComposition trainComposition, TractionInTrain tit) {
+		tractionInTrainRepository.save(tit);
+		tit.setTrainComposition(trainComposition);
+		trainComposition.addTraction(tit);
+		tractionInTrainRepository.saveAll(trainComposition.getTractions());
+		trainCompositionRepository.save(trainComposition);
+	}
+
+	public void moveTractionById(TrainComposition trainComposition, int tractionInTrainId, int position) {
+		trainComposition.moveWagonById(tractionInTrainId, position);
+		tractionInTrainRepository.saveAll(trainComposition.getTractions());
+		trainCompositionRepository.save(trainComposition);
+	}
+
+	public TrainComposition copyTrainComposition(TrainComposition trainComposition) {
+		TrainComposition newTrainComposition = new TrainComposition();
+		newTrainComposition.setLivestockOrPeopleIndicator(trainComposition.getLivestockOrPeopleIndicator());
+		newTrainComposition.setOwnerId(trainComposition.getOwnerId());
+		newTrainComposition.setTrainMaxSpeed(trainComposition.getTrainMaxSpeed());
+		for (TractionInTrain tractionInTrain : trainComposition.getTractions()) {
+			TractionInTrain newTractionInTrain = new TractionInTrain();
+			newTractionInTrain.setDriverIndication(tractionInTrain.getDriverIndication());
+			newTractionInTrain.setPosition(tractionInTrain.getPosition());
+			newTractionInTrain.setTraction(tractionInTrain.getTraction());
+			newTractionInTrain.setTrainComposition(tractionInTrain.getTrainComposition());
+			newTrainComposition.addTraction(newTractionInTrain);
+		}
+		for (WagonInTrain wagonInTrain : trainComposition.getWagons()) {
+			WagonInTrain newWagonInTrain = new WagonInTrain();
+			newWagonInTrain.setPosition(wagonInTrain.getPosition());
+			newWagonInTrain.setTrainComposition(wagonInTrain.getTrainComposition());
+			/*
+			 * wagonOperationaData/wagonLoad
+			 */
+			newTrainComposition.addWagon(newWagonInTrain);
+		}
+		return newTrainComposition;
+	}
+}

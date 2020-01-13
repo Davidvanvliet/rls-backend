@@ -22,6 +22,18 @@ import nl.rls.composer.domain.message.TrainCompositionMessage;
 @NoArgsConstructor
 @Getter @Setter
 public class Train extends OwnedEntity {
+	/**
+	 * 1 Passenger train Commercial train with passenger coaches or trainsets Empty
+	 * run of Train with passenger coaches or trainsets Including Crew train (for
+	 * Train Crew Members) 
+	 * 2 Freight train Train with freight wagons 
+	 * 3 Light engine (locomotive train) One or more engines without any carriages 
+	 * 4 Engineering train Train for measurement, maintenance, instructions, homologation, etc 
+	 * 0 Other Train types that are not covered with the four codes given above can be
+	 * codified as "other" in the messages Passenger with Freight - military trains,
+	 * the Overnight Express; Royalty, Head of States
+	 */
+	private int trainType;
     /**
      * Identifies the train for traffic management purposes by the Dispatcher, GSMR services, etc.
      */
@@ -44,15 +56,15 @@ public class Train extends OwnedEntity {
 	private Company transfereeIM;
 	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "train_id")
-	private List<TrainCompositionJourneySection> journeySections = new ArrayList<TrainCompositionJourneySection>();
+	private List<JourneySection> journeySections = new ArrayList<JourneySection>();
 
 	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "train_id")
 	private List<TrainCompositionMessage> trainCompositionMessages = new ArrayList<TrainCompositionMessage>();
 
 	@Transient
-	public TrainCompositionJourneySection getJourneySectionById(int id) {
-		for (TrainCompositionJourneySection trainCompositionJourneySection : journeySections) {
+	public JourneySection getJourneySectionById(int id) {
+		for (JourneySection trainCompositionJourneySection : journeySections) {
 			if (trainCompositionJourneySection.getId() == id) {
 				return trainCompositionJourneySection;
 			}
@@ -60,12 +72,12 @@ public class Train extends OwnedEntity {
 		return null;
 	}
 	
-	public void addJourneySection(TrainCompositionJourneySection journeySection) {
+	public void addJourneySection(JourneySection journeySection) {
 		journeySections.add(journeySection);
 //        comment.setPost(this);
     }
  
-    public void removeJourneySection(TrainCompositionJourneySection journeySection) {
+    public void removeJourneySection(JourneySection journeySection) {
     	journeySections.remove(journeySection);
 //        comment.setPost(null);
     }

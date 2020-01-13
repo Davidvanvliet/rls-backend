@@ -25,7 +25,7 @@ public class TractionInTrainDtoMapper {
 		};
 		mapper.addMapping(mappingBuilder);		
 		TractionInTrainDto dto = mapper.map(entity, TractionInTrainDto.class);
-		dto.add(linkTo(methodOn(TractionInTrainController.class).getTractionInTrain(entity.getTrainCompositionJourneySection().getId(), entity.getId())).withSelfRel());
+		dto.add(linkTo(methodOn(TractionInTrainController.class).getTractionInTrain(entity.getTrainComposition().getId(), entity.getId())).withSelfRel());
 		return dto;
 	}
 

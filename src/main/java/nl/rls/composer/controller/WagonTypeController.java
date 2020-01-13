@@ -12,23 +12,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import nl.rls.ci.url.BaseURL;
-import nl.rls.composer.domain.WagonTechData;
-import nl.rls.composer.repository.WagonTechDataRepository;
-import nl.rls.composer.rest.dto.WagonTechDataDto;
-import nl.rls.composer.rest.dto.mapper.WagonTechDataDtoMapper;
+import nl.rls.composer.domain.WagonType;
+import nl.rls.composer.repository.WagonTypeRepository;
+import nl.rls.composer.rest.dto.WagonTypeDto;
+import nl.rls.composer.rest.dto.mapper.WagonTypeDtoMapper;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH+"wagontechdata")
-public class WagonTechDataController {
+@RequestMapping(BaseURL.BASE_PATH+"wagontypes")
+public class WagonTypeController {
 	@Autowired
-	private WagonTechDataRepository wagonTechDataRepository;
+	private WagonTypeRepository wagonTechDataRepository;
 
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<WagonTechDataDto>> getAll() {
-		Iterable<WagonTechData> entityList = wagonTechDataRepository.findAll();
-		List<WagonTechDataDto> dtoList = new ArrayList<>();
-		for (WagonTechData entity : entityList) {
-			WagonTechDataDto dto = WagonTechDataDtoMapper.map(entity);
+	public ResponseEntity<List<WagonTypeDto>> getAll() {
+		Iterable<WagonType> entityList = wagonTechDataRepository.findAll();
+		List<WagonTypeDto> dtoList = new ArrayList<>();
+		for (WagonType entity : entityList) {
+			WagonTypeDto dto = WagonTypeDtoMapper.map(entity);
 			dtoList.add(dto);
 		}
 //		Link selfLink = linkTo(methodOn(WagonTechDataController.class).getAll()).withSelfRel();
@@ -38,8 +38,8 @@ public class WagonTechDataController {
 
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<WagonTechDataDto> getById(@PathVariable Integer id) {
-		WagonTechDataDto dto = WagonTechDataDtoMapper.map(wagonTechDataRepository.findById(id)
+	public ResponseEntity<WagonTypeDto> getById(@PathVariable Integer id) {
+		WagonTypeDto dto = WagonTypeDtoMapper.map(wagonTechDataRepository.findById(id)
 				.orElseThrow(() -> new WagonTechDataNotFoundException(id)));
 		return ResponseEntity.ok(dto);
 	}

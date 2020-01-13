@@ -17,5 +17,5 @@ import lombok.Setter;
 public class Wagon extends OwnedEntity{
 	private String numberFreight;
     @ManyToOne
-    private WagonTechData wagonTechData;
+    private WagonType wagonType;
 }
