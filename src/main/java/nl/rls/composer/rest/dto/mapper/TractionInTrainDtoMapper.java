@@ -19,7 +19,7 @@ public class TractionInTrainDtoMapper {
 			protected void configure() {
 				mapping(TractionInTrain.class, TractionInTrainDto.class)
 				.fields("traction", "traction",
-						FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.mapper.TractionConverter"))
+						FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.TractionConverter"))
 				;
 			}
 		};

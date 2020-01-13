@@ -9,8 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TractionInTrainAddDto extends ResourceSupport {
+public class TractionInTrainPostDto extends ResourceSupport {
 	private int position;
 	private int driverIndication;
-	private String traction;
+	private String tractionUrl;
 }

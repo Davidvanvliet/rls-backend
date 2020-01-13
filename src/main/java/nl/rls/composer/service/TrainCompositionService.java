@@ -63,10 +63,11 @@ public class TrainCompositionService {
 		for (WagonInTrain wagonInTrain : trainComposition.getWagons()) {
 			WagonInTrain newWagonInTrain = new WagonInTrain();
 			newWagonInTrain.setPosition(wagonInTrain.getPosition());
+			newWagonInTrain.setBrakeType(wagonInTrain.getBrakeType());
+			newWagonInTrain.setBrakeWeight(wagonInTrain.getBrakeWeight());
+			newWagonInTrain.setTotalLoadWeight(wagonInTrain.getTotalLoadWeight());
+			newWagonInTrain.setWagonMaxSpeed(wagonInTrain.getWagonMaxSpeed());
 			newWagonInTrain.setTrainComposition(wagonInTrain.getTrainComposition());
-			/*
-			 * wagonOperationaData/wagonLoad
-			 */
 			newTrainComposition.addWagon(newWagonInTrain);
 		}
 		return newTrainComposition;

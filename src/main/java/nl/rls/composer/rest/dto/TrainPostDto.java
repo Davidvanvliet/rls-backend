@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @Getter @Setter
-public class TrainCreateDto {
+public class TrainPostDto {
     private String operationalTrainNumber;
 	private String transferPoint;
     private Date scheduledTimeAtHandover;

@@ -9,7 +9,7 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @ToString
 @NoArgsConstructor
 @Getter @Setter
-public class LocationIdentDto extends ResourceSupport {
+public class LocationDto extends ResourceSupport {
     private int locationPrimaryCode;
     private String countryIso;
     private String primaryLocationName;

@@ -24,6 +24,9 @@ import nl.rls.composer.rest.dto.WagonInTrainDto;
 public class TrainCompositionDtoMapper {
 
 	public static TrainCompositionDto map(TrainComposition entity) {
+		if (entity == null) {
+			return null;
+		}
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
@@ -35,7 +38,7 @@ public class TrainCompositionDtoMapper {
 		List<TractionInTrainDto> dtoList = new ArrayList<TractionInTrainDto>();
 		for (TractionInTrain tractionInTrain : entity.getTractions()) {
 			TractionInTrainDto tractionInTrainDto = new TractionInTrainDto();
-			tractionInTrainDto.setLocomotive(TractionDtoMapper.map(tractionInTrain.getTraction()));
+			tractionInTrainDto.setTraction(TractionDtoMapper.map(tractionInTrain.getTraction()));
 			tractionInTrainDto.setDriverIndication(tractionInTrain.getDriverIndication());
 			tractionInTrainDto.setPosition(tractionInTrain.getPosition());
 			dtoList.add(tractionInTrainDto);

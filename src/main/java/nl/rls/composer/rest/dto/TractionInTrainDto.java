@@ -11,5 +11,5 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 public class TractionInTrainDto extends ResourceSupport {
 	private int driverIndication;
 	private int position;
-    private TractionDto locomotive;
+    private TractionDto traction;
 }

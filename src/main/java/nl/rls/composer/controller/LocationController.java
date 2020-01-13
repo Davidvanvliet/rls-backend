@@ -18,22 +18,22 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.Location;
-import nl.rls.composer.repository.LocationIdentRepository;
-import nl.rls.composer.rest.dto.LocationIdentDto;
-import nl.rls.composer.rest.dto.mapper.LocationIdentDtoMapper;
+import nl.rls.composer.repository.LocationRepository;
+import nl.rls.composer.rest.dto.LocationDto;
+import nl.rls.composer.rest.dto.mapper.LocationDtoMapper;
 
 @Api(value = "Access to Locations. ")
 @RestController
 @RequestMapping(BaseURL.BASE_PATH+"locations")
-public class LocationIdentController {
+public class LocationController {
 	@Autowired
-	private LocationIdentRepository locationIdentRepository;
+	private LocationRepository locationRepository;
 	@ApiOperation(value = "Get a location based on an id, which is the TSI.locationPrimaryCode")
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<LocationIdentDto> getById(@PathVariable Integer id) {
-		Optional<Location> optional = locationIdentRepository.findByLocationPrimaryCode(id);
+	public ResponseEntity<LocationDto> getById(@PathVariable Integer id) {
+		Optional<Location> optional = locationRepository.findByLocationPrimaryCode(id);
 		if (optional.isPresent()) {
-			LocationIdentDto locationIdentDto = LocationIdentDtoMapper.map(optional.get());
+			LocationDto locationIdentDto = LocationDtoMapper.map(optional.get());
 			return ResponseEntity.ok(locationIdentDto);
 		} else {
 			return ResponseEntity.notFound().build();
@@ -53,7 +53,7 @@ public class LocationIdentController {
 
 	@ApiOperation(value = "Get a list of locationIdent based on name, shortname of all")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<LocationIdentDto>> getAllQuery(
+	public ResponseEntity<List<LocationDto>> getAllQuery(
 			@ApiParam(value = "name can also be a fragement of the name (TSI.primaryLocationName) [Optional]")
 			@RequestParam(name = "name", required = false) String name, 
 			@ApiParam(value = "shortname can also be a fragement of the shortName [Optional]")
@@ -61,19 +61,19 @@ public class LocationIdentController {
 		Iterable<Location> locationList = null;
 		if (name != null) {
 			if (name.length() >= 3) {
-				locationList = locationIdentRepository.findByPrimaryLocationNameContainingIgnoreCase(name);
+				locationList = locationRepository.findByPrimaryLocationNameContainingIgnoreCase(name);
 			}
 		} else if (shortname != null) {
 			if (shortname.length() >= 2) {
-				locationList = locationIdentRepository.findByCodeIgnoreCase(shortname);
+				locationList = locationRepository.findByCodeIgnoreCase(shortname);
 			}
 		} else if (shortname == null && name == null) {
-			locationList = locationIdentRepository.findAll();			
+			locationList = locationRepository.findAll();			
 		}
-		List<LocationIdentDto> locationDtoList = new ArrayList<>();
+		List<LocationDto> locationDtoList = new ArrayList<>();
 
 		for (Location locationIdent : locationList) {
-			locationDtoList.add(LocationIdentDtoMapper.map(locationIdent));
+			locationDtoList.add(LocationDtoMapper.map(locationIdent));
 		}
 //		Link locationsLink = linkTo(methodOn(LocationIdentController.class).getAllQuery(name, shortname)).withSelfRel();
 //		Resources<LocationIdentDto> locations = new Resources<LocationIdentDto>(locationDtoList, locationsLink);

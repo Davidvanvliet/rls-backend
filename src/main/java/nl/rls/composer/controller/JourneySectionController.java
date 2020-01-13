@@ -19,7 +19,7 @@ import nl.rls.composer.domain.JourneySection;
 import nl.rls.composer.domain.Location;
 import nl.rls.composer.domain.TrainComposition;
 import nl.rls.composer.repository.JourneySectionRepository;
-import nl.rls.composer.repository.LocationIdentRepository;
+import nl.rls.composer.repository.LocationRepository;
 import nl.rls.composer.rest.dto.JourneySectionDto;
 import nl.rls.composer.rest.dto.JourneySectionPostDto;
 import nl.rls.composer.rest.dto.TrainCompositionPostDto;
@@ -30,7 +30,7 @@ import nl.rls.composer.rest.dto.mapper.JourneySectionDtoMapper;
 public class JourneySectionController {
 	public static final String PATH = "journeysections";
 	@Autowired
-	private LocationIdentRepository locationIdentRepository;
+	private LocationRepository locationRepository;
 	@Autowired
 	private JourneySectionRepository journeySectionRepository;
 	@Autowired
@@ -58,22 +58,22 @@ public class JourneySectionController {
 		Optional<JourneySection> optional = journeySectionRepository
 				.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
-			JourneySection trainCompositionJourneySection = optional.get();
-			Integer locationIdentId = DecodePath.decodeInteger(dto.getJourneySectionOrigin(), "locationidents");
-			Optional<Location> locationIdent = locationIdentRepository.findByLocationPrimaryCode(locationIdentId);
-			if (locationIdent.isPresent()) {
-				trainCompositionJourneySection.setJourneySectionOrigin(locationIdent.get());
+			JourneySection journeySection = optional.get();
+			Integer locationId = DecodePath.decodeInteger(dto.getJourneySectionOriginUrl(), "locations");
+			Optional<Location> location = locationRepository.findByLocationPrimaryCode(locationId);
+			if (location.isPresent()) {
+				journeySection.setJourneySectionOrigin(location.get());
 			}
 
-			locationIdentId = DecodePath.decodeInteger(dto.getJourneySectionDestination(), "locationidents");
-			locationIdent = locationIdentRepository.findByLocationPrimaryCode(locationIdentId);
-			if (locationIdent.isPresent()) {
-				trainCompositionJourneySection.setJourneySectionDestination(locationIdent.get());
+			locationId = DecodePath.decodeInteger(dto.getJourneySectionDestinationUrl(), "locations");
+			location = locationRepository.findByLocationPrimaryCode(locationId);
+			if (location.isPresent()) {
+				journeySection.setJourneySectionDestination(location.get());
 			}
-			journeySectionRepository.save(trainCompositionJourneySection);
-			JourneySectionDto trainCompositionJourneySectionDto = JourneySectionDtoMapper
-					.map(trainCompositionJourneySection);
-			return ResponseEntity.accepted().body(trainCompositionJourneySectionDto);
+			journeySectionRepository.save(journeySection);
+			JourneySectionDto journeySectionDto = JourneySectionDtoMapper
+					.map(journeySection);
+			return ResponseEntity.accepted().body(journeySectionDto);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -88,9 +88,15 @@ public class JourneySectionController {
 			ResponseEntity.notFound();
 		}
 		JourneySection journeySection = optional.get();
-		TrainComposition trainComposition = new TrainComposition(ownerId);
-		trainComposition.setLivestockOrPeopleIndicator(dto.getLivestockOrPeopleIndicator());
-		journeySection.setTrainComposition(trainComposition);
+		if (journeySection.getTrainComposition() == null) {
+			journeySection.setTrainComposition(new TrainComposition(ownerId));
+			journeySection.getTrainComposition().setJourneySection(journeySection);
+		} 
+		journeySection.getTrainComposition().setLivestockOrPeopleIndicator(dto.getLivestockOrPeopleIndicator());
+		journeySection.getTrainComposition().setBrakeType(dto.getBrakeType());
+		journeySection.getTrainComposition().setBrakeWeight(dto.getBrakeWeight());
+		journeySection.getTrainComposition().setTrainMaxSpeed(dto.getTrainMaxSpeed());
+		journeySection.getTrainComposition().setMaxAxleWeight(dto.getMaxAxleWeight());
 		journeySection = journeySectionRepository.save(journeySection);
 		if (journeySection != null) {
 			JourneySectionDto resultDto = JourneySectionDtoMapper.map(journeySection);

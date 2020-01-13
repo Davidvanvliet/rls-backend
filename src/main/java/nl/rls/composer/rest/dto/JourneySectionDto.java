@@ -18,5 +18,6 @@ public class JourneySectionDto extends ResourceSupport {
 //    private CompanyDto responsibilityNextSectionIM;
 //    private CompanyDto responsibilityActualSectionRU;
 //    private CompanyDto responsibilityNextSectionRU;
+	private TrainCompositionDto trainComposition;
     private List<TrainActivityTypeDto> activities  = new ArrayList<TrainActivityTypeDto>();
 }

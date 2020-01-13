@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class DanGoodsType {
      */
     private String unNumber;
     @OneToMany
+	@JoinColumn(name = "dan_goods_type_id")
     private List<DangerLabel> dangerLabel;
     /**
      * The Class of the dangerous good according to the RID chapter 3.2, table A, column 3a.

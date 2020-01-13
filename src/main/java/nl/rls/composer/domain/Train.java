@@ -46,7 +46,9 @@ public class Train extends OwnedEntity {
      * Scheduled Date and Time at a location related to the status of the train or wagon at the given location.
      */
     private Date scheduledDateTimeAtTransfer;
-
+    /**
+     * Transfer point or station of destination in the considered network
+     */
 	@ManyToOne
 	private Location transferPoint;
 	/**

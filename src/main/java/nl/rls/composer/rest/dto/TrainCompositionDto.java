@@ -14,7 +14,7 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 public class TrainCompositionDto extends ResourceSupport {
     private List<TractionInTrainDto> tractions  = new ArrayList<TractionInTrainDto>();;
     private List<WagonInTrainDto> wagons  = new ArrayList<WagonInTrainDto>();
-    private Integer exceptionalGaugingInd;
+    private Integer exceptionalGaugingIndicator;
     private Integer livestockOrPeopleIndicator;
     private Integer dangerousGoodsIndicator;
 	private int trainType;

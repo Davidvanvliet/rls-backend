@@ -52,7 +52,7 @@ import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.repository.CompositIdentifierOperationalTypeRepository;
 import nl.rls.composer.repository.JourneySectionRepository;
-import nl.rls.composer.repository.LocationIdentRepository;
+import nl.rls.composer.repository.LocationRepository;
 import nl.rls.composer.repository.ResponsibilityRepository;
 import nl.rls.composer.repository.TractionModeRepository;
 import nl.rls.composer.repository.TractionRepository;
@@ -76,7 +76,7 @@ public class Main {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private LocationIdentRepository locationIdentRepository;
+	private LocationRepository locationIdentRepository;
 	@Autowired
 	private CompanyRepository companyRepository;
 	@Autowired

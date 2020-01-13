@@ -41,7 +41,7 @@ public class TrainComposition extends OwnedEntity {
 	// private List<TrainCC_System> trainCCSystem;
 	// private TrainRadioSystem trainRadioSystem;
 	private int trainMaxSpeed;
-	// private BigDecimal maxAxleWeight;
+	private int maxAxleWeight;
 	private String brakeType;
 	private int brakeWeight;
 
@@ -187,8 +187,12 @@ public class TrainComposition extends OwnedEntity {
 	public int getTrainWeight() {
 		int trainWeight = 0;
 		for (WagonInTrain wagon : getWagons()) {
-			trainWeight += wagon.getWagon().getWagonType().getWagonWeightEmpty();
-			trainWeight += wagon.getTotalLoadWeight();
+			if (wagon.getWagon() != null) {
+				if (wagon.getWagon().getWagonType() != null) {
+					trainWeight += wagon.getWagon().getWagonType().getWagonWeightEmpty();
+					trainWeight += wagon.getTotalLoadWeight();
+				}
+			}
 		}
 		for (TractionInTrain traction : getTractions()) {
 			trainWeight += traction.getTraction().getWeight();
@@ -198,7 +202,7 @@ public class TrainComposition extends OwnedEntity {
 
 	/**
 	 * The calculated Length of a train (sum of all length over buffer of the wagons
-	 * and traction units). Expressed in Metres
+	 * and traction units). Expressed in Meters
 	 */
 	public int getTrainLength() {
 		int trainLength = 0;
@@ -210,6 +214,7 @@ public class TrainComposition extends OwnedEntity {
 		}
 		return trainLength;
 	}
+
 	public int getNumberOfVehicles() {
 		int numberOfVehicles = getWagons().size();
 		numberOfVehicles += getTractions().size();

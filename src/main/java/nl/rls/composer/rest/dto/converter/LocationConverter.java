@@ -3,12 +3,12 @@ package nl.rls.composer.rest.dto.converter;
 import org.dozer.CustomConverter;
 
 import nl.rls.composer.domain.Location;
-import nl.rls.composer.rest.dto.mapper.LocationIdentDtoMapper;
+import nl.rls.composer.rest.dto.mapper.LocationDtoMapper;
 
-public class LocationIdentConverter implements CustomConverter {
+public class LocationConverter implements CustomConverter {
 	@Override
 	public Object convert(Object dto, Object entity, Class<?> destinationClass,
 			Class<?> sourceClass) {
-		return LocationIdentDtoMapper.map((Location)entity);
+		return LocationDtoMapper.map((Location)entity);
 	}
 }

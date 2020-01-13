@@ -8,6 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class JourneySectionPostDto {
-	private String journeySectionOrigin;
-	private String journeySectionDestination;
+	private String journeySectionOriginUrl;
+	private String journeySectionDestinationUrl;
+    private Integer livestockOrPeopleIndicator;
+	private int trainMaxSpeed;
+	private int maxAxleWeight;
+	private String brakeType;
+	private int brakeWeight;
 }

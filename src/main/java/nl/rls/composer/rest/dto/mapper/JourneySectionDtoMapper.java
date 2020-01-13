@@ -8,18 +8,17 @@ import java.util.List;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
+import org.dozer.loader.api.FieldsMappingOptions;
 
 import nl.rls.composer.controller.CompanyController;
 import nl.rls.composer.controller.JourneySectionController;
-import nl.rls.composer.controller.LocationIdentController;
+import nl.rls.composer.controller.LocationController;
 import nl.rls.composer.controller.TrainCompositionController;
 import nl.rls.composer.domain.JourneySection;
-import nl.rls.composer.domain.Train;
 import nl.rls.composer.domain.code.TrainActivityType;
 import nl.rls.composer.rest.dto.JourneySectionDto;
 import nl.rls.composer.rest.dto.JourneySectionPostDto;
 import nl.rls.composer.rest.dto.TrainActivityTypeDto;
-import nl.rls.composer.rest.dto.TrainDto;
 
 public class JourneySectionDtoMapper {
 
@@ -27,7 +26,9 @@ public class JourneySectionDtoMapper {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
-				mapping(Train.class, TrainDto.class).fields("transferPoint.primaryLocationName", "transferPoint");
+				mapping(JourneySection.class, JourneySectionDto.class)
+				.fields("trainComposition", "trainComposition",
+						FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.TrainCompositionConverter"));
 			}
 		};
 		mapper.addMapping(mappingBuilder);
@@ -56,10 +57,10 @@ public class JourneySectionDtoMapper {
 				.getById(entity.getResponsibilityNextSection().getResponsibleIM().getId()))
 						.withRel("responsibilityNextSectionIM")
 						.withTitle(entity.getResponsibilityNextSection().getResponsibleIM().getName()));
-		dto.add(linkTo(methodOn(LocationIdentController.class)
+		dto.add(linkTo(methodOn(LocationController.class)
 				.getById(entity.getJourneySectionOrigin().getLocationPrimaryCode())).withRel("journeySectionOrigin")
 						.withTitle(entity.getJourneySectionOrigin().getPrimaryLocationName()));
-		dto.add(linkTo(methodOn(LocationIdentController.class)
+		dto.add(linkTo(methodOn(LocationController.class)
 				.getById(entity.getJourneySectionDestination().getLocationPrimaryCode()))
 						.withRel("journeySectionDestination")
 						.withTitle(entity.getJourneySectionDestination().getPrimaryLocationName()));
