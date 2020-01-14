@@ -10,6 +10,6 @@ import nl.rls.composer.domain.Location;
 public interface LocationRepository extends CrudRepository<Location, Integer> {
 	Optional<Location> findByLocationPrimaryCode(Integer id);
 //	@Query("select li from LocationIdent li where LOWER(li.code) = LOWER(?1)")
-	List<Location> findByCodeIgnoreCase(String code);
-	List<Location> findByPrimaryLocationNameContainingIgnoreCase(String name);
+	List<Location> findByCodeIgnoreCaseOrderByCodeAsc(String code);
+	List<Location> findByPrimaryLocationNameContainingIgnoreCaseOrderByPrimaryLocationNameAsc(String name);
 }

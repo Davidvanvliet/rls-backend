@@ -61,11 +61,11 @@ public class LocationController {
 		Iterable<Location> locationList = null;
 		if (name != null) {
 			if (name.length() >= 3) {
-				locationList = locationRepository.findByPrimaryLocationNameContainingIgnoreCase(name);
+				locationList = locationRepository.findByPrimaryLocationNameContainingIgnoreCaseOrderByPrimaryLocationNameAsc(name);
 			}
 		} else if (shortname != null) {
 			if (shortname.length() >= 2) {
-				locationList = locationRepository.findByCodeIgnoreCase(shortname);
+				locationList = locationRepository.findByCodeIgnoreCaseOrderByCodeAsc(shortname);
 			}
 		} else if (shortname == null && name == null) {
 			locationList = locationRepository.findAll();			

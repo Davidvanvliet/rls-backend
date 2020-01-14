@@ -4,12 +4,13 @@ RailLinkSystems Spring boot REST api
 
 Open Issues
 
-Clone composition API
-Deep copy WagonLoad
-tractions id is nog null
+v Clone composition API
+v Deep copy WagonLoad -> WaginInTrain
+v tractions id is nog null
+v sortering locations op naam
+v PUT wordt POST in activities
+
 composition omdraaien
 verplaatsen wagons slimmer
-sortering op locations op naam
-PUT wordt POST in activities
 in de tcm train goed meegeven (links - self) pointer verwijderen
 WebStruct

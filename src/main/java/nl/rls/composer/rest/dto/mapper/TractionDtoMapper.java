@@ -1,5 +1,6 @@
 
 package nl.rls.composer.rest.dto.mapper;
+
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -17,11 +18,6 @@ public class TractionDtoMapper {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
-//				mapping(Locomotive.class, LocomotiveDto.class)
-//				.fields("locomotiveNumberFreight", "locomotiveIdent",
-//						FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.mapper.LocomotiveIdentConverter"))
-//				;
-
 			}
 		};
 		mapper.addMapping(mappingBuilder);
@@ -29,7 +25,7 @@ public class TractionDtoMapper {
 		dto.add(linkTo(methodOn(TractionController.class).getById(entity.getId())).withSelfRel());
 		return dto;
 	}
-	
+
 	public static Traction map(TractionCreateDto dto) {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {

@@ -36,15 +36,13 @@ public class TrainCompositionDtoMapper {
 		TrainCompositionDto dto = mapper.map(entity, TrainCompositionDto.class);
 
 		List<TractionInTrainDto> dtoList = new ArrayList<TractionInTrainDto>();
+		System.out.println("entity.getWagons(): "+entity.getWagons());
 		for (TractionInTrain tractionInTrain : entity.getTractions()) {
-			TractionInTrainDto tractionInTrainDto = new TractionInTrainDto();
-			tractionInTrainDto.setTraction(TractionDtoMapper.map(tractionInTrain.getTraction()));
-			tractionInTrainDto.setDriverIndication(tractionInTrain.getDriverIndication());
-			tractionInTrainDto.setPosition(tractionInTrain.getPosition());
+			TractionInTrainDto tractionInTrainDto = TractionInTrainDtoMapper.map(tractionInTrain);
 			dtoList.add(tractionInTrainDto);
 		}
 		dto.setTractions(dtoList);
-
+		
 		List<WagonInTrainDto> wagonDtoList = new ArrayList<WagonInTrainDto>();
 		System.out.println("entity.getWagons(): "+entity.getWagons());
 		for (WagonInTrain wagonInTrain : entity.getWagons()) {

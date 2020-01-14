@@ -39,8 +39,8 @@ public class WagonInTrain {
 //	private List<DangerousGoodsDetails> dangerousGoodsDetails;
 //	@OneToMany
 //	private List<InfoOnGoodsShapeTypeDanger> infoOnGoodsShapeTypeDanger;
-//	@OneToMany
-//	private List<RestrictionCodes> restrictionsDueToLoadOrDamage;
+//	@ManyToMany
+//	private List<RestrictionCode> restrictions;
     @ManyToOne
 	private Wagon wagon;
 	@ManyToOne
