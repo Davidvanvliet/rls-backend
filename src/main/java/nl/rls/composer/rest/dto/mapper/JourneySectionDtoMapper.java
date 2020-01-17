@@ -68,7 +68,7 @@ public class JourneySectionDtoMapper {
 			dto.add(linkTo(methodOn(TrainCompositionController.class).getById(entity.getTrainComposition().getId()))
 					.withRel("trainComposition"));
 		}
-		dto.add(linkTo(methodOn(JourneySectionController.class).getById(entity.getId())).withSelfRel());
+		dto.add(linkTo(methodOn(JourneySectionController.class).getById(entity.getId())).withSelfRel().withTitle(entity.getJourneySectionDestination().getPrimaryLocationName()));
 		return dto;
 	}
 

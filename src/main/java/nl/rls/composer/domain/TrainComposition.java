@@ -99,18 +99,8 @@ public class TrainComposition extends OwnedEntity {
 	}
 
 	public void addWagon(WagonInTrain wagonInTrain) {
-		if (wagonInTrain.getPosition() <= 0 || wagonInTrain.getPosition() > wagons.size()) {
-			wagonInTrain.setPosition(1);
-		}
-		wagons.add(wagonInTrain.getPosition() - 1, wagonInTrain);
-		wagonInTrain.setTrainComposition(this);
-		int pos = 1;
-		for (WagonInTrain wit : wagons) {
-			if (wit.getPosition() != pos) {
-				wit.setPosition(pos);
-			}
-			pos++;
-		}
+		wagonInTrain.setPosition(wagons.size() + 1);
+		wagons.add(wagonInTrain);
 	}
 
 	public void moveWagonById(int wagonInTrainId, int position) {
@@ -122,10 +112,30 @@ public class TrainComposition extends OwnedEntity {
 		}
 	}
 
-	public void moveWagon(WagonInTrain wagonInTrain, int position) {
-		removeWagon(wagonInTrain);
-		wagonInTrain.setPosition(position);
-		addWagon(wagonInTrain);
+	public void moveWagon(WagonInTrain wagonInTrain, int newPosition) {
+		int oldPosition = wagonInTrain.getPosition();
+		System.out.println("moveWagon old " + oldPosition + ", new " + newPosition);
+		if (newPosition <= 0 || newPosition > wagons.size() || oldPosition == newPosition) {
+			return;
+		}
+		if (oldPosition < newPosition) {
+			for (WagonInTrain wit : wagons) {
+				int currentPosition = wit.getPosition();
+				if (currentPosition <= newPosition && currentPosition > oldPosition) {
+					currentPosition = currentPosition - 1;
+					wit.setPosition(currentPosition);
+				}
+			}
+		} else {
+			for (WagonInTrain wit : wagons) {
+				int currentPosition = wit.getPosition();
+				if (currentPosition >= newPosition && currentPosition < oldPosition) {
+					currentPosition = currentPosition + 1;
+					wit.setPosition(currentPosition);
+				}
+			}
+		}
+		wagonInTrain.setPosition(newPosition);
 	}
 
 	public TractionInTrain getTractionById(Integer id) {

@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ActivityInTrainAddDto {
-    public String trainActivityType;
+    public String trainActivityTypeUrl;
 }
