@@ -1281,6 +1281,9 @@ INSERT INTO danger_label (code, description) VALUES ('7D', '(obsolete) should be
 INSERT INTO danger_label (code, description) VALUES ('7E', 'Fissile radioactive material');
 INSERT INTO danger_label (code, description) VALUES ('8', 'Corrosive substances');
 INSERT INTO danger_label (code, description) VALUES ('9', 'Miscellaneous dangerous substances and articles');
+
+INSERT INTO danger_goods_type (hazard_identification_number, limited_quantity_indicator, packing_group, rid_class, un_number) VALUES ('1.1D', false,'','1.1D','75')
+
 INSERT INTO traction_mode (code, description) VALUES ('11', 'Train traction 1st traction unit in the group');
 INSERT INTO traction_mode (code, description) VALUES ('21', 'Intermediate traction 1st traction unit in the group');
 INSERT INTO traction_mode (code, description) VALUES ('31', 'Banking locomotive 1st traction unit in the group');

@@ -1,5 +1,8 @@
 package nl.rls.composer.rest.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,4 +18,6 @@ public class WagonInTrainDto extends ResourceSupport {
 	private int brakeWeight;
 	private int wagonMaxSpeed;
 	private WagonDto wagon;
+	private List<DangerGoodsInWagonDto> dangerGoods = new ArrayList<DangerGoodsInWagonDto>();
+
 }

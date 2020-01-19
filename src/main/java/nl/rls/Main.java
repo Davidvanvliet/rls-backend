@@ -32,6 +32,8 @@ import nl.rls.ci.aa.repository.RoleRepository;
 import nl.rls.ci.aa.repository.UserRepository;
 import nl.rls.composer.domain.Company;
 import nl.rls.composer.domain.CompositIdentifierOperationalType;
+import nl.rls.composer.domain.DangerGoodsInWagon;
+import nl.rls.composer.domain.DangerGoodsType;
 import nl.rls.composer.domain.GenericMessage;
 import nl.rls.composer.domain.JourneySection;
 import nl.rls.composer.domain.Location;
@@ -51,6 +53,7 @@ import nl.rls.composer.domain.message.MessageStatus;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.repository.CompositIdentifierOperationalTypeRepository;
+import nl.rls.composer.repository.DangerGoodsTypeRepository;
 import nl.rls.composer.repository.JourneySectionRepository;
 import nl.rls.composer.repository.LocationRepository;
 import nl.rls.composer.repository.ResponsibilityRepository;
@@ -82,6 +85,8 @@ public class Main {
 	@Autowired
 	private CompositIdentifierOperationalTypeRepository compositIdentifierOperationalTypeRepository;
 	@Autowired
+	DangerGoodsTypeRepository dangerGoodsTypeRepository;
+	@Autowired
 	private TractionRepository tractionRepository;
 	@Autowired
 	private ResponsibilityRepository responsibilityRepository;
@@ -112,7 +117,6 @@ public class Main {
 		return new BCryptPasswordEncoder();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Bean
 	@Transactional
 	public CommandLineRunner demo() {
@@ -265,6 +269,13 @@ public class Main {
 				wagonInTrain.setWagon(wagon.get());
 			}
 			trainComposition.getWagons().add(wagonInTrain);
+			Optional<DangerGoodsType> dangerGoodsType = dangerGoodsTypeRepository.findById(1);
+			DangerGoodsInWagon dangerGoodsInWagon = new DangerGoodsInWagon();
+			dangerGoodsInWagon.setDangerGoodsType(dangerGoodsType.get());
+			dangerGoodsInWagon.setDangerousGoodsWeight(1000);
+			dangerGoodsInWagon.setWagonInTrain(wagonInTrain);
+			wagonInTrain.addDangerGoodsInWagon(dangerGoodsInWagon);
+
 //			wagonInTrainRepository.save(wagonInTrain);
 
 			/*

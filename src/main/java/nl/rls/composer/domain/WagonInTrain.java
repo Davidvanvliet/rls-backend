@@ -1,10 +1,13 @@
 package nl.rls.composer.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,10 +18,7 @@ import nl.rls.composer.domain.code.BrakeType;
 @NoArgsConstructor
 @Getter
 @Setter
-public class WagonInTrain {
-	@Id 	
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private Integer id;
+public class WagonInTrain extends OwnedEntity {
 	/**
 	 * Identifies the position of a wagon within a train.  
 	 * Sequential number starting with the first wagon at the front of train as N°1.
@@ -35,8 +35,9 @@ public class WagonInTrain {
 //	private ExceptionalGaugingProfile exceptionalGaugingProfile;
 //	@ManyToOne
 //	private ExceptionalGaugingIdent exceptionalGaugingIdent;
-//	@OneToMany
-//	private List<DangerousGoodsDetails> dangerousGoodsDetails;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "wagon_in_train_id")
+	private List<DangerGoodsInWagon> dangerGoodsInWagons = new ArrayList<DangerGoodsInWagon>();
 //	@OneToMany
 //	private List<InfoOnGoodsShapeTypeDanger> infoOnGoodsShapeTypeDanger;
 //	@ManyToMany
@@ -45,5 +46,29 @@ public class WagonInTrain {
 	private Wagon wagon;
 	@ManyToOne
     private TrainComposition trainComposition;
+	
+	public DangerGoodsInWagon getDangerGoodsInWagonById(Integer dangerGoodsInWagonId) {
+		for (DangerGoodsInWagon diw : dangerGoodsInWagons) {
+			if (diw.getId() == dangerGoodsInWagonId) {
+				return diw;
+			}
+		}
+		return null;
+	}
+
+	public void addDangerGoodsInWagon(DangerGoodsInWagon dangerGoodsInWagon) {
+		dangerGoodsInWagons.add(dangerGoodsInWagon);
+
+	}
+
+	public void removeDangerGoodsById(int dangerGoodsInWagonId) {
+		DangerGoodsInWagon dangerGoodsInWagon = getDangerGoodsInWagonById(dangerGoodsInWagonId);
+		if (dangerGoodsInWagon != null) {
+			dangerGoodsInWagons.remove(dangerGoodsInWagon);
+		}
+		
+	}
+
+
 
 }

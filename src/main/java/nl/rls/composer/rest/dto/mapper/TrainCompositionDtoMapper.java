@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
-import org.dozer.loader.api.TypeMappingOptions;
 
 import nl.rls.composer.controller.TractionInTrainController;
 import nl.rls.composer.controller.TrainCompositionController;
@@ -17,7 +16,6 @@ import nl.rls.composer.domain.JourneySection;
 import nl.rls.composer.domain.TractionInTrain;
 import nl.rls.composer.domain.TrainComposition;
 import nl.rls.composer.domain.WagonInTrain;
-import nl.rls.composer.rest.dto.JourneySectionDto;
 import nl.rls.composer.rest.dto.JourneySectionPostDto;
 import nl.rls.composer.rest.dto.TractionInTrainDto;
 import nl.rls.composer.rest.dto.TrainCompositionDto;
