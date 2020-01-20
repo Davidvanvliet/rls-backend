@@ -45,6 +45,7 @@ public class DangerGoodsInWagonController {
 
 	@GetMapping(value = "/{id}/dangergoods/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<DangerGoodsInWagonDto>> getAllDangerGoodsInWagon(@PathVariable Integer id) {
+		System.out.println("getAllDangerGoodsInWagon");
 		int ownerId = securityContext.getOwnerId();
 		Optional<WagonInTrain> optional = wagonInTrainRepository.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
