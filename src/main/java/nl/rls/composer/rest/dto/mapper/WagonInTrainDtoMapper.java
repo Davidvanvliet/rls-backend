@@ -32,6 +32,7 @@ public class WagonInTrainDtoMapper {
 		
 		List<DangerGoodsInWagonDto> dtoList = new ArrayList<DangerGoodsInWagonDto>();
 		for (DangerGoodsInWagon dangerGoodsInWagon : entity.getDangerGoodsInWagons()) {
+			System.out.println("dangerGoodsInWagon "+dangerGoodsInWagon.getId());
 			DangerGoodsInWagonDto dangerGoodsInWagonDto = DangerGoodsInWagonDtoMapper.map(dangerGoodsInWagon);
 			dtoList.add(dangerGoodsInWagonDto);
 		}

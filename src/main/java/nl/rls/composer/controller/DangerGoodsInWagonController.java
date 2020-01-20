@@ -46,8 +46,9 @@ public class DangerGoodsInWagonController {
 	@GetMapping(value = "/{id}/dangergoods/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<DangerGoodsInWagonDto>> getAllDangerGoodsInWagon(@PathVariable Integer id) {
 		System.out.println("getAllDangerGoodsInWagon");
-		int ownerId = securityContext.getOwnerId();
+		Integer ownerId = securityContext.getOwnerId();
 		Optional<WagonInTrain> optional = wagonInTrainRepository.findByIdAndOwnerId(id, ownerId);
+		System.out.println("id: " + id + ", ownerId: " + ownerId + " optional: " + optional.get());
 		if (optional.isPresent()) {
 			WagonInTrain entity = optional.get();
 			List<DangerGoodsInWagonDto> dtoList = new ArrayList<DangerGoodsInWagonDto>();
@@ -90,6 +91,7 @@ public class DangerGoodsInWagonController {
 				dangerGoodsInWagon.setDangerGoodsType(dangerGoodsType.get());
 				dangerGoodsInWagon.setWagonInTrain(entity);
 				entity.addDangerGoodsInWagon(dangerGoodsInWagon);
+				wagonInTrainRepository.save(entity);
 				WagonInTrainDto dto = WagonInTrainDtoMapper.map(entity);
 				return ResponseEntity
 						.created(linkTo(methodOn(WagonInTrainController.class)
@@ -110,9 +112,15 @@ public class DangerGoodsInWagonController {
 			int dangerGoodsTypeId = DecodePath.decodeInteger(postDto.getDangerGoodsTypeUrl(), "dangergoodstypes");
 			Optional<DangerGoodsType> dangerGoodsType = dangerGoodsTypeRepository.findById(dangerGoodsTypeId);
 			if (dangerGoodsType.isPresent()) {
-				DangerGoodsInWagon dangerGoodsInWagon = new DangerGoodsInWagon();
-				dangerGoodsInWagon.setDangerousGoodsWeight(postDto.getDangerousGoodsWeight());
+				DangerGoodsInWagon dangerGoodsInWagon = entity.getDangerGoodsInWagonById(dangerGoodsId);
+				if (postDto.getDangerousGoodsWeight() != 0) {
+					dangerGoodsInWagon.setDangerousGoodsWeight(postDto.getDangerousGoodsWeight());
+				}
+				if (postDto.getDangerousGoodsVolume() != null) {
+					dangerGoodsInWagon.setDangerousGoodsVolume(postDto.getDangerousGoodsVolume());
+				}
 				dangerGoodsInWagon.setDangerGoodsType(dangerGoodsType.get());
+				wagonInTrainRepository.save(entity);
 				WagonInTrainDto dto = WagonInTrainDtoMapper.map(entity);
 				return ResponseEntity.accepted().body(dto);
 			}

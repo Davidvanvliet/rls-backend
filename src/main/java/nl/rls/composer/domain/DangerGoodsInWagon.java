@@ -18,10 +18,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter @Setter
 public class DangerGoodsInWagon {
-
 	@Id 	
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private int id;
+	private Integer id;
 	@ManyToOne
     private DangerGoodsType dangerGoodsType;
 	@ManyToOne
@@ -35,30 +34,4 @@ public class DangerGoodsInWagon {
      */
     private Float dangerousGoodsVolume;
     
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((dangerGoodsType == null) ? 0 : dangerGoodsType.hashCode());
-		result = prime * result + id;
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DangerGoodsInWagon other = (DangerGoodsInWagon) obj;
-		if (dangerGoodsType == null) {
-			if (other.dangerGoodsType != null)
-				return false;
-		} else if (!dangerGoodsType.equals(other.dangerGoodsType))
-			return false;
-		if (id != other.id)
-			return false;
-		return true;
-	}
 }
