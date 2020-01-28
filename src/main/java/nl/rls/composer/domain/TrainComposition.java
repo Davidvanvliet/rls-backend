@@ -194,7 +194,7 @@ public class TrainComposition extends OwnedEntity {
 	/**
 	 * The sum of all weights of wagons and traction units
 	 */
-	public int getTrainWeight() {
+	public Integer getTrainWeight() {
 		int trainWeight = 0;
 		for (WagonInTrain wagon : getWagons()) {
 			if (wagon.getWagon() != null) {
@@ -214,7 +214,7 @@ public class TrainComposition extends OwnedEntity {
 	 * The calculated Length of a train (sum of all length over buffer of the wagons
 	 * and traction units). Expressed in Meters
 	 */
-	public int getTrainLength() {
+	public Integer getTrainLength() {
 		int trainLength = 0;
 		for (WagonInTrain wagon : getWagons()) {
 			trainLength += wagon.getWagon().getWagonType().getLengthOverBuffers();
@@ -225,14 +225,14 @@ public class TrainComposition extends OwnedEntity {
 		return trainLength;
 	}
 
-	public int getNumberOfVehicles() {
+	public Integer getNumberOfVehicles() {
 		int numberOfVehicles = getWagons().size();
 		numberOfVehicles += getTractions().size();
 		return numberOfVehicles;
 	}
 
-	public int getNumberOfAxles() {
-		int numberOfAxles = 0;
+	public Integer getNumberOfAxles() {
+		Integer numberOfAxles = 0;
 		for (WagonInTrain wagon : getWagons()) {
 			numberOfAxles += wagon.getWagon().getWagonType().getWagonNumberOfAxles();
 		}

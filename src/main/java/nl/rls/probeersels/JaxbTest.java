@@ -1,4 +1,4 @@
-package nl.rls;
+package nl.rls.probeersels;
 
 import java.io.StringReader;
 

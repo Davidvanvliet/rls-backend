@@ -18,8 +18,12 @@ public class CiDtoMapper {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
-				mapping(CiMessage.class, CiDto.class).fields("uicRequest", "uicRequest",
-						FieldsMappingOptions.customConverter("nl.rls.ci.rest.dto.mapper.UicRequestConverter"));
+				mapping(CiMessage.class, CiDto.class)
+				.fields("uicRequest", "uicRequest",
+						FieldsMappingOptions.customConverter("nl.rls.ci.rest.dto.mapper.UicRequestConverter"))
+				.fields("uicHeader", "uicHeader",
+						FieldsMappingOptions.customConverter("nl.rls.ci.rest.dto.mapper.UicHeaderConverter"))
+				;
 			}
 		};
 		mapper.addMapping(mappingBuilder);

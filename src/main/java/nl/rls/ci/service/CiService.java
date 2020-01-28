@@ -1,20 +1,30 @@
 package nl.rls.ci.service;
 
+import java.io.File;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
 
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.domain.CiMessage;
@@ -90,13 +100,13 @@ public class CiService {
 				.map(trainCompositionMessage);
 		StringWriter xmlMessage = new StringWriter();
 		try {
-			// File file = new File("train_composition_message.xml");
+			File file = new File("train_composition_message.xml");
 			JAXBContext jaxbContext = JAXBContext.newInstance(info.taf_jsg.schemes.TrainCompositionMessage.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
 			// output pretty printed
 			// jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
-			// jaxbMarshaller.marshal(trainCompositionXmlMessage, file);
+			jaxbMarshaller.marshal(trainCompositionXmlMessage, file);
 			jaxbMarshaller.marshal(trainCompositionXmlMessage, System.out);
 
 			jaxbMarshaller.marshal(trainCompositionXmlMessage, xmlMessage);
@@ -109,9 +119,10 @@ public class CiService {
 	}
 
 	public CiMessage makeCiMessage(String messageXml) {
-		CiMessage ciMessage = new CiMessage();
+//		validateAgainstXSD(messageXml, "taf_cat_complete_sector.xsd");
 		int ownerId = securityContext.getOwnerId();
 		// maak de wrapper voor het bericht
+		CiMessage ciMessage = new CiMessage();
 		ciMessage.setOwnerId(ownerId);
 		/*
 		 * maak de het bericht voor de common interface = SOAP body
@@ -153,4 +164,38 @@ public class CiService {
 		return technicalAck;
 	}
 
+	public boolean validate() {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+		factory.setValidating(true);
+
+		factory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+				"http://www.w3.org/2001/XMLSchema");
+		factory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaSource",
+				"http://domain.com/mynamespace/mySchema.xsd");
+		try {
+			DocumentBuilder parser = factory.newDocumentBuilder();
+			Document doc = parser.parse("data.xml");
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	static boolean validateAgainstXSD(InputStream xml, InputStream xsd)
+	{
+	    try
+	    {
+	        SchemaFactory factory = 
+	            SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	        Schema schema = factory.newSchema(new StreamSource(xsd));
+	        Validator validator = schema.newValidator();
+	        validator.validate(new StreamSource(xml));
+	        return true;
+	    }
+	    catch(Exception ex)
+	    {
+	        return false;
+	    }
+	}
 }

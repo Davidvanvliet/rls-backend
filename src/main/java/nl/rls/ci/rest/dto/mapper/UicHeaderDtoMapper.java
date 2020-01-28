@@ -6,15 +6,13 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.dozer.DozerBeanMapper;
 
 import nl.rls.ci.controller.UicRequestController;
-import nl.rls.ci.controller.XmlMessageController;
-import nl.rls.ci.domain.UicRequest;
-import nl.rls.ci.rest.dto.UicRequestDto;
+import nl.rls.ci.domain.UicHeader;
+import nl.rls.ci.rest.dto.UicHeaderDto;
 
-public class UicRequestDtoMapper {
-	public static UicRequestDto map(UicRequest entity) {
+public class UicHeaderDtoMapper {
+	public static UicHeaderDto map(UicHeader entity) {
 		DozerBeanMapper mapper = new DozerBeanMapper();
-		UicRequestDto dto = mapper.map(entity, UicRequestDto.class);
-		dto.add(linkTo(methodOn(XmlMessageController.class).getById(entity.getMessage().getId())).withRel("xmlmessage"));
+		UicHeaderDto dto = mapper.map(entity, UicHeaderDto.class);
 		dto.add(linkTo(methodOn(UicRequestController.class).getById(entity.getId())).withSelfRel());
 		return dto;
 	}

@@ -1,15 +1,10 @@
 package nl.rls.ci.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +30,7 @@ public class UicRequestController {
 	private UicRequestResource uicRequestResource;
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "Gets all UicRequest for a client, no filtering")
-	public ResponseEntity<Resources<UicRequestDto>> getAll() {
+	public ResponseEntity<List<UicRequestDto>> getAll() {
 		int ownerId = securityContext.getOwnerId();
 		Iterable<UicRequest> uicRequestList = uicRequestResource.findByOwnerId(ownerId);
 		List<UicRequestDto> uicRequestDtoList = new ArrayList<>();
@@ -43,9 +38,7 @@ public class UicRequestController {
 		for (UicRequest uicRequest : uicRequestList) {
 			uicRequestDtoList.add(UicRequestDtoMapper.map(uicRequest));
 		}
-		Link link = linkTo(methodOn(UicRequestController.class).getAll()).withSelfRel();
-		Resources<UicRequestDto> dtos = new Resources<UicRequestDto>(uicRequestDtoList, link);
-		return ResponseEntity.ok(dtos);
+		return ResponseEntity.ok(uicRequestDtoList);
 	}
 	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

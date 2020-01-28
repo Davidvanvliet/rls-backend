@@ -52,6 +52,7 @@ public class TrainCompositionService {
 		newTrainComposition.setLivestockOrPeopleIndicator(trainComposition.getLivestockOrPeopleIndicator());
 		newTrainComposition.setOwnerId(trainComposition.getOwnerId());
 		newTrainComposition.setTrainMaxSpeed(trainComposition.getTrainMaxSpeed());
+		newTrainComposition.setJourneySection(trainComposition.getJourneySection());
 		for (TractionInTrain tractionInTrain : trainComposition.getTractions()) {
 			TractionInTrain newTractionInTrain = new TractionInTrain();
 			newTractionInTrain.setDriverIndication(tractionInTrain.getDriverIndication());
@@ -68,6 +69,7 @@ public class TrainCompositionService {
 			newWagonInTrain.setTotalLoadWeight(wagonInTrain.getTotalLoadWeight());
 			newWagonInTrain.setWagonMaxSpeed(wagonInTrain.getWagonMaxSpeed());
 			newWagonInTrain.setTrainComposition(wagonInTrain.getTrainComposition());
+			newWagonInTrain.setWagon(wagonInTrain.getWagon());
 			newTrainComposition.addWagon(newWagonInTrain);
 		}
 		return newTrainComposition;

@@ -8,8 +8,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +23,7 @@ import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.repository.TrainCompositionMessageRepository;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH+"ci/tcm")
+@RequestMapping(BaseURL.BASE_PATH+"tcm")
 public class TcmController {
 	@Autowired
 	private TrainCompositionMessageRepository trainCompositionMessageRepository;
@@ -33,7 +33,7 @@ public class TcmController {
 	private SecurityContext securityContext;
 
 	@ApiOperation(value = "Constructs a tcm-message from data and puts it into de CI-buffer")
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PostMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> createTcm(@PathVariable Integer id) {
 		int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionMessage> trainCompositionMessage = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
