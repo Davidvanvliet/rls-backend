@@ -1,6 +1,10 @@
 package nl.rls.ci.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -25,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.domain.CiMessage;
@@ -110,8 +115,16 @@ public class CiService {
 			jaxbMarshaller.marshal(trainCompositionXmlMessage, System.out);
 
 			jaxbMarshaller.marshal(trainCompositionXmlMessage, xmlMessage);
+			File xsdFile = new File("taf_cat_complete_sector.xsd");
+			InputStream xsdStream = new FileInputStream(xsdFile);
 
-		} catch (JAXBException e) {
+			System.out.println("validating XML message: " + xmlMessage);
+			System.out.println("xsdStream: " + xsdStream.toString());
+
+			InputStream xmlStream = new ByteArrayInputStream(xmlMessage.toString().getBytes());
+			validateAgainstXSD(xmlStream, xsdStream);
+
+		} catch (JAXBException | SAXException | IOException e) {
 			e.printStackTrace();
 			//
 		}
@@ -119,7 +132,7 @@ public class CiService {
 	}
 
 	public CiMessage makeCiMessage(String messageXml) {
-//		validateAgainstXSD(messageXml, "taf_cat_complete_sector.xsd");
+		// validateAgainstXSD(messageXml, "taf_cat_complete_sector.xsd");
 		int ownerId = securityContext.getOwnerId();
 		// maak de wrapper voor het bericht
 		CiMessage ciMessage = new CiMessage();
@@ -181,21 +194,16 @@ public class CiService {
 			return false;
 		}
 	}
-	
-	static boolean validateAgainstXSD(InputStream xml, InputStream xsd)
-	{
-	    try
-	    {
-	        SchemaFactory factory = 
-	            SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	        Schema schema = factory.newSchema(new StreamSource(xsd));
-	        Validator validator = schema.newValidator();
-	        validator.validate(new StreamSource(xml));
-	        return true;
-	    }
-	    catch(Exception ex)
-	    {
-	        return false;
-	    }
+
+	static boolean validateAgainstXSD(InputStream xml, InputStream xsd) throws SAXException, IOException {
+		System.out.println("Starting validateAgainstXSD");
+		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		System.out.println("factory.newSchema(new StreamSource(xsd))");
+		Schema schema = factory.newSchema(new StreamSource(xsd));
+		System.out.println("schema.newValidator()");
+		Validator validator = schema.newValidator();
+		System.out.println("Just before validating");
+		validator.validate(new StreamSource(xml));
+		return true;
 	}
 }

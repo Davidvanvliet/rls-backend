@@ -67,7 +67,7 @@ public class TrainCompositionMessageXmlMapper {
 										field("journeySection.responsibilityActualSection").accessible(true))
 								.fields("responsibilityNextSection",
 										field("journeySection.responsibilityNextSection").accessible(true))
-								.fields("activities", field("trainRunningData.activities").accessible(true))
+//								.fields("activities", field("trainRunningData.activities").accessible(true))
 								.fields("trainComposition.tractions", field("locoIdent").accessible(true))
 								.fields("trainComposition.wagons", field("wagonData").accessible(true));
 

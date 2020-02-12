@@ -5,7 +5,22 @@
 // Generated on: 2019.09.22 at 09:30:01 PM CEST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(xmlns = {
-        @javax.xml.bind.annotation.XmlNs(prefix = "",
-                namespaceURI="http://taf-jsg.info/schemes")})
+//@javax.xml.bind.annotation.XmlSchema(xmlns = {
+//        @javax.xml.bind.annotation.XmlNs(prefix = "taf",
+//                namespaceURI="http://taf-jsg.info/schemes")})
+
+//@javax.xml.bind.annotation.XmlSchema(
+//    namespace="http://taf-jsg.info/schemes",
+//    xmlns={@javax.xml.bind.annotation.XmlNs(prefix="taf",
+//                  namespaceURI="http://taf-jsg.info/schemes")}
+//)
+
+@javax.xml.bind.annotation.XmlSchema(
+		namespace = "http://taf-jsg.info/schemes", 
+		elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, 
+		xmlns = { 
+				@javax.xml.bind.annotation.XmlNs(namespaceURI = "http://taf-jsg.info/schemes", 
+						prefix = "") 
+		}
+)
 package info.taf_jsg.schemes;

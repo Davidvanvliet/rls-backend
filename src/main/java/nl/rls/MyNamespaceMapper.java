@@ -5,7 +5,7 @@ import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 public class MyNamespaceMapper extends NamespacePrefixMapper {
 
     private static final String FOO_PREFIX = ""; // DEFAULT NAMESPACE
-    private static final String FOO_URI = "http://www.trainlinksystems.com/tcm";
+    private static final String FOO_URI = "http://www.raillinksystems.com/tcm";
 
     private static final String BAR_PREFIX = "bar";
     private static final String BAR_URI = "http://www.example.com/BAR";

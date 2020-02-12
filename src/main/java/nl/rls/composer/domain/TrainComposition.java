@@ -192,7 +192,7 @@ public class TrainComposition extends OwnedEntity {
 	}
 
 	/**
-	 * The sum of all weights of wagons and traction units
+	 * The sum of all weights of wagons and traction units in tons
 	 */
 	public Integer getTrainWeight() {
 		int trainWeight = 0;
@@ -205,7 +205,7 @@ public class TrainComposition extends OwnedEntity {
 		for (TractionInTrain traction : getTractions()) {
 			trainWeight += traction.getTraction().getWeight();
 		}
-		return trainWeight;
+		return trainWeight/1000;
 	}
 
 	/**

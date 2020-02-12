@@ -62,7 +62,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "transfereeIM",
     "trainCompositionJourneySection"
 })
-@XmlRootElement(name = "TrainCompositionMessage")
+@XmlRootElement(name = "TrainCompositionMessage", namespace = "http://taf-jsg.info/schemes")
 public class TrainCompositionMessage {
 
     @XmlElement(name = "MessageHeader", required = true)

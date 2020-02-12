@@ -168,7 +168,7 @@ public class Main {
 			Train train = new Train();
 			train.setOwnerId(ownerId);
 			train.setTrainType(2);
-			train.setOperationalTrainNumber("123456789");
+			train.setOperationalTrainNumber("12345678");
 			train.setScheduledDateTimeAtTransfer(new Date());
 			train.setScheduledTimeAtHandover(new Date());
 			train.setTransfereeIM(companyRepository.findByCode("0084").get(0));
