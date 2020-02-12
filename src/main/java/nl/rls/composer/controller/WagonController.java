@@ -19,11 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
-import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Wagon;
-import nl.rls.composer.domain.WagonType;
 import nl.rls.composer.repository.WagonRepository;
-import nl.rls.composer.repository.WagonTypeRepository;
 import nl.rls.composer.rest.dto.WagonDto;
 import nl.rls.composer.rest.dto.WagonPostDto;
 import nl.rls.composer.rest.dto.mapper.WagonDtoMapper;
@@ -33,8 +30,6 @@ import nl.rls.composer.rest.dto.mapper.WagonDtoMapper;
 public class WagonController {
 	@Autowired
 	private WagonRepository wagonRepository;
-	@Autowired
-	private WagonTypeRepository wagonTypeRepository;
 
 	@Autowired
 	private SecurityContext securityContext;
@@ -71,12 +66,12 @@ public class WagonController {
 		Wagon entity = new Wagon();
 		entity.setOwnerId(ownerId);
 		entity.setNumberFreight(dto.getNumberFreight());
-		int wagonTypeId = DecodePath.decodeInteger(dto.getWagonTypeUrl(), "wagontypes");
-		System.out.println("URL: "+dto.getWagonTypeUrl()+", "+wagonTypeId);
-		Optional<WagonType> wagonType = wagonTypeRepository.findById(wagonTypeId);
-		if (wagonType.isPresent()) {
-			entity.setWagonType(wagonType.get());
-		}
+		entity.setCode(dto.getCode());
+		entity.setHandBrakeBrakedWeight(dto.getHandBrakeBrakedWeight());
+		entity.setLengthOverBuffers(dto.getLengthOverBuffers());
+		entity.setName(dto.getName());
+		entity.setWagonNumberOfAxles(dto.getWagonNumberOfAxles());
+		entity.setWagonWeightEmpty(dto.getWagonWeightEmpty());
 		wagonRepository.save(entity);
 		WagonDto wagonDto = WagonDtoMapper.map(entity);
 		return ResponseEntity.created(linkTo(methodOn(WagonController.class).getById(entity.getId()))

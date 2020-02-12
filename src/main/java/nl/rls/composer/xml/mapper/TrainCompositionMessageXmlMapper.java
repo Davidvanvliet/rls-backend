@@ -76,7 +76,7 @@ public class TrainCompositionMessageXmlMapper {
 
 				mapping(nl.rls.composer.domain.WagonInTrain.class, info.taf_jsg.schemes.WagonData.class)
 						.fields("position", "wagonTrainPosition").fields("wagon.numberFreight", "wagonNumberFreight")
-						.fields("wagon.wagonType", "wagonTechData")
+						.fields("wagon", "wagonTechData")
 						.fields("totalLoadWeight", "wagonOperationalData.totalLoadWeight.")
 						.fields("brakeWeight", "wagonOperationalData.brakeWeight")
 						.fields("brakeType", "wagonOperationalData.brakeType")

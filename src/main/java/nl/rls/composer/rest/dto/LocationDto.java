@@ -11,7 +11,7 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Getter @Setter
 public class LocationDto extends ResourceSupport {
     private int locationPrimaryCode;
-    private String countryIso;
+    private String countryCodeIso;
     private String primaryLocationName;
     private String code;
     private String latitude;

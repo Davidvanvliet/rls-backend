@@ -5,12 +5,17 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
+import org.dozer.loader.api.FieldsMappingOptions;
 
 import nl.rls.composer.controller.CompanyController;
 import nl.rls.composer.controller.TrainCompositionMessageController;
+import nl.rls.composer.domain.JourneySection;
+import nl.rls.composer.domain.Train;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
+import nl.rls.composer.rest.dto.JourneySectionDto;
 import nl.rls.composer.rest.dto.TrainCompositionMessageCreateDto;
 import nl.rls.composer.rest.dto.TrainCompositionMessageDto;
+import nl.rls.composer.rest.dto.TrainDto;
 
 public class TrainCompositionMessageDtoMapper {
 	public static TrainCompositionMessageDto map(TrainCompositionMessage entity) {
@@ -20,7 +25,8 @@ public class TrainCompositionMessageDtoMapper {
 				mapping(TrainCompositionMessage.class, TrainCompositionMessageDto.class)
 				.fields("sender.code", "sender")
 				.fields("recipient.code", "recipient")
-				;
+				.fields("train", "train",
+						FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.TrainConverter"));
 			}
 		};
 		mapper.addMapping(mappingBuilder);

@@ -15,6 +15,10 @@ import lombok.Setter;
 public class WagonPostDto {
 	@ApiModelProperty(notes = "Identifies uniquely the freight wagon by its number. Identification code of a freight wagon based on the TSI OPE and CEN Recommendations and CIS wagons coded according to OSJD-UIC leaflet 402, which allows the conversion from 8 digits to 12 digits and viceversa.")
 	private String numberFreight;
-    @ApiModelProperty(notes = "wagonType is a valid URL to a resource.")
-    private String wagonTypeUrl;
+	private String name;
+	private String code;
+	private int lengthOverBuffers;
+	private int wagonNumberOfAxles;
+	private int wagonWeightEmpty;
+	private int handBrakeBrakedWeight;
 }

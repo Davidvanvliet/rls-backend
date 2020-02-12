@@ -198,10 +198,8 @@ public class TrainComposition extends OwnedEntity {
 		int trainWeight = 0;
 		for (WagonInTrain wagon : getWagons()) {
 			if (wagon.getWagon() != null) {
-				if (wagon.getWagon().getWagonType() != null) {
-					trainWeight += wagon.getWagon().getWagonType().getWagonWeightEmpty();
-					trainWeight += wagon.getTotalLoadWeight();
-				}
+				trainWeight += wagon.getWagon().getWagonWeightEmpty();
+				trainWeight += wagon.getTotalLoadWeight();
 			}
 		}
 		for (TractionInTrain traction : getTractions()) {
@@ -217,7 +215,7 @@ public class TrainComposition extends OwnedEntity {
 	public Integer getTrainLength() {
 		int trainLength = 0;
 		for (WagonInTrain wagon : getWagons()) {
-			trainLength += wagon.getWagon().getWagonType().getLengthOverBuffers();
+			trainLength += wagon.getWagon().getLengthOverBuffers();
 		}
 		for (TractionInTrain traction : getTractions()) {
 			trainLength += traction.getTraction().getLengthOverBuffers();
@@ -234,7 +232,7 @@ public class TrainComposition extends OwnedEntity {
 	public Integer getNumberOfAxles() {
 		Integer numberOfAxles = 0;
 		for (WagonInTrain wagon : getWagons()) {
-			numberOfAxles += wagon.getWagon().getWagonType().getWagonNumberOfAxles();
+			numberOfAxles += wagon.getWagon().getWagonNumberOfAxles();
 		}
 		for (TractionInTrain traction : getTractions()) {
 			numberOfAxles += traction.getTraction().getNumberOfAxles();

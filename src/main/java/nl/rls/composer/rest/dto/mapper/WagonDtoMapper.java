@@ -17,8 +17,6 @@ public class WagonDtoMapper {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
-				mapping(Wagon.class, WagonDto.class).fields("wagonType", "wagonType",
-						FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.WagonTypeConverter"));
 			}
 		};
 		mapper.addMapping(mappingBuilder);
