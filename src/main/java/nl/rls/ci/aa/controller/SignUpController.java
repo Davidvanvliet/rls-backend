@@ -18,7 +18,7 @@ import nl.rls.ci.aa.domain.Owner;
 import nl.rls.ci.aa.domain.Role;
 import nl.rls.ci.aa.dto.UserDto;
 import nl.rls.ci.aa.dto.UserDtoMapper;
-import nl.rls.ci.aa.dto.UserDtoPost;
+import nl.rls.ci.aa.dto.UserPostDto;
 import nl.rls.ci.aa.repository.OwnerRepository;
 import nl.rls.ci.aa.repository.RoleRepository;
 import nl.rls.ci.aa.repository.UserRepository;
@@ -42,27 +42,27 @@ public class SignUpController {
 
 	@PutMapping("/sign-up/{username}")
 	@Transactional
-	public ResponseEntity<UserDto> signUp(@PathVariable(value = "username") String username, @RequestBody UserDtoPost userDtoPost) {
-		log.info("signUp: " + userDtoPost);
+	public ResponseEntity<UserDto> signUp(@PathVariable(value = "username") String username, @RequestBody UserPostDto userPostDtoPost) {
+		log.info("signUp: " + userPostDtoPost);
 		AppUser user = userRepository.findByUsername(username);
 		if (user != null) {
-			user.setEmail(userDtoPost.getEmail());
-			user.setFirstName(userDtoPost.getFirstName());
-			user.setLastName(userDtoPost.getLastName());
-			user.setPassword(bCryptPasswordEncoder.encode(userDtoPost.getPassword()));
+			user.setEmail(userPostDtoPost.getEmail());
+			user.setFirstName(userPostDtoPost.getFirstName());
+			user.setLastName(userPostDtoPost.getLastName());
+			user.setPassword(bCryptPasswordEncoder.encode(userPostDtoPost.getPassword()));
 		} else {
-			Role role = roleRepository.findByName(Role.ROLE_USER);
+			Optional<Role> role = roleRepository.findByName(Role.ROLE_USER);
 			user = new AppUser();
-			user.setPassword(bCryptPasswordEncoder.encode(userDtoPost.getPassword()));
+			user.setPassword(bCryptPasswordEncoder.encode(userPostDtoPost.getPassword()));
 			user.setUsername(username);
-			user.setEmail(userDtoPost.getEmail());
-			user.setFirstName(userDtoPost.getFirstName());
-			user.setLastName(userDtoPost.getLastName());
+			user.setEmail(userPostDtoPost.getEmail());
+			user.setFirstName(userPostDtoPost.getFirstName());
+			user.setLastName(userPostDtoPost.getLastName());
 			user.setEnabled(true);
 			userRepository.save(user);
 			user = userRepository.findById(user.getId()).get();
 			System.out.println(user);
-			user.getRoles().add(role);
+			user.setRole(role.get());
 			log.info("signUp: getOwner");
 			Optional<Owner> optional = ownerRepository.findById(1);
 			optional.get().getUsers().add(user);

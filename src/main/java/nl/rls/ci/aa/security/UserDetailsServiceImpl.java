@@ -37,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			System.out.println("OwnerId: " + user.getOwner().getId());
 			UserDetails userDetails = new org.springframework.security.core.userdetails.User(
 					user.getUsername(), user.getPassword(),
-					getAuthorities(user.getRoles()));
+					getAuthorities(user.getRole()));
 			// emptyList());
 			return userDetails;
 		} else {
@@ -45,15 +45,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 	}
 
-	private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
-		return getGrantedAuthorities(roles);
+	private Collection<? extends GrantedAuthority> getAuthorities(Role role) {
+		return getGrantedAuthorities(role);
 	}
 
-	private List<GrantedAuthority> getGrantedAuthorities(Collection<Role> roles) {
+	private List<GrantedAuthority> getGrantedAuthorities(Role role) {
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		for (Role role : roles) {
-			authorities.add(new SimpleGrantedAuthority(role.getName()));
-		}
+		authorities.add(new SimpleGrantedAuthority(role.getName()));
 		return authorities;
 	}
 }

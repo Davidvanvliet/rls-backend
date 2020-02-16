@@ -21,14 +21,15 @@ import lombok.Setter;
 public class Role {
 	@Transient
 	public static String ROLE_USER = "ROLE_USER";
+	@Transient
+	public static String ROLE_SUPER_USER = "ROLE_SUPER_USER";
+	@Transient
+	public static String ROLE_ADMIN = "ROLE_ADMIN";
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
  
     private String name;
-    @ManyToMany(mappedBy = "roles")
-    private List<AppUser> users;
- 
     @ManyToMany
     @JoinTable(
         name = "roles_privileges", 

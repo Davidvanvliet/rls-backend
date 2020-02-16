@@ -3,7 +3,6 @@ package nl.rls.ci.service;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -188,6 +187,7 @@ public class CiService {
 				"http://domain.com/mynamespace/mySchema.xsd");
 		try {
 			DocumentBuilder parser = factory.newDocumentBuilder();
+			@SuppressWarnings("unused")
 			Document doc = parser.parse("data.xml");
 			return true;
 		} catch (Exception e) {

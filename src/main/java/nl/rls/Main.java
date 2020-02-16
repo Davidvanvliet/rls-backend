@@ -122,14 +122,14 @@ public class Main {
 	public CommandLineRunner demo() {
 		return (args) -> {
 			log.info("Start CommandLineRunner");
-			roleRepository.save(new Role("ROLE_USER"));
-			roleRepository.save(new Role("ROLE_SUPER_USER"));
-			roleRepository.save(new Role("ROLE_ADMIN"));
-			Role role = roleRepository.findByName("ROLE_ADMIN");
+			roleRepository.save(new Role(Role.ROLE_USER));
+			roleRepository.save(new Role(Role.ROLE_SUPER_USER));
+			roleRepository.save(new Role(Role.ROLE_ADMIN));
+			Optional<Role> role = roleRepository.findByName("ROLE_ADMIN");
 			AppUser user = new AppUser("Berend", "Wilkens", "berend.wilkens@hu.nl");
 			userRepository.save(user);
 			user = userRepository.findById(user.getId()).get();
-			user.getRoles().add(role);
+			user.setRole(role.get());
 			user.setPassword(bCryptPasswordEncoder().encode("qwerty"));
 			Owner owner = new Owner();
 			owner.setCode("3502");

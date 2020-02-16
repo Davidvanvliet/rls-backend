@@ -16,6 +16,8 @@ public class UserDtoMapper {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
+				mapping(AppUser.class, UserDto.class)
+					.fields("role.name", "role");
 			}
 		};
 		mapper.addMapping(mappingBuilder);
@@ -25,8 +27,13 @@ public class UserDtoMapper {
 		System.out.println("link: "+ link.toString());
 		userDto.add(link);
 	    userDto.add(linkTo(methodOn(UserController.class).getUser(user.getId())).withSelfRel());
-		userDto.add(linkTo(methodOn(UserController.class).getRolesByUser(user.getId())).withRel("roles"));
 		return userDto;
+	}
+
+	public static AppUser map(UserPostDto dto) {
+		DozerBeanMapper mapper = new DozerBeanMapper();
+		AppUser entity = mapper.map(dto, AppUser.class);
+		return entity;
 	}
 
 }

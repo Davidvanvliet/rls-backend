@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import nl.rls.ci.aa.domain.Role;
@@ -23,14 +22,14 @@ public class RoleController {
 	@Autowired
 	RoleRepository roleRepository;
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public List<RoleDto> getAll() {
+	@GetMapping(value = "/")
+	public ResponseEntity<List<RoleDto>> getAll() {
 		Iterable<Role> roleList = roleRepository.findAll();
 		List<RoleDto> roleDtoList = new ArrayList<RoleDto>();
 		for (Role role : roleList) {
 			roleDtoList.add(RoleDtoMapper.map(role));
 		}
-		return roleDtoList;
+		return ResponseEntity.ok(roleDtoList);
 	}
 
 	@GetMapping(value = "/{id}")

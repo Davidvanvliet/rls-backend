@@ -2,7 +2,7 @@ package nl.rls.ci.aa.dto;
 
 import java.util.List;
 
-import org.springframework.hateoas.ResourceSupport;
+import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
