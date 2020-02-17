@@ -1,11 +1,10 @@
 package nl.rls.composer.repository;
 
-import java.util.List;
-
+import nl.rls.composer.domain.message.MessageHeader;
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.composer.domain.message.MessageHeader;
+import java.util.List;
 
 public interface MessageHeaderRepository extends CrudRepository<MessageHeader, Integer> {
-	List<MessageHeader> findByOwnerId(int ownerId);
+    List<MessageHeader> findByOwnerId(int ownerId);
 }

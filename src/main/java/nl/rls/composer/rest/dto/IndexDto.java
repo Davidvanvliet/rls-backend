@@ -9,5 +9,5 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Getter
 @Setter
 public class IndexDto extends ResourceSupport {
-	private String name;
+    private String name;
 }

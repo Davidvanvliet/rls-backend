@@ -1,16 +1,15 @@
 package nl.rls.composer.domain.message;
 
-import java.util.Date;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.Date;
 
 /**
  * @author berend.wilkens
@@ -19,15 +18,16 @@ import lombok.ToString;
 @ToString
 @Entity
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class MessageReference {
-	@Id 	
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     /**
      * To indicate the message type transmitted or referred to.
      * 3003        TrainCompositionMessage
-	 * 9000        ErrorMessage
+     * 9000        ErrorMessage
      */
     private int messageType;
     private String messageTypeVersion;

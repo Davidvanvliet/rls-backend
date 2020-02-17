@@ -1,12 +1,12 @@
 package nl.rls.composer.repository;
 
-import java.util.List;
-
+import nl.rls.composer.domain.Company;
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.composer.domain.Company;
+import java.util.List;
 
 public interface CompanyRepository extends CrudRepository<Company, Integer> {
-	List<Company> findByCode(String code);
-	List<Company> findByCountryIso(String countryIso);
+    List<Company> findByCode(String code);
+
+    List<Company> findByCountryIso(String countryIso);
 }

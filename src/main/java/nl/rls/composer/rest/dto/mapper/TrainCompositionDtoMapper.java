@@ -1,14 +1,5 @@
 package nl.rls.composer.rest.dto.mapper;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.dozer.DozerBeanMapper;
-import org.dozer.loader.api.BeanMappingBuilder;
-
 import nl.rls.composer.controller.TractionInTrainController;
 import nl.rls.composer.controller.TrainCompositionController;
 import nl.rls.composer.controller.WagonInTrainController;
@@ -20,53 +11,61 @@ import nl.rls.composer.rest.dto.JourneySectionPostDto;
 import nl.rls.composer.rest.dto.TractionInTrainDto;
 import nl.rls.composer.rest.dto.TrainCompositionDto;
 import nl.rls.composer.rest.dto.WagonInTrainDto;
+import org.dozer.DozerBeanMapper;
+import org.dozer.loader.api.BeanMappingBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 public class TrainCompositionDtoMapper {
 
-	public static TrainCompositionDto map(TrainComposition entity) {
-		if (entity == null) {
-			return null;
-		}
-		DozerBeanMapper mapper = new DozerBeanMapper();
-		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
-			protected void configure() {
+    public static TrainCompositionDto map(TrainComposition entity) {
+        if (entity == null) {
+            return null;
+        }
+        DozerBeanMapper mapper = new DozerBeanMapper();
+        BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
+            protected void configure() {
 //				mapping(TrainComposition.class, TrainCompositionDto.class, TypeMappingOptions.oneWay(), TypeMappingOptions.mapNull(false));
-			}
-		};
-		mapper.addMapping(mappingBuilder);
-		TrainCompositionDto dto = mapper.map(entity, TrainCompositionDto.class);
+            }
+        };
+        mapper.addMapping(mappingBuilder);
+        TrainCompositionDto dto = mapper.map(entity, TrainCompositionDto.class);
 
-		List<TractionInTrainDto> dtoList = new ArrayList<TractionInTrainDto>();
-		System.out.println("entity.getWagons(): "+entity.getWagons());
-		for (TractionInTrain tractionInTrain : entity.getTractions()) {
-			TractionInTrainDto tractionInTrainDto = TractionInTrainDtoMapper.map(tractionInTrain);
-			dtoList.add(tractionInTrainDto);
-		}
-		dto.setTractions(dtoList);
-		
-		List<WagonInTrainDto> wagonDtoList = new ArrayList<WagonInTrainDto>();
-		System.out.println("entity.getWagons(): "+entity.getWagons());
-		for (WagonInTrain wagonInTrain : entity.getWagons()) {
-			WagonInTrainDto wagonInTrainDto = WagonInTrainDtoMapper.map(wagonInTrain);
-			wagonDtoList.add(wagonInTrainDto);
-		}
-		dto.setWagons(wagonDtoList);
-		
-		dto.add(linkTo(methodOn(WagonInTrainController.class).getAllWagonInTrain(entity.getId())).withRel("wagons"));
-		dto.add(linkTo(methodOn(TractionInTrainController.class).getAllTractionInTrain(entity.getId())).withRel("tractions"));
-		dto.add(linkTo(methodOn(TrainCompositionController.class).getById(entity.getId())).withSelfRel());
-		return dto;
-	}
+        List<TractionInTrainDto> dtoList = new ArrayList<TractionInTrainDto>();
+        System.out.println("entity.getWagons(): " + entity.getWagons());
+        for (TractionInTrain tractionInTrain : entity.getTractions()) {
+            TractionInTrainDto tractionInTrainDto = TractionInTrainDtoMapper.map(tractionInTrain);
+            dtoList.add(tractionInTrainDto);
+        }
+        dto.setTractions(dtoList);
 
-	public static JourneySection map(JourneySectionPostDto dto) {
-		DozerBeanMapper mapper = new DozerBeanMapper();
-		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
-			protected void configure() {
-			}
-		};
-		mapper.addMapping(mappingBuilder);
-		JourneySection entity = mapper.map(dto, JourneySection.class);
-		return entity;
-	}
+        List<WagonInTrainDto> wagonDtoList = new ArrayList<WagonInTrainDto>();
+        System.out.println("entity.getWagons(): " + entity.getWagons());
+        for (WagonInTrain wagonInTrain : entity.getWagons()) {
+            WagonInTrainDto wagonInTrainDto = WagonInTrainDtoMapper.map(wagonInTrain);
+            wagonDtoList.add(wagonInTrainDto);
+        }
+        dto.setWagons(wagonDtoList);
+
+        dto.add(linkTo(methodOn(WagonInTrainController.class).getAllWagonInTrain(entity.getId())).withRel("wagons"));
+        dto.add(linkTo(methodOn(TractionInTrainController.class).getAllTractionInTrain(entity.getId())).withRel("tractions"));
+        dto.add(linkTo(methodOn(TrainCompositionController.class).getById(entity.getId())).withSelfRel());
+        return dto;
+    }
+
+    public static JourneySection map(JourneySectionPostDto dto) {
+        DozerBeanMapper mapper = new DozerBeanMapper();
+        BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
+            protected void configure() {
+            }
+        };
+        mapper.addMapping(mappingBuilder);
+        JourneySection entity = mapper.map(dto, JourneySection.class);
+        return entity;
+    }
 
 }

@@ -1,13 +1,12 @@
 package nl.rls.composer.repository;
 
-import java.util.Optional;
-
+import nl.rls.composer.domain.TrainComposition;
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.composer.domain.TrainComposition;
+import java.util.Optional;
 
-public interface TrainCompositionRepository extends CrudRepository<TrainComposition, Integer>  {
+public interface TrainCompositionRepository extends CrudRepository<TrainComposition, Integer> {
 
-	Optional<TrainComposition> findByIdAndOwnerId(Integer id, int ownerId);
+    Optional<TrainComposition> findByIdAndOwnerId(Integer id, int ownerId);
 
 }

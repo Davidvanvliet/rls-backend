@@ -11,9 +11,9 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Setter
 @ToString
 public class UserDto extends ResourceSupport {
-	private String username;
-	private String firstName;
-	private String lastName;
-	private String email;
-	private String role;
+    private String username;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String role;
 }

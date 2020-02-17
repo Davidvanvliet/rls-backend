@@ -1,18 +1,7 @@
 package nl.rls.ci.aa.security;
 
-import static nl.rls.ci.aa.security.SecurityConstants.HEADER_STRING;
-import static nl.rls.ci.aa.security.SecurityConstants.SECRET;
-import static nl.rls.ci.aa.security.SecurityConstants.TOKEN_PREFIX;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,11 +11,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static nl.rls.ci.aa.security.SecurityConstants.*;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
-	private static final Logger log = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
 
     public JWTAuthorizationFilter(AuthenticationManager authManager) {
         super(authManager);
@@ -53,21 +49,21 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(HEADER_STRING);
         if (token != null) {
             // parse the token.
-        	log.info("Token: "+token);
+            log.info("Token: " + token);
             String user = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
                     .build()
                     .verify(token.replace(TOKEN_PREFIX, ""))
                     .getSubject();
 
-             if (user != null) {
-                 String role = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
-                         .build()
-                         .verify(token.replace(TOKEN_PREFIX, ""))
-                         .getClaim("role").asString();
+            if (user != null) {
+                String role = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
+                        .build()
+                        .verify(token.replace(TOKEN_PREFIX, ""))
+                        .getClaim("role").asString();
 
-         		List<GrantedAuthority> authorities = new ArrayList<>();
-        		authorities.add(new SimpleGrantedAuthority(role));
-        		System.out.println("getAuthentication: "+role+ ", authorities: "+authorities);
+                List<GrantedAuthority> authorities = new ArrayList<>();
+                authorities.add(new SimpleGrantedAuthority(role));
+                System.out.println("getAuthentication: " + role + ", authorities: " + authorities);
                 return new UsernamePasswordAuthenticationToken(user, null, authorities);
             }
             return null;

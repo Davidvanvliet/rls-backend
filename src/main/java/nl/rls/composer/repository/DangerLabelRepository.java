@@ -1,13 +1,12 @@
 package nl.rls.composer.repository;
 
-import java.util.Optional;
-
+import nl.rls.composer.domain.code.DangerLabel;
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.composer.domain.code.DangerLabel;
+import java.util.Optional;
 
-public interface DangerLabelRepository extends CrudRepository<DangerLabel, Integer>{
-	Optional<DangerLabel> findByCode(String code);
+public interface DangerLabelRepository extends CrudRepository<DangerLabel, Integer> {
+    Optional<DangerLabel> findByCode(String code);
 
 
 }

@@ -1,30 +1,5 @@
 package nl.rls.composer.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
@@ -40,148 +15,161 @@ import nl.rls.composer.rest.dto.TrainCompositionMessageCreateDto;
 import nl.rls.composer.rest.dto.TrainCompositionMessageDto;
 import nl.rls.composer.rest.dto.mapper.TrainCompositionMessageDtoMapper;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.StringWriter;
+import java.util.*;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH+"traincompositionmessages")
+@RequestMapping(BaseURL.BASE_PATH + "traincompositionmessages")
 public class TrainCompositionMessageController {
-	@Autowired
-	private TrainCompositionMessageRepository trainCompositionMessageRepository;
-	@Autowired
-	private CompanyRepository companyRepository;
-	@Autowired
-	private TrainRepository trainRepository;
+    @Autowired
+    private TrainCompositionMessageRepository trainCompositionMessageRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
+    @Autowired
+    private TrainRepository trainRepository;
 
-	@Autowired
-	private SecurityContext securityContext;
+    @Autowired
+    private SecurityContext securityContext;
 
-	@GetMapping("/hello")
-	public ResponseEntity<String> getHello() {
-		return ResponseEntity.ok("Hello world");
-	}
+    @GetMapping("/hello")
+    public ResponseEntity<String> getHello() {
+        return ResponseEntity.ok("Hello world");
+    }
 
-	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<TrainCompositionMessageDto>> getAll() {
-		int ownerId = securityContext.getOwnerId();
-		System.out.println("TrainCompositionMessageController " + ownerId);
-		Iterable<TrainCompositionMessage> trainCompositionMessageList = trainCompositionMessageRepository
-				.findByOwnerId(ownerId);
-		System.out.println("TrainCompositionMessageController " + ownerId);
-		List<TrainCompositionMessageDto> trainCompositionMessageDtoList = new ArrayList<>();
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TrainCompositionMessageDto>> getAll() {
+        int ownerId = securityContext.getOwnerId();
+        System.out.println("TrainCompositionMessageController " + ownerId);
+        Iterable<TrainCompositionMessage> trainCompositionMessageList = trainCompositionMessageRepository
+                .findByOwnerId(ownerId);
+        System.out.println("TrainCompositionMessageController " + ownerId);
+        List<TrainCompositionMessageDto> trainCompositionMessageDtoList = new ArrayList<>();
 
-		for (TrainCompositionMessage trainCompositionMessage : trainCompositionMessageList) {
-			trainCompositionMessageDtoList.add(TrainCompositionMessageDtoMapper.map(trainCompositionMessage));
-		}
+        for (TrainCompositionMessage trainCompositionMessage : trainCompositionMessageList) {
+            trainCompositionMessageDtoList.add(TrainCompositionMessageDtoMapper.map(trainCompositionMessage));
+        }
 //		Link trainCompositionMessagesLink = linkTo(methodOn(TrainCompositionMessageController.class).getAll())
 //				.withSelfRel();
 //		Resources<TrainCompositionMessageDto> trainCompositionMessages = new Resources<TrainCompositionMessageDto>(
 //				trainCompositionMessageDtoList, trainCompositionMessagesLink);
-		return ResponseEntity.ok(trainCompositionMessageDtoList);
-	}
+        return ResponseEntity.ok(trainCompositionMessageDtoList);
+    }
 
-	//
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TrainCompositionMessageDto> getById(@PathVariable int id) {
-		int ownerId = securityContext.getOwnerId();
-		Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
-		if (optional.isPresent()) {
-			TrainCompositionMessageDto trainCompositionMessageDto = TrainCompositionMessageDtoMapper
-					.map(optional.get());
-			return ResponseEntity.ok(trainCompositionMessageDto);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
+    //
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TrainCompositionMessageDto> getById(@PathVariable int id) {
+        int ownerId = securityContext.getOwnerId();
+        Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
+        if (optional.isPresent()) {
+            TrainCompositionMessageDto trainCompositionMessageDto = TrainCompositionMessageDtoMapper
+                    .map(optional.get());
+            return ResponseEntity.ok(trainCompositionMessageDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-	// @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> getTcmIdent(@PathVariable Integer id) {
-		int ownerId = securityContext.getOwnerId();
-		Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
-		if (optional.isPresent()) {
-			StringWriter sw = new StringWriter();
-			System.out.println(optional.get());
-			info.taf_jsg.schemes.TrainCompositionMessage tcm = TrainCompositionMessageXmlMapper.map(optional.get());
-			try {
-				// File file = new File("train_composition_message.xml");
-				JAXBContext jaxbContext = JAXBContext.newInstance(info.taf_jsg.schemes.TrainCompositionMessage.class);
-				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-				// output pretty printed
-				// jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
-				// jaxbMarshaller.marshal(tcm, file);
-				jaxbMarshaller.marshal(tcm, System.out);
-				jaxbMarshaller.marshal(tcm, sw);
-			} catch (JAXBException e) {
-				e.printStackTrace();
-				//
-			}
-			return ResponseEntity.ok(sw.toString());
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
+    // @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> getTcmIdent(@PathVariable Integer id) {
+        int ownerId = securityContext.getOwnerId();
+        Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
+        if (optional.isPresent()) {
+            StringWriter sw = new StringWriter();
+            System.out.println(optional.get());
+            info.taf_jsg.schemes.TrainCompositionMessage tcm = TrainCompositionMessageXmlMapper.map(optional.get());
+            try {
+                // File file = new File("train_composition_message.xml");
+                JAXBContext jaxbContext = JAXBContext.newInstance(info.taf_jsg.schemes.TrainCompositionMessage.class);
+                Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+                // output pretty printed
+                // jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+                // jaxbMarshaller.marshal(tcm, file);
+                jaxbMarshaller.marshal(tcm, System.out);
+                jaxbMarshaller.marshal(tcm, sw);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+                //
+            }
+            return ResponseEntity.ok(sw.toString());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TrainCompositionMessageDto> create(@RequestBody TrainCompositionMessageCreateDto dto) {
-		int ownerId = securityContext.getOwnerId();
-		TrainCompositionMessage trainCompositionMessage = new TrainCompositionMessage();
-		trainCompositionMessage.setOwnerId(ownerId);
-		trainCompositionMessage.setMessageIdentifier(UUID.randomUUID().toString());
-		trainCompositionMessage.setMessageDateTime(new Date());
-		trainCompositionMessage.setMessageType(MessageType.TRAIN_COMPOSITION_MESSAGE.code());
-		trainCompositionMessage.setMessageTypeVersion(MessageType.TRAIN_COMPOSITION_MESSAGE.version());
-		trainCompositionMessage.setMessageStatus(MessageStatus.creation.getValue());
-		trainCompositionMessage.setSenderReference(UUID.randomUUID().toString());
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TrainCompositionMessageDto> create(@RequestBody TrainCompositionMessageCreateDto dto) {
+        int ownerId = securityContext.getOwnerId();
+        TrainCompositionMessage trainCompositionMessage = new TrainCompositionMessage();
+        trainCompositionMessage.setOwnerId(ownerId);
+        trainCompositionMessage.setMessageIdentifier(UUID.randomUUID().toString());
+        trainCompositionMessage.setMessageDateTime(new Date());
+        trainCompositionMessage.setMessageType(MessageType.TRAIN_COMPOSITION_MESSAGE.code());
+        trainCompositionMessage.setMessageTypeVersion(MessageType.TRAIN_COMPOSITION_MESSAGE.version());
+        trainCompositionMessage.setMessageStatus(MessageStatus.creation.getValue());
+        trainCompositionMessage.setSenderReference(UUID.randomUUID().toString());
 
-		/* ProRail = 0084 */
-		List<Company> recipient = companyRepository.findByCode("0084");
-		if (recipient.size() == 1) {
-			trainCompositionMessage.setRecipient(recipient.get(0));
-		}
+        /* ProRail = 0084 */
+        List<Company> recipient = companyRepository.findByCode("0084");
+        if (recipient.size() == 1) {
+            trainCompositionMessage.setRecipient(recipient.get(0));
+        }
 
-		List<Company> sender = companyRepository.findByCode("9001");
-		if (sender.size() == 1) {
-			trainCompositionMessage.setSender(sender.get(0));
-		}
-		
-		Integer trainId = DecodePath.decodeInteger(dto.getTrain(), "trains");
-		Optional<Train> optional = trainRepository.findByIdAndOwnerId(trainId, ownerId);
-		if (optional.isPresent()) {
-			trainCompositionMessage.setTrain(optional.get());
-			optional.get().getTrainCompositionMessages().add(trainCompositionMessage);
-		}
+        List<Company> sender = companyRepository.findByCode("9001");
+        if (sender.size() == 1) {
+            trainCompositionMessage.setSender(sender.get(0));
+        }
 
-		trainCompositionMessage = trainCompositionMessageRepository.save(trainCompositionMessage);
-		if (trainCompositionMessage != null) {
-			TrainCompositionMessageDto resultDto = TrainCompositionMessageDtoMapper.map(trainCompositionMessage);
+        Integer trainId = DecodePath.decodeInteger(dto.getTrain(), "trains");
+        Optional<Train> optional = trainRepository.findByIdAndOwnerId(trainId, ownerId);
+        if (optional.isPresent()) {
+            trainCompositionMessage.setTrain(optional.get());
+            optional.get().getTrainCompositionMessages().add(trainCompositionMessage);
+        }
 
-			return ResponseEntity.created(
-					linkTo(methodOn(TrainCompositionMessageController.class).getById(trainCompositionMessage.getId()))
-							.toUri())
-					.body(resultDto);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
+        trainCompositionMessage = trainCompositionMessageRepository.save(trainCompositionMessage);
+        if (trainCompositionMessage != null) {
+            TrainCompositionMessageDto resultDto = TrainCompositionMessageDtoMapper.map(trainCompositionMessage);
 
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TrainCompositionMessageDto> update(@PathVariable Integer id,
-			@RequestBody TrainCompositionMessageCreateDto trainCompositionMessageCreateDto) {
-		int ownerId = securityContext.getOwnerId();
-		Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
-		if (optional.isPresent()) {
-			TrainCompositionMessage trainCompositionMessage = TrainCompositionMessageDtoMapper
-					.map(trainCompositionMessageCreateDto);
-			trainCompositionMessage.setOwnerId(ownerId);
-			trainCompositionMessage = trainCompositionMessageRepository.save(trainCompositionMessage);
-			if (trainCompositionMessage != null) {
-				TrainCompositionMessageDto dto = TrainCompositionMessageDtoMapper.map(trainCompositionMessage);
+            return ResponseEntity.created(
+                    linkTo(methodOn(TrainCompositionMessageController.class).getById(trainCompositionMessage.getId()))
+                            .toUri())
+                    .body(resultDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-				return ResponseEntity.created(linkTo(
-						methodOn(TrainCompositionMessageController.class).getById(trainCompositionMessage.getId()))
-								.toUri())
-						.body(dto);
-			}
-		}
-		return ResponseEntity.notFound().build();
-	}
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TrainCompositionMessageDto> update(@PathVariable Integer id,
+                                                             @RequestBody TrainCompositionMessageCreateDto trainCompositionMessageCreateDto) {
+        int ownerId = securityContext.getOwnerId();
+        Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
+        if (optional.isPresent()) {
+            TrainCompositionMessage trainCompositionMessage = TrainCompositionMessageDtoMapper
+                    .map(trainCompositionMessageCreateDto);
+            trainCompositionMessage.setOwnerId(ownerId);
+            trainCompositionMessage = trainCompositionMessageRepository.save(trainCompositionMessage);
+            if (trainCompositionMessage != null) {
+                TrainCompositionMessageDto dto = TrainCompositionMessageDtoMapper.map(trainCompositionMessage);
+
+                return ResponseEntity.created(linkTo(
+                        methodOn(TrainCompositionMessageController.class).getById(trainCompositionMessage.getId()))
+                        .toUri())
+                        .body(dto);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 }

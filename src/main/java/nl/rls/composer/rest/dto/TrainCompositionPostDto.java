@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 public class TrainCompositionPostDto {
     private Integer livestockOrPeopleIndicator;
-	private int trainMaxSpeed;
-	private int maxAxleWeight;
-	private String brakeType;
-	private int brakeWeight;
+    private int trainMaxSpeed;
+    private int maxAxleWeight;
+    private String brakeType;
+    private int brakeWeight;
 
 }

@@ -1,11 +1,10 @@
 package nl.rls.composer.repository;
 
-import java.util.Optional;
-
+import nl.rls.composer.domain.code.TrainActivityType;
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.composer.domain.code.TrainActivityType;
+import java.util.Optional;
 
 public interface TrainActivityTypeRepository extends CrudRepository<TrainActivityType, Integer> {
-	Optional<TrainActivityType> findByCode(String code);
+    Optional<TrainActivityType> findByCode(String code);
 }

@@ -9,7 +9,7 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Getter
 @Setter
 public class TractionInTrainDto extends ResourceSupport {
-	private int driverIndication;
-	private int position;
+    private int driverIndication;
+    private int position;
     private TractionDto traction;
 }

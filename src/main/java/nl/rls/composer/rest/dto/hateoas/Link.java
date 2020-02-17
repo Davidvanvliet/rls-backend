@@ -14,13 +14,19 @@ package nl.rls.composer.rest.dto.hateoas;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Wither;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import lombok.experimental.Wither;
+import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.UriTemplate;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,21 +35,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-
-import org.springframework.hateoas.TemplateVariable;
-import org.springframework.hateoas.UriTemplate;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 /**
  * Value object for links.
- * 
+ *
  * @author Oliver Gierke
  * @author Greg Turnquist
  */
@@ -52,204 +46,209 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
-@EqualsAndHashCode(of = { "rel", "href", "title" })
+@EqualsAndHashCode(of = {"rel", "href", "title"})
 public class Link implements Serializable {
 
-	private static final long serialVersionUID = -9037755944661782121L;
-	private static final String URI_PATTERN = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    public static final String ATOM_NAMESPACE = "http://www.w3.org/2005/Atom";
+    public static final String REL_SELF = "self";
+    public static final String REL_FIRST = "first";
+    public static final String REL_PREVIOUS = "prev";
+    public static final String REL_NEXT = "next";
+    public static final String REL_LAST = "last";
+    private static final long serialVersionUID = -9037755944661782121L;
+    private static final String URI_PATTERN = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    private @XmlAttribute
+    @Wither
+    String rel;
+    private @XmlAttribute
+    @Wither
+    String href;
+    private @XmlAttribute
+    @Wither
+    String title;
+    private @XmlTransient
+    @JsonIgnore
+    UriTemplate template;
 
-	public static final String ATOM_NAMESPACE = "http://www.w3.org/2005/Atom";
+    /**
+     * Creates a new link to the given URI with the self rel.
+     *
+     * @param href must not be {@literal null} or empty.
+     * @see #REL_SELF
+     */
+    public Link(String href) {
+        this(href, REL_SELF);
+    }
 
-	public static final String REL_SELF = "self";
-	public static final String REL_FIRST = "first";
-	public static final String REL_PREVIOUS = "prev";
-	public static final String REL_NEXT = "next";
-	public static final String REL_LAST = "last";
+    /**
+     * Creates a new {@link Link} to the given URI with the given rel.
+     *
+     * @param href must not be {@literal null} or empty.
+     * @param rel  must not be {@literal null} or empty.
+     */
+    public Link(String href, String rel) {
+        this(new UriTemplate(href), rel);
+    }
 
-	private @XmlAttribute @Wither String rel;
-	private @XmlAttribute @Wither String href;
-	private @XmlAttribute @Wither String title;
-	private @XmlTransient @JsonIgnore UriTemplate template;
+    /**
+     * Creates a new Link from the given {@link UriTemplate} and rel.
+     *
+     * @param template must not be {@literal null}.
+     * @param rel      must not be {@literal null} or empty.
+     */
+    public Link(UriTemplate template, String rel) {
 
-	/**
-	 * Creates a new link to the given URI with the self rel.
-	 * 
-	 * @see #REL_SELF
-	 * @param href must not be {@literal null} or empty.
-	 */
-	public Link(String href) {
-		this(href, REL_SELF);
-	}
+        Assert.notNull(template, "UriTemplate must not be null!");
+        Assert.hasText(rel, "Rel must not be null or empty!");
 
-	/**
-	 * Creates a new {@link Link} to the given URI with the given rel.
-	 * 
-	 * @param href must not be {@literal null} or empty.
-	 * @param rel must not be {@literal null} or empty.
-	 */
-	public Link(String href, String rel) {
-		this(new UriTemplate(href), rel);
-	}
+        this.template = template;
+        this.href = template.toString();
+        this.rel = rel;
+    }
 
-	/**
-	 * Creates a new Link from the given {@link UriTemplate} and rel.
-	 * 
-	 * @param template must not be {@literal null}.
-	 * @param rel must not be {@literal null} or empty.
-	 */
-	public Link(UriTemplate template, String rel) {
+    /**
+     * Factory method to easily create {@link Link} instances from RFC-5988 compatible {@link String} representations of a
+     * link. Will return {@literal null} if an empty or {@literal null} {@link String} is given.
+     *
+     * @param element an RFC-5899 compatible representation of a link.
+     * @return
+     * @throws IllegalArgumentException if a non-empty {@link String} was given that does not adhere to RFC-5899.
+     * @throws IllegalArgumentException if no {@code rel} attribute could be found.
+     */
+    public static Link valueOf(String element) {
 
-		Assert.notNull(template, "UriTemplate must not be null!");
-		Assert.hasText(rel, "Rel must not be null or empty!");
+        if (!StringUtils.hasText(element)) {
+            return null;
+        }
 
-		this.template = template;
-		this.href = template.toString();
-		this.rel = rel;
-	}
+        Pattern uriAndAttributes = Pattern.compile("<(.*)>;(.*)");
+        Matcher matcher = uriAndAttributes.matcher(element);
 
-	/**
-	 * Returns a {@link Link} pointing to the same URI but with the {@code self} relation.
-	 * 
-	 * @return
-	 */
-	public Link withSelfRel() {
-		return withRel(Link.REL_SELF);
-	}
+        if (matcher.find()) {
 
-	/**
-	 * Returns the variable names contained in the template.
-	 * 
-	 * @return
-	 */
-	@JsonIgnore
-	public List<String> getVariableNames() {
-		return getUriTemplate().getVariableNames();
-	}
+            Map<String, String> attributes = getAttributeMap(matcher.group(2));
 
-	/**
-	 * Returns all {@link TemplateVariables} contained in the {@link Link}.
-	 * 
-	 * @return
-	 */
-	@JsonIgnore
-	public List<TemplateVariable> getVariables() {
-		return getUriTemplate().getVariables();
-	}
+            if (!attributes.containsKey("rel")) {
+                throw new IllegalArgumentException("Link does not provide a rel attribute!");
+            }
 
-	/**
-	 * Returns whether the link is templated.
-	 * 
-	 * @return
-	 */
-	public boolean isTemplated() {
-		return !getUriTemplate().getVariables().isEmpty();
-	}
+            Link link = new Link(matcher.group(1), attributes.get("rel"));
 
-	/**
-	 * Turns the current template into a {@link Link} by expanding it using the given parameters.
-	 * 
-	 * @param arguments
-	 * @return
-	 */
-	public Link expand(Object... arguments) {
-		return new Link(getUriTemplate().expand(arguments).toString(), getRel());
-	}
+            if (attributes.containsKey("title")) {
+                link = link.withTitle(attributes.get("title"));
+            }
 
-	/**
-	 * Turns the current template into a {@link Link} by expanding it using the given parameters.
-	 * 
-	 * @param arguments must not be {@literal null}.
-	 * @return
-	 */
-	public Link expand(Map<String, ? extends Object> arguments) {
-		return new Link(getUriTemplate().expand(arguments).toString(), getRel());
-	}
+            return link;
 
-	private UriTemplate getUriTemplate() {
+        } else {
+            throw new IllegalArgumentException(String.format("Given link header %s is not RFC5988 compliant!", element));
+        }
+    }
 
-		if (template == null) {
-			this.template = new UriTemplate(href);
-		}
+    /**
+     * Parses the links attributes from the given source {@link String}.
+     *
+     * @param source
+     * @return
+     */
+    private static Map<String, String> getAttributeMap(String source) {
 
-		return template;
-	}
+        if (!StringUtils.hasText(source)) {
+            return Collections.emptyMap();
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
+        Map<String, String> attributes = new HashMap<String, String>();
+        Pattern keyAndValue = Pattern
+                .compile("(\\w+)=\"(\\p{Lower}[\\p{Lower}\\p{Digit}\\.\\-\\s]*|" + URI_PATTERN + ")\"");
+        Matcher matcher = keyAndValue.matcher(source);
 
-		String linkString = String.format("<%s>;rel=\"%s\"", href, rel);
+        while (matcher.find()) {
+            attributes.put(matcher.group(1), matcher.group(2));
+        }
 
-		if (title != null) {
-			linkString += ";title=\"" + title + "\"";
-		}
+        return attributes;
+    }
 
-		return linkString;
-	}
+    /**
+     * Returns a {@link Link} pointing to the same URI but with the {@code self} relation.
+     *
+     * @return
+     */
+    public Link withSelfRel() {
+        return withRel(Link.REL_SELF);
+    }
 
-	/**
-	 * Factory method to easily create {@link Link} instances from RFC-5988 compatible {@link String} representations of a
-	 * link. Will return {@literal null} if an empty or {@literal null} {@link String} is given.
-	 * 
-	 * @param element an RFC-5899 compatible representation of a link.
-	 * @throws IllegalArgumentException if a non-empty {@link String} was given that does not adhere to RFC-5899.
-	 * @throws IllegalArgumentException if no {@code rel} attribute could be found.
-	 * @return
-	 */
-	public static Link valueOf(String element) {
+    /**
+     * Returns the variable names contained in the template.
+     *
+     * @return
+     */
+    @JsonIgnore
+    public List<String> getVariableNames() {
+        return getUriTemplate().getVariableNames();
+    }
 
-		if (!StringUtils.hasText(element)) {
-			return null;
-		}
+    /**
+     * Returns all {@link TemplateVariables} contained in the {@link Link}.
+     *
+     * @return
+     */
+    @JsonIgnore
+    public List<TemplateVariable> getVariables() {
+        return getUriTemplate().getVariables();
+    }
 
-		Pattern uriAndAttributes = Pattern.compile("<(.*)>;(.*)");
-		Matcher matcher = uriAndAttributes.matcher(element);
+    /**
+     * Returns whether the link is templated.
+     *
+     * @return
+     */
+    public boolean isTemplated() {
+        return !getUriTemplate().getVariables().isEmpty();
+    }
 
-		if (matcher.find()) {
+    /**
+     * Turns the current template into a {@link Link} by expanding it using the given parameters.
+     *
+     * @param arguments
+     * @return
+     */
+    public Link expand(Object... arguments) {
+        return new Link(getUriTemplate().expand(arguments).toString(), getRel());
+    }
 
-			Map<String, String> attributes = getAttributeMap(matcher.group(2));
+    /**
+     * Turns the current template into a {@link Link} by expanding it using the given parameters.
+     *
+     * @param arguments must not be {@literal null}.
+     * @return
+     */
+    public Link expand(Map<String, ? extends Object> arguments) {
+        return new Link(getUriTemplate().expand(arguments).toString(), getRel());
+    }
 
-			if (!attributes.containsKey("rel")) {
-				throw new IllegalArgumentException("Link does not provide a rel attribute!");
-			}
+    private UriTemplate getUriTemplate() {
 
-			Link link = new Link(matcher.group(1), attributes.get("rel"));
+        if (template == null) {
+            this.template = new UriTemplate(href);
+        }
 
-			if (attributes.containsKey("title")) {
-				link = link.withTitle(attributes.get("title"));
-			}
+        return template;
+    }
 
-			return link;
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
 
-		} else {
-			throw new IllegalArgumentException(String.format("Given link header %s is not RFC5988 compliant!", element));
-		}
-	}
+        String linkString = String.format("<%s>;rel=\"%s\"", href, rel);
 
-	/**
-	 * Parses the links attributes from the given source {@link String}.
-	 * 
-	 * @param source
-	 * @return
-	 */
-	private static Map<String, String> getAttributeMap(String source) {
+        if (title != null) {
+            linkString += ";title=\"" + title + "\"";
+        }
 
-		if (!StringUtils.hasText(source)) {
-			return Collections.emptyMap();
-		}
-
-		Map<String, String> attributes = new HashMap<String, String>();
-		Pattern keyAndValue = Pattern
-				.compile("(\\w+)=\"(\\p{Lower}[\\p{Lower}\\p{Digit}\\.\\-\\s]*|" + URI_PATTERN + ")\"");
-		Matcher matcher = keyAndValue.matcher(source);
-
-		while (matcher.find()) {
-			attributes.put(matcher.group(1), matcher.group(2));
-		}
-
-		return attributes;
-	}
+        return linkString;
+    }
 }

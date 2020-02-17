@@ -8,9 +8,10 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 
 @ToString
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class UicRequestDto extends ResourceSupport {
-	private String signature;
-	private String senderAlias;
-	private String encoding;
+    private String signature;
+    private String senderAlias;
+    private String encoding;
 }

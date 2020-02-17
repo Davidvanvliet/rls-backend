@@ -1,20 +1,17 @@
 package nl.rls.composer.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
+
 @Entity
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class Location {
-	@Id 	
+    @Id
     private int locationPrimaryCode;
     private String countryCodeIso;
     private String code;
@@ -24,8 +21,8 @@ public class Location {
     private String primaryLocationName;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "responsible_code",
-        referencedColumnName = "code"
+            name = "responsible_code",
+            referencedColumnName = "code"
     )
     private Company responsible;
     private String latitude;

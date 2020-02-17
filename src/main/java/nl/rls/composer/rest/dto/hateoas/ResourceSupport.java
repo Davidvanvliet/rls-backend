@@ -14,188 +14,187 @@ package nl.rls.composer.rest.dto.hateoas;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.util.Assert;
+
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-
-import org.springframework.util.Assert;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Base class for DTOs to collect links.
- * 
+ *
  * @author Oliver Gierke
  */
 public class ResourceSupport implements Identifiable<Link> {
 
-	private final List<Link> links;
+    private final List<Link> links;
 
-	private Integer id;
-	
-	public ResourceSupport() {
-		this.links = new ArrayList<Link>();
-	}
+    private Integer id;
 
-	/**
-	 * Returns the {@link Link} with a rel of {@link Link#REL_SELF}.
-	 */
-	@JsonIgnore
-	public Link getResourceLocation() {
-		return getLink(Link.REL_SELF);
-	}
+    public ResourceSupport() {
+        this.links = new ArrayList<Link>();
+    }
 
-	/**
-	 * Adds the given link to the resource.
-	 * 
-	 * @param link
-	 */
-	public void add(org.springframework.hateoas.Link link) {
-		Assert.notNull(link, "Link must not be null!");
-		Link newLink = new Link(link.getRel(), link.getHref(), link.getTitle(), link.getTemplate());
-		this.links.add(newLink);
-	}
+    /**
+     * Returns the {@link Link} with a rel of {@link Link#REL_SELF}.
+     */
+    @JsonIgnore
+    public Link getResourceLocation() {
+        return getLink(Link.REL_SELF);
+    }
 
-	/**
-	 * Adds all given {@link Link}s to the resource.
-	 * 
-	 * @param links
-	 */
-	public void add(Iterable<Link> links) {
-		Assert.notNull(links, "Given links must not be null!");
-		for (Link candidate : links) {
-			add(candidate);
-		}
-	}
+    /**
+     * Adds the given link to the resource.
+     *
+     * @param link
+     */
+    public void add(org.springframework.hateoas.Link link) {
+        Assert.notNull(link, "Link must not be null!");
+        Link newLink = new Link(link.getRel(), link.getHref(), link.getTitle(), link.getTemplate());
+        this.links.add(newLink);
+    }
 
-	/**
-	 * Adds all given {@link Link}s to the resource.
-	 *
-	 * @param links must not be {@literal null}.
-	 */
-	public void add(Link... links) {
-		Assert.notNull(links, "Given links must not be null!");
-		add(Arrays.asList(links));
-	}
+    /**
+     * Adds all given {@link Link}s to the resource.
+     *
+     * @param links
+     */
+    public void add(Iterable<Link> links) {
+        Assert.notNull(links, "Given links must not be null!");
+        for (Link candidate : links) {
+            add(candidate);
+        }
+    }
 
-	/**
-	 * Returns whether the resource contains {@link Link}s at all.
-	 * 
-	 * @return
-	 */
-	public boolean hasLinks() {
-		return !this.links.isEmpty();
-	}
+    /**
+     * Adds all given {@link Link}s to the resource.
+     *
+     * @param links must not be {@literal null}.
+     */
+    public void add(Link... links) {
+        Assert.notNull(links, "Given links must not be null!");
+        add(Arrays.asList(links));
+    }
 
-	/**
-	 * Returns whether the resource contains a {@link Link} with the given rel.
-	 * 
-	 * @param rel
-	 * @return
-	 */
-	public boolean hasLink(String rel) {
-		return getLink(rel) != null;
-	}
+    /**
+     * Returns whether the resource contains {@link Link}s at all.
+     *
+     * @return
+     */
+    public boolean hasLinks() {
+        return !this.links.isEmpty();
+    }
 
-	/**
-	 * Returns all {@link Link}s contained in this resource.
-	 * 
-	 * @return
-	 */
-	@XmlElement(name = "link", namespace = Link.ATOM_NAMESPACE)
-	@JsonProperty("links")
-	public List<Link> getLinks() {
-		return links;
-	}
+    /**
+     * Returns whether the resource contains a {@link Link} with the given rel.
+     *
+     * @param rel
+     * @return
+     */
+    public boolean hasLink(String rel) {
+        return getLink(rel) != null;
+    }
 
-	/**
-	 * Removes all {@link Link}s added to the resource so far.
-	 */
-	public void removeLinks() {
-		this.links.clear();
-	}
+    /**
+     * Returns all {@link Link}s contained in this resource.
+     *
+     * @return
+     */
+    @XmlElement(name = "link", namespace = Link.ATOM_NAMESPACE)
+    @JsonProperty("links")
+    public List<Link> getLinks() {
+        return links;
+    }
 
-	/**
-	 * Returns the link with the given rel.
-	 * 
-	 * @param rel
-	 * @return the link with the given rel or {@literal null} if none found.
-	 */
-	public Link getLink(String rel) {
+    /**
+     * Removes all {@link Link}s added to the resource so far.
+     */
+    public void removeLinks() {
+        this.links.clear();
+    }
 
-		for (Link link : links) {
-			if (link.getRel().equals(rel)) {
-				return link;
-			}
-		}
+    /**
+     * Returns the link with the given rel.
+     *
+     * @param rel
+     * @return the link with the given rel or {@literal null} if none found.
+     */
+    public Link getLink(String rel) {
 
-		return null;
-	}
+        for (Link link : links) {
+            if (link.getRel().equals(rel)) {
+                return link;
+            }
+        }
 
-	/**
-	 * Returns all {@link Link}s with the given relation type.
-	 *
-	 * @return the links in a {@link List}
-	 */
-	public List<Link> getLinks(String rel) {
+        return null;
+    }
 
-		List<Link> relatedLinks = new ArrayList<Link>();
+    /**
+     * Returns all {@link Link}s with the given relation type.
+     *
+     * @return the links in a {@link List}
+     */
+    public List<Link> getLinks(String rel) {
 
-		for (Link link : links) {
-			if (link.getRel().equals(rel)) {
-				relatedLinks.add(link);
-			}
-		}
+        List<Link> relatedLinks = new ArrayList<Link>();
 
-		return relatedLinks;
-	}
+        for (Link link : links) {
+            if (link.getRel().equals(rel)) {
+                relatedLinks.add(link);
+            }
+        }
 
-	/* 
-	 * (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return String.format("links: %s", links.toString());
-	}
+        return relatedLinks;
+    }
 
-	/* 
-	 * (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return String.format("links: %s", links.toString());
+    }
 
-		if (this == obj) {
-			return true;
-		}
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
 
-		if (obj == null || !obj.getClass().equals(this.getClass())) {
-			return false;
-		}
+        if (this == obj) {
+            return true;
+        }
 
-		ResourceSupport that = (ResourceSupport) obj;
+        if (obj == null || !obj.getClass().equals(this.getClass())) {
+            return false;
+        }
 
-		return this.links.equals(that.links);
-	}
+        ResourceSupport that = (ResourceSupport) obj;
 
-	/* 
-	 * (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return this.links.hashCode();
-	}
+        return this.links.equals(that.links);
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return this.links.hashCode();
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

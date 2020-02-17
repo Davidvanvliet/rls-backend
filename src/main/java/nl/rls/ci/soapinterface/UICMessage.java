@@ -1,4 +1,3 @@
-
 package nl.rls.ci.soapinterface;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -8,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for UICMessage complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="UICMessage">
  *   &lt;complexContent>
@@ -25,15 +24,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UICMessage", propOrder = {
-    "message",
-    "signature",
-    "senderAlias",
-    "encoding"
+        "message",
+        "signature",
+        "senderAlias",
+        "encoding"
 })
 public class UICMessage {
 
@@ -44,11 +41,9 @@ public class UICMessage {
 
     /**
      * Gets the value of the message property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
+     *
+     * @return possible object is
+     * {@link Object }
      */
     public String getMessage() {
         return message;
@@ -56,11 +51,9 @@ public class UICMessage {
 
     /**
      * Sets the value of the message property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Object }
      */
     public void setMessage(String value) {
         this.message = value;
@@ -68,11 +61,9 @@ public class UICMessage {
 
     /**
      * Gets the value of the signature property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
+     *
+     * @return possible object is
+     * {@link Object }
      */
     public String getSignature() {
         return signature;
@@ -80,11 +71,9 @@ public class UICMessage {
 
     /**
      * Sets the value of the signature property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Object }
      */
     public void setSignature(String value) {
         this.signature = value;
@@ -92,11 +81,9 @@ public class UICMessage {
 
     /**
      * Gets the value of the senderAlias property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
+     *
+     * @return possible object is
+     * {@link Object }
      */
     public String getSenderAlias() {
         return senderAlias;
@@ -104,11 +91,9 @@ public class UICMessage {
 
     /**
      * Sets the value of the senderAlias property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Object }
      */
     public void setSenderAlias(String value) {
         this.senderAlias = value;
@@ -116,11 +101,9 @@ public class UICMessage {
 
     /**
      * Gets the value of the encoding property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
+     *
+     * @return possible object is
+     * {@link Object }
      */
     public String getEncoding() {
         return encoding;
@@ -128,11 +111,9 @@ public class UICMessage {
 
     /**
      * Sets the value of the encoding property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Object }
      */
     public void setEncoding(String value) {
         this.encoding = value;
