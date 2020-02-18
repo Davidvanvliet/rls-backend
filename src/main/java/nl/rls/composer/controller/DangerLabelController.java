@@ -6,7 +6,6 @@ import nl.rls.composer.domain.code.DangerLabel;
 import nl.rls.composer.repository.DangerLabelRepository;
 import nl.rls.composer.rest.dto.DangerLabelDto;
 import nl.rls.composer.rest.dto.mapper.DangerLabelDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +19,15 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "dangerlabels/")
-@Api(description = "All Danger Labels of dangerous good according to the RID chapter 3.2, table A, column 5, excepting the shunting labels Model 13 and 15 (CODE: OTIF RID-Specification).")
+@Api(value = "All Danger Labels of dangerous good according to the RID chapter 3.2, table A, column 5, excepting the shunting labels Model 13 and 15 (CODE: OTIF RID-Specification).")
 public class DangerLabelController {
-    @Autowired
-    private DangerLabelRepository dangerLabelRepository;
+    private final DangerLabelRepository dangerLabelRepository;
 
-    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public DangerLabelController(DangerLabelRepository dangerLabelRepository) {
+        this.dangerLabelRepository = dangerLabelRepository;
+    }
+
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DangerLabelDto> getById(@PathVariable Integer id) {
         Optional<DangerLabel> optional = dangerLabelRepository.findById(id);
         if (optional.isPresent()) {

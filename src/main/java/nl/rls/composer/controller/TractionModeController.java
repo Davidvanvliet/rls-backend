@@ -15,12 +15,15 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "tractionmodes")
+@RequestMapping(BaseURL.BASE_PATH + "tractionmodes/")
 public class TractionModeController {
-    @Autowired
-    private TractionModeRepository tractionModeRepository;
+    private final TractionModeRepository tractionModeRepository;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public TractionModeController(TractionModeRepository tractionModeRepository) {
+        this.tractionModeRepository = tractionModeRepository;
+    }
+
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TractionModeDto> getTractionMode(@PathVariable Integer id) {
         Optional<TractionMode> optional = tractionModeRepository.findById(id);
         if (optional.isPresent()) {
@@ -32,7 +35,7 @@ public class TractionModeController {
         }
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TractionModeDto> getTractionModeByCode(@RequestParam("code") String code) {
         Optional<TractionMode> optional = tractionModeRepository.findByCode(code);
         if (optional.isPresent()) {
@@ -44,7 +47,7 @@ public class TractionModeController {
         }
     }
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TractionModeDto>> getAll() {
         Iterable<TractionMode> tractionModeList = tractionModeRepository.findAll();
         List<TractionModeDto> tractionModeDtoList = new ArrayList<>();

@@ -15,7 +15,6 @@ import nl.rls.composer.rest.dto.TrainCompositionMessageCreateDto;
 import nl.rls.composer.rest.dto.TrainCompositionMessageDto;
 import nl.rls.composer.rest.dto.mapper.TrainCompositionMessageDtoMapper;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,24 +29,28 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "traincompositionmessages")
+@RequestMapping(BaseURL.BASE_PATH + "traincompositionmessages/")
 public class TrainCompositionMessageController {
-    @Autowired
-    private TrainCompositionMessageRepository trainCompositionMessageRepository;
-    @Autowired
-    private CompanyRepository companyRepository;
-    @Autowired
-    private TrainRepository trainRepository;
+    private final TrainCompositionMessageRepository trainCompositionMessageRepository;
+    private final CompanyRepository companyRepository;
+    private final TrainRepository trainRepository;
 
-    @Autowired
-    private SecurityContext securityContext;
+    private final SecurityContext securityContext;
 
-    @GetMapping("/hello")
+    public TrainCompositionMessageController(TrainCompositionMessageRepository trainCompositionMessageRepository, CompanyRepository companyRepository, TrainRepository trainRepository, SecurityContext securityContext) {
+        this.trainCompositionMessageRepository = trainCompositionMessageRepository;
+        this.companyRepository = companyRepository;
+        this.trainRepository = trainRepository;
+        this.securityContext = securityContext;
+    }
+
+    //TODO - remove this endpoint
+    @GetMapping("hello")
     public ResponseEntity<String> getHello() {
         return ResponseEntity.ok("Hello world");
     }
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TrainCompositionMessageDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
         System.out.println("TrainCompositionMessageController " + ownerId);
@@ -67,7 +70,7 @@ public class TrainCompositionMessageController {
     }
 
     //
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionMessageDto> getById(@PathVariable int id) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);

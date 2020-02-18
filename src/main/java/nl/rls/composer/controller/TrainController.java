@@ -25,23 +25,26 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "trains")
+@RequestMapping(BaseURL.BASE_PATH + "trains/")
 public class TrainController {
-    @Autowired
-    private TrainRepository trainRepository;
-    @Autowired
-    private CompanyRepository companyRepository;
-    @Autowired
-    private ResponsibilityRepository responsibilityRepository;
-    @Autowired
-    private LocationRepository locationRepository;
-    @Autowired
-    private JourneySectionRepository journeySectionRepository;
-    @Autowired
-    private SecurityContext securityContext;
+    private final TrainRepository trainRepository;
+    private final CompanyRepository companyRepository;
+    private final ResponsibilityRepository responsibilityRepository;
+    private final LocationRepository locationRepository;
+    private final JourneySectionRepository journeySectionRepository;
+    private final SecurityContext securityContext;
+
+    public TrainController(TrainRepository trainRepository, CompanyRepository companyRepository, ResponsibilityRepository responsibilityRepository, LocationRepository locationRepository, JourneySectionRepository journeySectionRepository, SecurityContext securityContext) {
+        this.trainRepository = trainRepository;
+        this.companyRepository = companyRepository;
+        this.responsibilityRepository = responsibilityRepository;
+        this.locationRepository = locationRepository;
+        this.journeySectionRepository = journeySectionRepository;
+        this.securityContext = securityContext;
+    }
 
     @ApiOperation(value = "Gets a complete Train object")
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TrainDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
         System.out.println("TrainController " + ownerId);
@@ -58,7 +61,7 @@ public class TrainController {
     }
 
     //
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainDto> getById(@PathVariable int id) {
         int ownerId = securityContext.getOwnerId();
         Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
@@ -189,7 +192,7 @@ public class TrainController {
         }
     }
 
-    @DeleteMapping(value = "{id}/journeysections/{sectionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "{id}/journeysections/{sectionId}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainDto> removeJourneysection(@PathVariable int id, @PathVariable int sectionId) {
         int ownerId = securityContext.getOwnerId();
         Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);

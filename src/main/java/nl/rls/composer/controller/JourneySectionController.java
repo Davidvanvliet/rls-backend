@@ -15,7 +15,6 @@ import nl.rls.composer.rest.dto.*;
 import nl.rls.composer.rest.dto.mapper.JourneySectionDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainDtoMapper;
 import nl.rls.composer.service.TrainCompositionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,19 +24,22 @@ import java.util.Optional;
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + JourneySectionController.PATH)
 public class JourneySectionController {
-    public static final String PATH = "journeysections";
-    @Autowired
-    private LocationRepository locationRepository;
-    @Autowired
-    private JourneySectionRepository journeySectionRepository;
-    @Autowired
-    private SecurityContext securityContext;
-    @Autowired
-    private TrainRepository trainRepository;
-    @Autowired
-    private TrainCompositionService trainCompositionService;
+    public static final String PATH = "journeysections/";
+    private final LocationRepository locationRepository;
+    private final JourneySectionRepository journeySectionRepository;
+    private final SecurityContext securityContext;
+    private final TrainRepository trainRepository;
+    private final TrainCompositionService trainCompositionService;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public JourneySectionController(LocationRepository locationRepository, JourneySectionRepository journeySectionRepository, SecurityContext securityContext, TrainRepository trainRepository, TrainCompositionService trainCompositionService) {
+        this.locationRepository = locationRepository;
+        this.journeySectionRepository = journeySectionRepository;
+        this.securityContext = securityContext;
+        this.trainRepository = trainRepository;
+        this.trainCompositionService = trainCompositionService;
+    }
+
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> getById(@PathVariable int id) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
@@ -49,7 +51,7 @@ public class JourneySectionController {
         }
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "{id}/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> update(@PathVariable int id, @RequestBody JourneySectionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
@@ -74,7 +76,7 @@ public class JourneySectionController {
         }
     }
 
-    @PutMapping(value = "/{id}/traincomposition", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "{id}/traincomposition/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> putTrainCompositionToJourneySection(@PathVariable Integer id,
                                                                                  @RequestBody TrainCompositionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
@@ -102,7 +104,7 @@ public class JourneySectionController {
     }
 
     @ApiOperation(value = "Copies or clones a complete TrainComposition including tractions and wagons.")
-    @PutMapping(value = "/{id}/clone/")
+    @PutMapping(value = "{id}/clone/")
     public ResponseEntity<TrainDto> copyComposition(@PathVariable Integer id,
                                                     @RequestBody TrainCompositionCloneDto dto) {
         int ownerId = securityContext.getOwnerId();

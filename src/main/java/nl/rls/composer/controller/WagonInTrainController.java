@@ -30,17 +30,20 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + TrainCompositionController.PATH)
 public class WagonInTrainController {
-    public static final String PATH = "wagonintrains";
-    @Autowired
-    private SecurityContext securityContext;
-    @Autowired
-    private WagonRepository wagonRepository;
-    @Autowired
-    private TrainCompositionService trainCompositionService;
-    @Autowired
-    private TrainCompositionRepository trainCompositionRepository;
+    public static final String PATH = "wagonintrains/";
+    private final SecurityContext securityContext;
+    private final WagonRepository wagonRepository;
+    private final TrainCompositionService trainCompositionService;
+    private final TrainCompositionRepository trainCompositionRepository;
 
-    @GetMapping(value = "/{trainCompositionId}/wagons", produces = MediaType.APPLICATION_JSON_VALUE)
+    public WagonInTrainController(SecurityContext securityContext, WagonRepository wagonRepository, TrainCompositionService trainCompositionService, TrainCompositionRepository trainCompositionRepository) {
+        this.securityContext = securityContext;
+        this.wagonRepository = wagonRepository;
+        this.trainCompositionService = trainCompositionService;
+        this.trainCompositionRepository = trainCompositionRepository;
+    }
+
+    @GetMapping(value = "{trainCompositionId}/wagons/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<WagonInTrainDto>> getAllWagonInTrain(@PathVariable Integer trainCompositionId) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository
@@ -57,7 +60,7 @@ public class WagonInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping(value = "/{trainCompositionId}/wagons/{wagonId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{trainCompositionId}/wagons/{wagonId}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WagonInTrainDto> getWagonInTrain(@PathVariable Integer trainCompositionId, @PathVariable Integer wagonId) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository
@@ -72,7 +75,7 @@ public class WagonInTrainController {
     }
 
 
-    @PostMapping(value = "/{trainCompositionId}/wagons", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "{trainCompositionId}/wagons/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> addWagon(@PathVariable int trainCompositionId,
                                                         @RequestBody WagonInTrainAddDto dto) {
         int ownerId = securityContext.getOwnerId();
@@ -105,7 +108,7 @@ public class WagonInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping(value = "/{trainCompositionId}/wagons/{wagonInTrainId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "{trainCompositionId}/wagons/{wagonInTrainId}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> moveWagon(@PathVariable int trainCompositionId,
                                                          @PathVariable int wagonInTrainId, @RequestParam("position") int position) {
         int ownerId = securityContext.getOwnerId();
@@ -121,7 +124,7 @@ public class WagonInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping(value = "/{id}/wagons/{wagonInTrainId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "{id}/wagons/{wagonInTrainId}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> removeWagon(@PathVariable int id,
                                                            @PathVariable int wagonInTrainId) {
         int ownerId = securityContext.getOwnerId();

@@ -15,7 +15,6 @@ import nl.rls.composer.rest.dto.TrainCompositionDto;
 import nl.rls.composer.rest.dto.mapper.TractionInTrainDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainCompositionDtoMapper;
 import nl.rls.composer.service.TrainCompositionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,18 +29,21 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + TrainCompositionController.PATH)
 public class TractionInTrainController {
-    @Autowired
-    private SecurityContext securityContext;
-    @Autowired
-    private TractionRepository tractionRepository;
-    @Autowired
-    private TractionInTrainRepository tractionInTrainRepository;
-    @Autowired
-    private TrainCompositionService trainCompositionService;
-    @Autowired
-    private TrainCompositionRepository trainCompositionRepository;
+    private final SecurityContext securityContext;
+    private final TractionRepository tractionRepository;
+    private final TractionInTrainRepository tractionInTrainRepository;
+    private final TrainCompositionService trainCompositionService;
+    private final TrainCompositionRepository trainCompositionRepository;
 
-    @GetMapping(value = "/{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public TractionInTrainController(SecurityContext securityContext, TractionRepository tractionRepository, TractionInTrainRepository tractionInTrainRepository, TrainCompositionService trainCompositionService, TrainCompositionRepository trainCompositionRepository) {
+        this.securityContext = securityContext;
+        this.tractionRepository = tractionRepository;
+        this.tractionInTrainRepository = tractionInTrainRepository;
+        this.trainCompositionService = trainCompositionService;
+        this.trainCompositionRepository = trainCompositionRepository;
+    }
+
+    @GetMapping(value = "{id}/tractions/{tractionId}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TractionInTrainDto> getTractionInTrain(@PathVariable Integer id, @PathVariable Integer tractionId) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository
@@ -55,7 +57,7 @@ public class TractionInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping(value = "/{id}/tractions/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{id}/tractions/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TractionInTrainDto>> getAllTractionInTrain(@PathVariable Integer id) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository
@@ -75,7 +77,7 @@ public class TractionInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping(value = "/{id}/tractions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "{id}/tractions/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> addTraction(@PathVariable int id,
                                                            @RequestBody TractionInTrainPostDto dto) {
         int ownerId = securityContext.getOwnerId();
@@ -103,15 +105,15 @@ public class TractionInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping(value = "/{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "{id}/tractions/{tractionId}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> moveTraction(@PathVariable int id,
-                                                            @PathVariable int tractionInTrainId, @RequestParam("position") int position) {
+                                                            @PathVariable int tractionId, @RequestParam("position") int position) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository
                 .findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {
             TrainComposition trainComposition = optional.get();
-            trainCompositionService.moveTractionById(trainComposition, tractionInTrainId, position);
+            trainCompositionService.moveTractionById(trainComposition, tractionId, position);
             TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
                     .map(trainComposition);
             return ResponseEntity.ok(trainCompositionDto);
@@ -119,7 +121,7 @@ public class TractionInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping(value = "/{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "{id}/tractions/{tractionId}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> removeTraction(@PathVariable int id,
                                                               @PathVariable int tractionId) {
         int ownerId = securityContext.getOwnerId();

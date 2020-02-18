@@ -15,12 +15,15 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "trainactivitytypes")
+@RequestMapping(BaseURL.BASE_PATH + "trainactivitytypes/")
 public class TrainActivityTypeController {
-    @Autowired
-    private TrainActivityTypeRepository trainActivityTypeRepository;
+    private final TrainActivityTypeRepository trainActivityTypeRepository;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public TrainActivityTypeController(TrainActivityTypeRepository trainActivityTypeRepository) {
+        this.trainActivityTypeRepository = trainActivityTypeRepository;
+    }
+
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainActivityTypeDto> getById(@PathVariable Integer id) {
         Optional<TrainActivityType> optional = trainActivityTypeRepository.findById(id);
         if (optional.isPresent()) {
@@ -32,7 +35,7 @@ public class TrainActivityTypeController {
         }
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainActivityTypeDto> getByCode(@RequestParam("code") String code) {
         Optional<TrainActivityType> optional = trainActivityTypeRepository.findByCode(code);
         if (optional.isPresent()) {
@@ -44,7 +47,7 @@ public class TrainActivityTypeController {
         }
     }
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TrainActivityTypeDto>> getAll() {
         Iterable<TrainActivityType> trainActivityTypeList = trainActivityTypeRepository.findAll();
         List<TrainActivityTypeDto> trainActivityTypeDtoList = new ArrayList<>();

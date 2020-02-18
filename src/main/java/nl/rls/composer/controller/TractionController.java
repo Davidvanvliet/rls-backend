@@ -25,18 +25,21 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "tractions")
+@RequestMapping(BaseURL.BASE_PATH + "tractions/")
 public class TractionController {
-    @Autowired
-    private TractionRepository tractionRepository;
-    @Autowired
-    private TractionTypeRepository tractionTypeRepository;
-    @Autowired
-    private TractionModeRepository tractionModeRepository;
-    @Autowired
-    private SecurityContext securityContext;
+    private final TractionRepository tractionRepository;
+    private final TractionTypeRepository tractionTypeRepository;
+    private final TractionModeRepository tractionModeRepository;
+    private final SecurityContext securityContext;
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public TractionController(TractionRepository tractionRepository, TractionTypeRepository tractionTypeRepository, TractionModeRepository tractionModeRepository, SecurityContext securityContext) {
+        this.tractionRepository = tractionRepository;
+        this.tractionTypeRepository = tractionTypeRepository;
+        this.tractionModeRepository = tractionModeRepository;
+        this.securityContext = securityContext;
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TractionDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
         Iterable<Traction> tractionList = tractionRepository.findByOwnerId(ownerId);
@@ -50,7 +53,7 @@ public class TractionController {
         return ResponseEntity.ok(dtoList);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<TractionDto> getById(@PathVariable Integer id) {
         int ownerId = securityContext.getOwnerId();
         TractionDto dto = TractionDtoMapper
@@ -58,7 +61,7 @@ public class TractionController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TractionDto> create(@RequestBody TractionCreateDto dto) {
         int ownerId = securityContext.getOwnerId();
         Traction entity = TractionDtoMapper.map(dto);

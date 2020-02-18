@@ -8,7 +8,6 @@ import nl.rls.composer.domain.Location;
 import nl.rls.composer.repository.LocationRepository;
 import nl.rls.composer.rest.dto.LocationDto;
 import nl.rls.composer.rest.dto.mapper.LocationDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +18,16 @@ import java.util.Optional;
 
 @Api(value = "Access to Locations. ")
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "locations")
+@RequestMapping(BaseURL.BASE_PATH + "locations/")
 public class LocationController {
-    @Autowired
-    private LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
+
+    public LocationController(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
+    }
 
     @ApiOperation(value = "Get a location based on an id, which is the TSI.locationPrimaryCode")
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LocationDto> getById(@PathVariable Integer id) {
         Optional<Location> optional = locationRepository.findByLocationPrimaryCode(id);
         if (optional.isPresent()) {

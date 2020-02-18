@@ -15,12 +15,15 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "restrictioncodes")
+@RequestMapping(BaseURL.BASE_PATH + "restrictioncodes/")
 public class RestrictionCodeController {
-    @Autowired
-    private RestrictionCodeRepository restrictionCodeRepository;
+    private final RestrictionCodeRepository restrictionCodeRepository;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestrictionCodeController(RestrictionCodeRepository restrictionCodeRepository) {
+        this.restrictionCodeRepository = restrictionCodeRepository;
+    }
+
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RestrictionCodeDto> getRestrictionCode(@PathVariable Integer id) {
         Optional<RestrictionCode> optional = restrictionCodeRepository.findById(id);
         if (optional.isPresent()) {
@@ -32,7 +35,7 @@ public class RestrictionCodeController {
         }
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RestrictionCodeDto> getRestrictionCodeByCode(@RequestParam("code") String code) {
         Optional<RestrictionCode> optional = restrictionCodeRepository.findByCode(code);
         if (optional.isPresent()) {
@@ -45,7 +48,7 @@ public class RestrictionCodeController {
     }
 
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RestrictionCodeDto>> getAll() {
         Iterable<RestrictionCode> restrictionCodeList = restrictionCodeRepository.findAll();
         List<RestrictionCodeDto> restrictionCodeDtoList = new ArrayList<>();

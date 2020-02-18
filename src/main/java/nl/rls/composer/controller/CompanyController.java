@@ -1,11 +1,11 @@
 package nl.rls.composer.controller;
 
 import io.swagger.annotations.Api;
+import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.Company;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.rest.dto.CompanyDto;
 import nl.rls.composer.rest.dto.mapper.CompanyDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Api(value = "Access to all companies, RU's and IM's")
 @RestController
-@RequestMapping("/api/v1/companies/")
+@RequestMapping(BaseURL.BASE_PATH + "companies/")
+@Api(value = "Access to all companies, RU's and IM's")
 public class CompanyController {
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
-    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CompanyController(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+    }
+
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CompanyDto> getById(@PathVariable Integer id) {
         Optional<Company> optional = companyRepository.findById(id);
         if (optional.isPresent()) {

@@ -20,15 +20,18 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "wagons")
+@RequestMapping(BaseURL.BASE_PATH + "wagons/")
 public class WagonController {
-    @Autowired
-    private WagonRepository wagonRepository;
+    private final WagonRepository wagonRepository;
 
-    @Autowired
-    private SecurityContext securityContext;
+    private final SecurityContext securityContext;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public WagonController(WagonRepository wagonRepository, SecurityContext securityContext) {
+        this.wagonRepository = wagonRepository;
+        this.securityContext = securityContext;
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<WagonDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
         Iterable<Wagon> wagonList = wagonRepository.findByOwnerId(ownerId);
@@ -42,7 +45,7 @@ public class WagonController {
         return ResponseEntity.ok(wagonDtoList);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WagonDto> getById(@PathVariable Integer id) {
         int ownerId = securityContext.getOwnerId();
         Optional<Wagon> entity = wagonRepository.findByOwnerIdAndId(ownerId, id);
@@ -54,7 +57,7 @@ public class WagonController {
         }
     }
 
-    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WagonDto> create(@RequestBody WagonPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Wagon entity = new Wagon();

@@ -6,7 +6,6 @@ import nl.rls.composer.domain.DangerGoodsType;
 import nl.rls.composer.repository.DangerGoodsTypeRepository;
 import nl.rls.composer.rest.dto.DangerGoodsTypeDto;
 import nl.rls.composer.rest.dto.mapper.DangerGoodsTypeDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +18,16 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "dangergoodstypes")
-@Api(description = "All DangerGoodsType according to the RID chapter 3.2, table A, column 5, excepting the shunting labels Model 13 and 15 (CODE: OTIF RID-Specification).")
+@RequestMapping(BaseURL.BASE_PATH + "dangergoodstypes/")
+@Api(value = "All DangerGoodsType according to the RID chapter 3.2, table A, column 5, excepting the shunting labels Model 13 and 15 (CODE: OTIF RID-Specification).")
 public class DangerGoodsTypeController {
-    @Autowired
-    private DangerGoodsTypeRepository dangerGoodsTypeRepository;
+    private final DangerGoodsTypeRepository dangerGoodsTypeRepository;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public DangerGoodsTypeController(DangerGoodsTypeRepository dangerGoodsTypeRepository) {
+        this.dangerGoodsTypeRepository = dangerGoodsTypeRepository;
+    }
+
+    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DangerGoodsTypeDto> getById(@PathVariable Integer id) {
         Optional<DangerGoodsType> optional = dangerGoodsTypeRepository.findById(id);
         if (optional.isPresent()) {
@@ -36,7 +38,7 @@ public class DangerGoodsTypeController {
         }
     }
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DangerGoodsTypeDto>> getAll() {
         Iterable<DangerGoodsType> entityList = dangerGoodsTypeRepository.findAll();
 
