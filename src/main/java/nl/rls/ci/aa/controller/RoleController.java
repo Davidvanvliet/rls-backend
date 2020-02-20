@@ -4,7 +4,6 @@ import nl.rls.ci.aa.domain.Role;
 import nl.rls.ci.aa.dto.RoleDto;
 import nl.rls.ci.aa.dto.RoleDtoMapper;
 import nl.rls.ci.aa.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,22 +15,25 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/aa/roles")
+@RequestMapping("aa/roles/")
 public class RoleController {
-    @Autowired
-    RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    @GetMapping(value = "/")
+    public RoleController(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
+
+    @GetMapping
     public ResponseEntity<List<RoleDto>> getAll() {
         Iterable<Role> roleList = roleRepository.findAll();
-        List<RoleDto> roleDtoList = new ArrayList<RoleDto>();
+        List<RoleDto> roleDtoList = new ArrayList<>();
         for (Role role : roleList) {
             roleDtoList.add(RoleDtoMapper.map(role));
         }
         return ResponseEntity.ok(roleDtoList);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "{id}")
     public ResponseEntity<RoleDto> getRole(@PathVariable int id) {
         Optional<Role> role = roleRepository.findById(id);
         return ResponseEntity.ok(RoleDtoMapper.map(role.get()));

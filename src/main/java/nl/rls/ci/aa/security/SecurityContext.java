@@ -2,7 +2,6 @@ package nl.rls.ci.aa.security;
 
 import nl.rls.ci.aa.domain.AppUser;
 import nl.rls.ci.aa.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +11,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SecurityContext {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public SecurityContext(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public int getOwnerId() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

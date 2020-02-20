@@ -23,32 +23,35 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/aa/users")
+@RequestMapping("aa/users/")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private OwnerRepository ownerRepository;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private SecurityContext securityContext;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+    private final OwnerRepository ownerRepository;
+    private final RoleRepository roleRepository;
+    private final SecurityContext securityContext;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @GetMapping(value = "/")
+    public UserController(UserRepository userRepository, OwnerRepository ownerRepository, RoleRepository roleRepository, SecurityContext securityContext, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepository = userRepository;
+        this.ownerRepository = ownerRepository;
+        this.roleRepository = roleRepository;
+        this.securityContext = securityContext;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    @GetMapping
     public ResponseEntity<List<UserDto>> getAll() {
         log.debug("public List<UserDto> getAll()");
         Iterable<AppUser> userList = userRepository.findAll();
-        List<UserDto> users = new ArrayList<UserDto>();
+        List<UserDto> users = new ArrayList<>();
         for (AppUser user : userList) {
             users.add(UserDtoMapper.map(user));
         }
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable int id) {
         Optional<AppUser> user = userRepository.findById(id);
         if (!user.isPresent()) {
@@ -57,7 +60,7 @@ public class UserController {
         return ResponseEntity.ok(UserDtoMapper.map(user.get()));
     }
 
-    @PutMapping("/{username}")
+    @PutMapping("{username}/")
     @Transactional
     public ResponseEntity<UserDto> signUp(@PathVariable(value = "username") String username,
                                           @RequestBody UserPostDto userPostDtoPost) {
@@ -88,7 +91,7 @@ public class UserController {
         return ResponseEntity.ok(UserDtoMapper.map(user));
     }
 
-    @PutMapping("/{userId}/role/{roleName}")
+    @PutMapping("{userId}/role/{roleName}/")
     public ResponseEntity<UserDto> setRoleToUser(@PathVariable(value = "userId") int userId,
                                                  @PathVariable(value = "roleName") String roleName) {
         log.info("setRoleToUser: " + userId + " " + roleName);

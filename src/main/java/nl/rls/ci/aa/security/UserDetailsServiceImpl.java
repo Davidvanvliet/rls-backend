@@ -5,7 +5,6 @@ import nl.rls.ci.aa.domain.Role;
 import nl.rls.ci.aa.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,14 +16,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-//import org.springframework.security.core.userdetails.User;
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @SuppressWarnings("unused")
     private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserDetailsServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /**
      * Load the user from a DB

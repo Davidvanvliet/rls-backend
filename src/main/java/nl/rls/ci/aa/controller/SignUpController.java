@@ -15,29 +15,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
+@RequestMapping("sign-up/")
 public class SignUpController {
     private static final Logger log = LoggerFactory.getLogger(SignUpController.class);
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private OwnerRepository ownerRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final OwnerRepository ownerRepository;
+    private final RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public SignUpController(BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public SignUpController(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository, OwnerRepository ownerRepository, RoleRepository roleRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userRepository = userRepository;
+        this.ownerRepository = ownerRepository;
+        this.roleRepository = roleRepository;
     }
 
-    @PutMapping("/sign-up/{username}")
+    @PutMapping("{username}")
     @Transactional
     public ResponseEntity<UserDto> signUp(@PathVariable(value = "username") String username, @RequestBody UserPostDto userPostDtoPost) {
         log.info("signUp: " + userPostDtoPost);

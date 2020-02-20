@@ -8,7 +8,6 @@ import nl.rls.ci.aa.dto.*;
 import nl.rls.ci.aa.repository.LicenseRepository;
 import nl.rls.ci.aa.repository.OwnerRepository;
 import nl.rls.ci.aa.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -22,36 +21,37 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/aa/owners")
+@RequestMapping("aa/owners/")
 public class OwnerController {
-    @Autowired
-    private OwnerRepository ownerRepository;
-    @Autowired
-    private LicenseRepository licenseRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+    private final OwnerRepository ownerRepository;
+    private final LicenseRepository licenseRepository;
+    private final RoleRepository roleRepository;
 
-    @GetMapping(value = "/")
+    public OwnerController(OwnerRepository ownerRepository, LicenseRepository licenseRepository, RoleRepository roleRepository) {
+        this.ownerRepository = ownerRepository;
+        this.licenseRepository = licenseRepository;
+        this.roleRepository = roleRepository;
+    }
+
+    @GetMapping
     public ResponseEntity<List<OwnerDto>> getAll() {
         Iterable<Owner> ownerList = ownerRepository.findAll();
-        List<OwnerDto> owners = new ArrayList<OwnerDto>();
+        List<OwnerDto> owners = new ArrayList<>();
         for (Owner owner : ownerList) {
             owners.add(OwnerDtoMapper.map(owner));
         }
         return ResponseEntity.ok(owners);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "{id}")
     public ResponseEntity<OwnerDto> getOwner(@PathVariable Integer id) {
         Optional<Owner> owner = ownerRepository.findById(id);
-        if (!owner.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(OwnerDtoMapper.map(owner.get()));
+        return owner.map(value -> ResponseEntity.ok(OwnerDtoMapper.map(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Transactional
-    @PostMapping(value = "/")
+    @PostMapping
     public ResponseEntity<?> postOwner(@RequestBody OwnerDtoPost dto) {
         Owner owner = OwnerDtoMapper.map(dto);
         Calendar now = Calendar.getInstance();
@@ -66,13 +66,10 @@ public class OwnerController {
     }
 
     @Transactional
-    @PostMapping(value = "/{id}/users/")
+    @PostMapping(value = "{id}/users/")
     public ResponseEntity<?> postUser(@PathVariable Integer id, @RequestBody UserPostDto dto) {
-        Optional<Owner> optional = ownerRepository.findById(id);
-        if (!optional.isPresent()) {
-
-        }
-        Owner owner = optional.get();
+        Optional<Owner> optionalOwner = ownerRepository.findById(id);
+        Owner owner = optionalOwner.get();
         AppUser user = UserDtoMapper.map(dto);
         user.setOwner(owner);
         user.setUsername(dto.getEmail());
@@ -84,14 +81,14 @@ public class OwnerController {
         return ResponseEntity.created(linkTo(methodOn(UserController.class).getUser(user.getId())).toUri()).build();
     }
 
-    @GetMapping(value = "/{id}/users/")
+    @GetMapping(value = "{id}/users/")
     public ResponseEntity<List<UserDto>> getUsersByOwner(@PathVariable Integer id) {
         Optional<Owner> optional = ownerRepository.findById(id);
         if (!optional.isPresent()) {
             return ResponseEntity.notFound().build();
         }
         Owner owner = optional.get();
-        List<UserDto> users = new ArrayList<UserDto>();
+        List<UserDto> users = new ArrayList<>();
         for (AppUser user : owner.getUsers()) {
             users.add(UserDtoMapper.map(user));
         }
