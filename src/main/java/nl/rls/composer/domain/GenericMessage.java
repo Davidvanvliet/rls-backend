@@ -1,6 +1,3 @@
-/**
- *
- */
 package nl.rls.composer.domain;
 
 import lombok.Getter;
