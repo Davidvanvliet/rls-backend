@@ -6,17 +6,19 @@ import nl.rls.composer.domain.WagonInTrain;
 import nl.rls.composer.repository.TractionInTrainRepository;
 import nl.rls.composer.repository.TrainCompositionRepository;
 import nl.rls.composer.repository.WagonInTrainRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TrainCompositionService {
-    @Autowired
-    private WagonInTrainRepository wagonInTrainRepository;
-    @Autowired
-    private TractionInTrainRepository tractionInTrainRepository;
-    @Autowired
-    private TrainCompositionRepository trainCompositionRepository;
+    private final WagonInTrainRepository wagonInTrainRepository;
+    private final TractionInTrainRepository tractionInTrainRepository;
+    private final TrainCompositionRepository trainCompositionRepository;
+
+    public TrainCompositionService(WagonInTrainRepository wagonInTrainRepository, TractionInTrainRepository tractionInTrainRepository, TrainCompositionRepository trainCompositionRepository) {
+        this.wagonInTrainRepository = wagonInTrainRepository;
+        this.tractionInTrainRepository = tractionInTrainRepository;
+        this.trainCompositionRepository = trainCompositionRepository;
+    }
 
     public void addWagonToTrain(TrainComposition trainComposition, WagonInTrain wit) {
         wagonInTrainRepository.save(wit);
