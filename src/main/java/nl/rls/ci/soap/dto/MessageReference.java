@@ -8,19 +8,15 @@
 
 package nl.rls.ci.soap.dto;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -35,15 +31,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "messageType",
-    "messageTypeVersion",
-    "messageIdentifier",
-    "messageDateTime"
+        "messageType",
+        "messageTypeVersion",
+        "messageIdentifier",
+        "messageDateTime"
 })
 @XmlRootElement(name = "MessageReference")
 public class MessageReference {
@@ -59,11 +53,9 @@ public class MessageReference {
 
     /**
      * Gets the value of the messageType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getMessageType() {
         return messageType;
@@ -71,11 +63,9 @@ public class MessageReference {
 
     /**
      * Sets the value of the messageType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setMessageType(String value) {
         this.messageType = value;
@@ -83,11 +73,9 @@ public class MessageReference {
 
     /**
      * Gets the value of the messageTypeVersion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getMessageTypeVersion() {
         return messageTypeVersion;
@@ -95,11 +83,9 @@ public class MessageReference {
 
     /**
      * Sets the value of the messageTypeVersion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setMessageTypeVersion(String value) {
         this.messageTypeVersion = value;
@@ -107,11 +93,9 @@ public class MessageReference {
 
     /**
      * Gets the value of the messageIdentifier property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getMessageIdentifier() {
         return messageIdentifier;
@@ -119,11 +103,9 @@ public class MessageReference {
 
     /**
      * Sets the value of the messageIdentifier property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setMessageIdentifier(String value) {
         this.messageIdentifier = value;
@@ -131,11 +113,9 @@ public class MessageReference {
 
     /**
      * Gets the value of the messageDateTime property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getMessageDateTime() {
         return messageDateTime;
@@ -143,11 +123,9 @@ public class MessageReference {
 
     /**
      * Sets the value of the messageDateTime property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setMessageDateTime(XMLGregorianCalendar value) {
         this.messageDateTime = value;

@@ -1,16 +1,17 @@
 package nl.rls.ci.rest.dto;
 
-import java.util.Date;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 
+import java.util.Date;
+
 @ToString
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class CiDto extends ResourceSupport {
     private Date createDate;
     private Date postDate;

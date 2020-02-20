@@ -9,13 +9,13 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Getter
 @Setter
 public class TractionDto extends ResourceSupport {
-	private TractionTypeDto tractionType;
-	private String locoTypeNumber;
-	private String locoNumber;
-	private TractionModeDto tractionMode;
-	private String type;
-	private int lengthOverBuffers;
-	private int numberOfAxles;
-	private int weight;
-	private int brakeWeight;
+    private TractionTypeDto tractionType;
+    private String locoTypeNumber;
+    private String locoNumber;
+    private TractionModeDto tractionMode;
+    private String type;
+    private int lengthOverBuffers;
+    private int numberOfAxles;
+    private int weight;
+    private int brakeWeight;
 }

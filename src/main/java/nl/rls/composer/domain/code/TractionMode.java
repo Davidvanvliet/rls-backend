@@ -1,14 +1,14 @@
 package nl.rls.composer.domain.code;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Identifies the mode of deployment of a traction within a train First digit –
@@ -18,12 +18,13 @@ import lombok.ToString;
 @ToString
 @Entity
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class TractionMode {
-	@Id 	
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private int id;
-	private String code;
-	private String description;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String code;
+    private String description;
 
 }

@@ -1,47 +1,47 @@
 package nl.rls.composer.domain;
 
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import java.util.Date;
+
 /**
  * @author berend.wilkens
- * 
- * Used for unique identification of the objects handled in the messages such as train, 
+ * <p>
+ * Used for unique identification of the objects handled in the messages such as train,
  * path, path request or case reference.
  */
 @Entity
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class CompositIdentifierOperationalType extends OwnedEntity {
-	/**
-	 * Provides a possibility for differentiation between the objects: 
-	 * Train, Path, Case Reference and Path Request
-	 */
+    /**
+     * Provides a possibility for differentiation between the objects:
+     * Train, Path, Case Reference and Path Request
+     */
     private String objectType;
     @ManyToOne
     private Company company;
-	/**
-	 * It is the main part of identifier and is determent by 
-	 * the company that creates  it.
-	 */
+    /**
+     * It is the main part of identifier and is determent by
+     * the company that creates  it.
+     */
     private String core;
-	/**
-	 * The variant shows a relationship between two identifiers 
-	 * referring to the same business case
-	 */
+    /**
+     * The variant shows a relationship between two identifiers
+     * referring to the same business case
+     */
     private String variant;
-	/**
-	 * Refers to the timetable period in which the business will be carried out
-	 */
+    /**
+     * Refers to the timetable period in which the business will be carried out
+     */
     private int timetableYear;
-	/**
-	 * The start of the date/time in effect
-	 */
+    /**
+     * The start of the date/time in effect
+     */
     private Date startDate;
 }

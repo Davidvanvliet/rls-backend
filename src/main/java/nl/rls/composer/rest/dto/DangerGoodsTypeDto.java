@@ -1,19 +1,20 @@
 package nl.rls.composer.rest.dto;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rls.composer.domain.code.DangerLabel;
 import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 
+import java.util.List;
+
 /**
  * @author berend.wilkens
  * This element indicates the type of a dangerous load
  */
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class DangerGoodsTypeDto extends ResourceSupport {
     private String hazardIdentificationNumber;
     /**
@@ -26,7 +27,7 @@ public class DangerGoodsTypeDto extends ResourceSupport {
      */
     private String ridClass;
     private String packingGroup;
-   /**
+    /**
      * Indicator for labelled dangerous goods in limited quantity according to chapter 3.-4 RID
      */
     private boolean limitedQuantityIndicator;

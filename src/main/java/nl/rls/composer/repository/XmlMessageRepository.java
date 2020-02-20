@@ -1,11 +1,10 @@
 package nl.rls.composer.repository;
 
-import java.util.Optional;
-
+import nl.rls.ci.domain.XmlMessage;
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.ci.domain.XmlMessage;
+import java.util.Optional;
 
 public interface XmlMessageRepository extends CrudRepository<XmlMessage, Integer> {
-	Optional<XmlMessage> findByIdAndOwnerId(Integer id, int ownerId);
+    Optional<XmlMessage> findByIdAndOwnerId(Integer id, int ownerId);
 }

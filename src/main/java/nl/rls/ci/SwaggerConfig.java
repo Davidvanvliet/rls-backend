@@ -2,7 +2,6 @@ package nl.rls.ci;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -14,26 +13,26 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig {                                    
+public class SwaggerConfig {
     @Bean
-    public Docket api() { 
-        return new Docket(DocumentationType.SWAGGER_2)  
-          .select()                                  
-          .apis(RequestHandlerSelectors.any())              
-          .paths(PathSelectors.any())                          
-          .build();                                           
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build();
     }
 
     public ApiInfo apiEndPointsInfo() {
         return new ApiInfoBuilder().title("RLS Common Interface REST API")
-            .description("Common Interface REST API")
-            .contact(new Contact("Berend Wilkens", "www.koekoeksplein.nl", "berend.j.wilkens@gmail.com"))
-            .license("Apache 2.0")
-            .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
-            .version("1.0.0")
-            .build();
+                .description("Common Interface REST API")
+                .contact(new Contact("Berend Wilkens", "www.koekoeksplein.nl", "berend.j.wilkens@gmail.com"))
+                .license("Apache 2.0")
+                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+                .version("1.0.0")
+                .build();
     }
-    
+
 //    public Docket api() {
 //        return new Docket(DocumentationType.SWAGGER_2).select()
 //            .apis(RequestHandlerSelectors

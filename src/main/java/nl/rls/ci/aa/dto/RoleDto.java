@@ -11,5 +11,5 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Setter
 @ToString
 public class RoleDto extends ResourceSupport {
-	private String name;
+    private String name;
 }

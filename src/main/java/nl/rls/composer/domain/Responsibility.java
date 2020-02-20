@@ -1,20 +1,22 @@
 package nl.rls.composer.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
 public class Responsibility extends OwnedEntity {
-	public Responsibility(Integer ownerId) {super(ownerId);}
-	@ManyToOne
+    @ManyToOne
     private Company responsibleRU;
-	@ManyToOne
+    @ManyToOne
     private Company responsibleIM;
+    public Responsibility(Integer ownerId) {
+        super(ownerId);
+    }
 }

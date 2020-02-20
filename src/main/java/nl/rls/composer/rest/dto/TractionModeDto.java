@@ -13,9 +13,10 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
  */
 @ToString
 @NoArgsConstructor
-@Getter @Setter
-public class TractionModeDto extends ResourceSupport  {
-	private String code;
-	private String description;
+@Getter
+@Setter
+public class TractionModeDto extends ResourceSupport {
+    private String code;
+    private String description;
 
 }

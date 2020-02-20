@@ -9,6 +9,6 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Getter
 @Setter
 public class TractionTypeDto extends ResourceSupport {
-	private String code;
-	private String description;
+    private String code;
+    private String description;
 }

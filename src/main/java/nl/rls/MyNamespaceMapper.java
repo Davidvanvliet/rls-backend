@@ -12,9 +12,9 @@ public class MyNamespaceMapper extends NamespacePrefixMapper {
 
     @Override
     public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix) {
-        if(FOO_URI.equals(namespaceUri)) {
+        if (FOO_URI.equals(namespaceUri)) {
             return FOO_PREFIX;
-        } else if(BAR_URI.equals(namespaceUri)) {
+        } else if (BAR_URI.equals(namespaceUri)) {
             return BAR_PREFIX;
         }
         return suggestion;
@@ -22,7 +22,7 @@ public class MyNamespaceMapper extends NamespacePrefixMapper {
 
     @Override
     public String[] getPreDeclaredNamespaceUris() {
-        return new String[] { FOO_URI, BAR_URI };
+        return new String[]{FOO_URI, BAR_URI};
     }
 
 }

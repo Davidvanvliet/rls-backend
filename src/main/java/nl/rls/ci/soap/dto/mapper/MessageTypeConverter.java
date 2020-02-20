@@ -2,22 +2,22 @@ package nl.rls.ci.soap.dto.mapper;
 
 import org.dozer.CustomConverter;
 
-public class MessageTypeConverter implements CustomConverter  {
+public class MessageTypeConverter implements CustomConverter {
 
-	@Override
-	public Object convert(Object existingDestinationFieldValue, Object sourceFieldValue, Class<?> destinationClass,
-			Class<?> sourceClass) {
-		String source = (String) sourceFieldValue;
-		Integer destination = (Integer) existingDestinationFieldValue;
-		switch (source) {
-		case "TrainCompositionMessage":
-			return new Integer(3003);
-		case "TrainRunningInformationMessage":
-			return new Integer(4005);
-		default:
-			return destination;
-		}
-	}
+    @Override
+    public Object convert(Object existingDestinationFieldValue, Object sourceFieldValue, Class<?> destinationClass,
+                          Class<?> sourceClass) {
+        String source = (String) sourceFieldValue;
+        Integer destination = (Integer) existingDestinationFieldValue;
+        switch (source) {
+            case "TrainCompositionMessage":
+                return new Integer(3003);
+            case "TrainRunningInformationMessage":
+                return new Integer(4005);
+            default:
+                return destination;
+        }
+    }
 
 }
 

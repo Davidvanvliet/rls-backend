@@ -11,7 +11,7 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Getter
 @Setter
 public class OwnerDto extends ResourceSupport {
-	private String code;
-	private String name;
+    private String code;
+    private String name;
 
 }

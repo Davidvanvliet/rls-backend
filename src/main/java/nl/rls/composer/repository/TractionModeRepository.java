@@ -1,11 +1,10 @@
 package nl.rls.composer.repository;
 
-import java.util.Optional;
-
+import nl.rls.composer.domain.code.TractionMode;
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.composer.domain.code.TractionMode;
+import java.util.Optional;
 
 public interface TractionModeRepository extends CrudRepository<TractionMode, Integer> {
-	Optional<TractionMode> findByCode(String code);
+    Optional<TractionMode> findByCode(String code);
 }

@@ -1,11 +1,10 @@
 package nl.rls.ci.aa.repository;
 
-import java.util.Optional;
-
+import nl.rls.ci.aa.domain.Role;
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.ci.aa.domain.Role;
+import java.util.Optional;
 
 public interface RoleRepository extends CrudRepository<Role, Integer> {
-	Optional<Role> findByName(String string);
+    Optional<Role> findByName(String string);
 }

@@ -9,9 +9,9 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Getter
 @Setter
 public class CompanyDto extends ResourceSupport {
-	private String code;
-	private String name;
-	private String shortName;
-	private String url;
-	private String countryIso;
+    private String code;
+    private String name;
+    private String shortName;
+    private String url;
+    private String countryIso;
 }

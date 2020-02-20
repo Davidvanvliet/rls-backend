@@ -1,12 +1,12 @@
 package nl.rls.composer.rest.dto;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 @ToString
 @XmlRootElement
@@ -14,10 +14,10 @@ import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 @Getter
 @Setter
 public class WagonTypeDto extends ResourceSupport {
-	private String name;
-	private String code;
-	private int lengthOverBuffers;
-	private int wagonNumberOfAxles;
-	private int wagonWeightEmpty;
-	private int handBrakeBrakedWeight;
+    private String name;
+    private String code;
+    private int lengthOverBuffers;
+    private int wagonNumberOfAxles;
+    private int wagonWeightEmpty;
+    private int handBrakeBrakedWeight;
 }

@@ -1,12 +1,11 @@
 package nl.rls.ci.aa.repository;
 
-import java.util.Optional;
-
+import nl.rls.ci.aa.domain.Owner;
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.ci.aa.domain.Owner;
+import java.util.Optional;
 
 public interface OwnerRepository extends CrudRepository<Owner, Integer> {
-	Optional<Owner> findByCode(String code);
+    Optional<Owner> findByCode(String code);
 
 }

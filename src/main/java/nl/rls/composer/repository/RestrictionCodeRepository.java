@@ -1,12 +1,11 @@
 package nl.rls.composer.repository;
 
 
-import java.util.Optional;
-
+import nl.rls.composer.domain.code.RestrictionCode;
 import org.springframework.data.repository.CrudRepository;
 
-import nl.rls.composer.domain.code.RestrictionCode;
+import java.util.Optional;
 
 public interface RestrictionCodeRepository extends CrudRepository<RestrictionCode, Integer> {
-	Optional<RestrictionCode> findByCode(String code);
+    Optional<RestrictionCode> findByCode(String code);
 }

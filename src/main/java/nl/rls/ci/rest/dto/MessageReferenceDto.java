@@ -1,10 +1,10 @@
 package nl.rls.ci.rest.dto;
 
-import java.util.Date;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Date;
 
 /**
  * MessageReference: This element contains four child elements MessageType,
@@ -13,12 +13,13 @@ import lombok.Setter;
  * received TAF/TAPTSI message.
  */
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class MessageReferenceDto {
     /**
      * To indicate the message type transmitted or referred to.
      * 3003        TrainCompositionMessage
-	 * 9000        ErrorMessage
+     * 9000        ErrorMessage
      */
     private int messageType;
     private String messageTypeVersion;

@@ -5,17 +5,17 @@ package nl.rls.composer.domain.message;
  * Assigned by the Sender 1=creation, 2=modification, 3=deletion
  */
 public enum MessageStatus {
-	creation (1),
-	modification (2),
-	deletion (3);
-	
-	private int value;
+    creation(1),
+    modification(2),
+    deletion(3);
 
-	MessageStatus(int value) {
-		this.value = value;
-	}
+    private int value;
 
-	public int getValue() {
-		return this.value;
-	}
+    MessageStatus(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return this.value;
+    }
 }

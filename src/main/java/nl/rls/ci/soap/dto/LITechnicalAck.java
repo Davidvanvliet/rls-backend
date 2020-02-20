@@ -8,18 +8,14 @@
 
 package nl.rls.ci.soap.dto;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -38,19 +34,17 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "responseStatus",
-    "ackIndentifier",
-    "messageReference",
-    "sender",
-    "recipient",
-    "remoteLIName",
-    "remoteLIInstanceNumber",
-    "messageTransportMechanism"
+        "responseStatus",
+        "ackIndentifier",
+        "messageReference",
+        "sender",
+        "recipient",
+        "remoteLIName",
+        "remoteLIInstanceNumber",
+        "messageTransportMechanism"
 })
 @XmlRootElement(name = "LI_TechnicalAck")
 public class LITechnicalAck {
@@ -74,11 +68,9 @@ public class LITechnicalAck {
 
     /**
      * Gets the value of the responseStatus property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getResponseStatus() {
         return responseStatus;
@@ -86,11 +78,9 @@ public class LITechnicalAck {
 
     /**
      * Sets the value of the responseStatus property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setResponseStatus(String value) {
         this.responseStatus = value;
@@ -98,11 +88,9 @@ public class LITechnicalAck {
 
     /**
      * Gets the value of the ackIndentifier property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getAckIndentifier() {
         return ackIndentifier;
@@ -110,11 +98,9 @@ public class LITechnicalAck {
 
     /**
      * Sets the value of the ackIndentifier property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAckIndentifier(String value) {
         this.ackIndentifier = value;
@@ -122,11 +108,9 @@ public class LITechnicalAck {
 
     /**
      * Gets the value of the messageReference property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link MessageReference }
-     *     
+     *
+     * @return possible object is
+     * {@link MessageReference }
      */
     public MessageReference getMessageReference() {
         return messageReference;
@@ -134,11 +118,9 @@ public class LITechnicalAck {
 
     /**
      * Sets the value of the messageReference property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link MessageReference }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link MessageReference }
      */
     public void setMessageReference(MessageReference value) {
         this.messageReference = value;
@@ -146,7 +128,6 @@ public class LITechnicalAck {
 
     /**
      * Gets the value of the sender property.
-     * 
      */
     public int getSender() {
         return sender;
@@ -154,7 +135,6 @@ public class LITechnicalAck {
 
     /**
      * Sets the value of the sender property.
-     * 
      */
     public void setSender(int value) {
         this.sender = value;
@@ -162,7 +142,6 @@ public class LITechnicalAck {
 
     /**
      * Gets the value of the recipient property.
-     * 
      */
     public int getRecipient() {
         return recipient;
@@ -170,7 +149,6 @@ public class LITechnicalAck {
 
     /**
      * Sets the value of the recipient property.
-     * 
      */
     public void setRecipient(int value) {
         this.recipient = value;
@@ -178,11 +156,9 @@ public class LITechnicalAck {
 
     /**
      * Gets the value of the remoteLIName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getRemoteLIName() {
         return remoteLIName;
@@ -190,11 +166,9 @@ public class LITechnicalAck {
 
     /**
      * Sets the value of the remoteLIName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRemoteLIName(String value) {
         this.remoteLIName = value;
@@ -202,7 +176,6 @@ public class LITechnicalAck {
 
     /**
      * Gets the value of the remoteLIInstanceNumber property.
-     * 
      */
     public int getRemoteLIInstanceNumber() {
         return remoteLIInstanceNumber;
@@ -210,7 +183,6 @@ public class LITechnicalAck {
 
     /**
      * Sets the value of the remoteLIInstanceNumber property.
-     * 
      */
     public void setRemoteLIInstanceNumber(int value) {
         this.remoteLIInstanceNumber = value;
@@ -218,11 +190,9 @@ public class LITechnicalAck {
 
     /**
      * Gets the value of the messageTransportMechanism property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getMessageTransportMechanism() {
         return messageTransportMechanism;
@@ -230,11 +200,9 @@ public class LITechnicalAck {
 
     /**
      * Sets the value of the messageTransportMechanism property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setMessageTransportMechanism(String value) {
         this.messageTransportMechanism = value;
