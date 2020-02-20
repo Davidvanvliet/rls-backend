@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,28 +36,28 @@ public class TrainActivityTypeController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainActivityTypeDto> getByCode(@RequestParam("code") String code) {
-        Optional<TrainActivityType> optional = trainActivityTypeRepository.findByCode(code);
-        if (optional.isPresent()) {
-            TrainActivityTypeDto trainActivityTypeDto = TrainActivityTypeDtoMapper
-                    .map(optional.get());
-            return ResponseEntity.ok(trainActivityTypeDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    public ResponseEntity<List<TrainActivityTypeDto>> getAll(@RequestParam("code") String code) {
+        if (code == null) {
+            Iterable<TrainActivityType> trainActivityTypeList = trainActivityTypeRepository.findAll();
+            List<TrainActivityTypeDto> trainActivityTypeDtoList = new ArrayList<>();
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TrainActivityTypeDto>> getAll() {
-        Iterable<TrainActivityType> trainActivityTypeList = trainActivityTypeRepository.findAll();
-        List<TrainActivityTypeDto> trainActivityTypeDtoList = new ArrayList<>();
-
-        for (TrainActivityType trainActivityType : trainActivityTypeList) {
-            trainActivityTypeDtoList.add(TrainActivityTypeDtoMapper.map(trainActivityType));
-        }
+            for (TrainActivityType trainActivityType : trainActivityTypeList) {
+                trainActivityTypeDtoList.add(TrainActivityTypeDtoMapper.map(trainActivityType));
+            }
 //		Link trainActivityTypesLink = linkTo(methodOn(TrainActivityTypeController.class).getAll()).withSelfRel();
 //		Resources<TrainActivityTypeDto> trainActivityTypes = new Resources<TrainActivityTypeDto>(trainActivityTypeDtoList, trainActivityTypesLink);
-        return ResponseEntity.ok(trainActivityTypeDtoList);
+            return ResponseEntity.ok(trainActivityTypeDtoList);
+        } else {
+            Optional<TrainActivityType> optional = trainActivityTypeRepository.findByCode(code);
+            if (optional.isPresent()) {
+                TrainActivityTypeDto trainActivityTypeDto = TrainActivityTypeDtoMapper
+                        .map(optional.get());
+                return ResponseEntity.ok(new ArrayList<>(Collections.singletonList(trainActivityTypeDto)));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }
+
     }
 
 }
