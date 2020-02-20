@@ -14,7 +14,6 @@ import nl.rls.composer.repository.XmlMessageRepository;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -41,12 +40,15 @@ import java.util.UUID;
 @Component
 public class CiService {
     private static final Logger log = LoggerFactory.getLogger(CiService.class);
-    @Autowired
-    private CiRepository ciRepository;
-    @Autowired
-    private XmlMessageRepository xmlMessageRepository;
-    @Autowired
-    private SecurityContext securityContext;
+    private final CiRepository ciRepository;
+    private final XmlMessageRepository xmlMessageRepository;
+    private final SecurityContext securityContext;
+
+    public CiService(CiRepository ciRepository, XmlMessageRepository xmlMessageRepository, SecurityContext securityContext) {
+        this.ciRepository = ciRepository;
+        this.xmlMessageRepository = xmlMessageRepository;
+        this.securityContext = securityContext;
+    }
 
     static boolean validateAgainstXSD(InputStream xml, InputStream xsd) throws SAXException, IOException {
         System.out.println("Starting validateAgainstXSD");

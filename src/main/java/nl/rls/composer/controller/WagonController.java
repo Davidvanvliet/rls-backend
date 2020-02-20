@@ -7,7 +7,6 @@ import nl.rls.composer.repository.WagonRepository;
 import nl.rls.composer.rest.dto.WagonDto;
 import nl.rls.composer.rest.dto.WagonPostDto;
 import nl.rls.composer.rest.dto.mapper.WagonDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "wagons/")
+@RequestMapping(BaseURL.BASE_PATH + "/wagons")
 public class WagonController {
     private final WagonRepository wagonRepository;
 
@@ -45,7 +44,7 @@ public class WagonController {
         return ResponseEntity.ok(wagonDtoList);
     }
 
-    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WagonDto> getById(@PathVariable Integer id) {
         int ownerId = securityContext.getOwnerId();
         Optional<Wagon> entity = wagonRepository.findByOwnerIdAndId(ownerId, id);

@@ -21,7 +21,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("aa/owners/")
+@RequestMapping("/aa/owners")
 public class OwnerController {
     private final OwnerRepository ownerRepository;
     private final LicenseRepository licenseRepository;
@@ -43,7 +43,7 @@ public class OwnerController {
         return ResponseEntity.ok(owners);
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<OwnerDto> getOwner(@PathVariable Integer id) {
         Optional<Owner> owner = ownerRepository.findById(id);
         return owner.map(value -> ResponseEntity.ok(OwnerDtoMapper.map(value)))
@@ -66,7 +66,7 @@ public class OwnerController {
     }
 
     @Transactional
-    @PostMapping(value = "{id}/users/")
+    @PostMapping(value = "/{id}/users")
     public ResponseEntity<?> postUser(@PathVariable Integer id, @RequestBody UserPostDto dto) {
         Optional<Owner> optionalOwner = ownerRepository.findById(id);
         Owner owner = optionalOwner.get();

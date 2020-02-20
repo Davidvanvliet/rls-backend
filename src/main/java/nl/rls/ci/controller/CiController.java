@@ -11,7 +11,6 @@ import nl.rls.ci.service.CiService;
 import nl.rls.ci.url.BaseURL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,16 +31,19 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + CiController.PATH)
 public class CiController {
-    public static final String PATH = "messages";
+    public static final String PATH = "/messages";
     private static final Logger log = LoggerFactory.getLogger(CiController.class);
-    @Autowired
-    private CiRepository ciRepository;
-    @Autowired
-    private SecurityContext securityContext;
-    @Autowired
-    private CiService ciService;
+    private final CiRepository ciRepository;
+    private final SecurityContext securityContext;
+    private final CiService ciService;
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CiController(CiRepository ciRepository, SecurityContext securityContext, CiService ciService) {
+        this.ciRepository = ciRepository;
+        this.securityContext = securityContext;
+        this.ciService = ciService;
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Gets a all stored messages for a client, no filtering")
     public ResponseEntity<List<CiDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
@@ -72,7 +74,7 @@ public class CiController {
      * @return de link naar het CI object/resource
      */
     @Transactional
-    @PostMapping(value = "/")
+    @PostMapping
     @ApiOperation(value = "Stores a CI (XML-)message for a client (UicRequest). This message is not send.")
     public ResponseEntity<?> postMessage(@RequestBody String messageXml) {
         System.out.println("POST XML message to databases");

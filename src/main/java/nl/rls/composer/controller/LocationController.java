@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Api(value = "Access to Locations. ")
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "locations/")
+@RequestMapping(BaseURL.BASE_PATH + "/locations")
 public class LocationController {
     private final LocationRepository locationRepository;
 
@@ -27,7 +27,7 @@ public class LocationController {
     }
 
     @ApiOperation(value = "Get a location based on an id, which is the TSI.locationPrimaryCode")
-    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LocationDto> getById(@PathVariable Integer id) {
         Optional<Location> optional = locationRepository.findByLocationPrimaryCode(id);
         if (optional.isPresent()) {

@@ -12,7 +12,6 @@ import nl.rls.composer.repository.TractionTypeRepository;
 import nl.rls.composer.rest.dto.TractionCreateDto;
 import nl.rls.composer.rest.dto.TractionDto;
 import nl.rls.composer.rest.dto.mapper.TractionDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "tractions/")
+@RequestMapping(BaseURL.BASE_PATH + "/tractions")
 public class TractionController {
     private final TractionRepository tractionRepository;
     private final TractionTypeRepository tractionTypeRepository;
@@ -53,7 +52,7 @@ public class TractionController {
         return ResponseEntity.ok(dtoList);
     }
 
-    @RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<TractionDto> getById(@PathVariable Integer id) {
         int ownerId = securityContext.getOwnerId();
         TractionDto dto = TractionDtoMapper

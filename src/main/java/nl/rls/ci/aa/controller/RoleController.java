@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("aa/roles/")
+@RequestMapping("/aa/roles")
 public class RoleController {
     private final RoleRepository roleRepository;
 
@@ -33,7 +33,7 @@ public class RoleController {
         return ResponseEntity.ok(roleDtoList);
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<RoleDto> getRole(@PathVariable int id) {
         Optional<Role> role = roleRepository.findById(id);
         return ResponseEntity.ok(RoleDtoMapper.map(role.get()));

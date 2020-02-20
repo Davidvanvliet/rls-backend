@@ -29,7 +29,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "traincompositionmessages/")
+@RequestMapping(BaseURL.BASE_PATH + "/traincompositionmessages")
 public class TrainCompositionMessageController {
     private final TrainCompositionMessageRepository trainCompositionMessageRepository;
     private final CompanyRepository companyRepository;
@@ -45,7 +45,7 @@ public class TrainCompositionMessageController {
     }
 
     //TODO - remove this endpoint
-    @GetMapping("hello")
+    @GetMapping("/hello")
     public ResponseEntity<String> getHello() {
         return ResponseEntity.ok("Hello world");
     }
@@ -70,7 +70,7 @@ public class TrainCompositionMessageController {
     }
 
     //
-    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionMessageDto> getById(@PathVariable int id) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);

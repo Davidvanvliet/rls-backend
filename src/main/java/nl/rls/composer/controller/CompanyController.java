@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "companies/")
+@RequestMapping(BaseURL.BASE_PATH + "/companies")
 @Api(value = "Access to all companies, RU's and IM's")
 public class CompanyController {
     private final CompanyRepository companyRepository;

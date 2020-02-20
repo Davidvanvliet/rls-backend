@@ -10,7 +10,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 public class RootController {
-    @GetMapping("/api/v1/")
+    @GetMapping("/api/v1")
     ResponseEntity<ResourceSupport> root() {
         ResourceSupport resourceSupport = new ResourceSupport();
         resourceSupport.add(linkTo(methodOn(RootController.class).root()).withSelfRel());

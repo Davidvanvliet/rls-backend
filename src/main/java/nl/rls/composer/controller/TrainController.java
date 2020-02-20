@@ -12,7 +12,6 @@ import nl.rls.composer.rest.dto.TrainDto;
 import nl.rls.composer.rest.dto.TrainPostDto;
 import nl.rls.composer.rest.dto.mapper.JourneySectionDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "trains/")
+@RequestMapping(BaseURL.BASE_PATH + "/trains")
 public class TrainController {
     private final TrainRepository trainRepository;
     private final CompanyRepository companyRepository;
@@ -61,7 +60,7 @@ public class TrainController {
     }
 
     //
-    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainDto> getById(@PathVariable int id) {
         int ownerId = securityContext.getOwnerId();
         Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
@@ -123,7 +122,7 @@ public class TrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping(value = "{id}/journeysections/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/journeysections", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<JourneySectionDto>> getAllJourneySections(@PathVariable int id) {
         int ownerId = securityContext.getOwnerId();
         Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
@@ -146,7 +145,7 @@ public class TrainController {
         }
     }
 
-    @PostMapping(value = "{id}/journeysections/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/journeysections", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainDto> postJourneySection(@PathVariable Integer id,
                                                        @RequestBody JourneySectionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
@@ -192,7 +191,7 @@ public class TrainController {
         }
     }
 
-    @DeleteMapping(value = "{id}/journeysections/{sectionId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}/journeysections/{sectionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainDto> removeJourneysection(@PathVariable int id, @PathVariable int sectionId) {
         int ownerId = securityContext.getOwnerId();
         Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);

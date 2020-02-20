@@ -7,7 +7,6 @@ import nl.rls.ci.repository.UicRequestResource;
 import nl.rls.ci.rest.dto.UicRequestDto;
 import nl.rls.ci.rest.dto.mapper.UicRequestDtoMapper;
 import nl.rls.ci.url.BaseURL;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +21,16 @@ import java.util.Optional;
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + UicRequestController.PATH)
 public class UicRequestController {
-    public static final String PATH = "uicrequests";
-    @Autowired
-    private SecurityContext securityContext;
-    @Autowired
-    private UicRequestResource uicRequestResource;
+    public static final String PATH = "/uicrequests";
+    private final SecurityContext securityContext;
+    private final UicRequestResource uicRequestResource;
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UicRequestController(SecurityContext securityContext, UicRequestResource uicRequestResource) {
+        this.securityContext = securityContext;
+        this.uicRequestResource = uicRequestResource;
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Gets all UicRequest for a client, no filtering")
     public ResponseEntity<List<UicRequestDto>> getAll() {
         int ownerId = securityContext.getOwnerId();

@@ -43,7 +43,7 @@ public class TractionInTrainController {
         this.trainCompositionRepository = trainCompositionRepository;
     }
 
-    @GetMapping(value = "{id}/tractions/{tractionId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TractionInTrainDto> getTractionInTrain(@PathVariable Integer id, @PathVariable Integer tractionId) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository
@@ -57,7 +57,7 @@ public class TractionInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping(value = "{id}/tractions/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/tractions", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TractionInTrainDto>> getAllTractionInTrain(@PathVariable Integer id) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository
@@ -77,7 +77,7 @@ public class TractionInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping(value = "{id}/tractions/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/tractions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> addTraction(@PathVariable int id,
                                                            @RequestBody TractionInTrainPostDto dto) {
         int ownerId = securityContext.getOwnerId();
@@ -105,7 +105,7 @@ public class TractionInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping(value = "{id}/tractions/{tractionId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> moveTraction(@PathVariable int id,
                                                             @PathVariable int tractionId, @RequestParam("position") int position) {
         int ownerId = securityContext.getOwnerId();
@@ -121,7 +121,7 @@ public class TractionInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping(value = "{id}/tractions/{tractionId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> removeTraction(@PathVariable int id,
                                                               @PathVariable int tractionId) {
         int ownerId = securityContext.getOwnerId();

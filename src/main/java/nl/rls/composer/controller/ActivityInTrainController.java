@@ -12,7 +12,6 @@ import nl.rls.composer.rest.dto.JourneySectionDto;
 import nl.rls.composer.rest.dto.TrainActivityTypeDto;
 import nl.rls.composer.rest.dto.mapper.JourneySectionDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainActivityTypeDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +36,7 @@ public class ActivityInTrainController {
         this.journeySectionRepository = journeySectionRepository;
     }
 
-    @GetMapping(value = "{id}/activities/{activityId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/activities/{activityId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainActivityTypeDto> getActivityInTrain(@PathVariable Integer id,
                                                                    @PathVariable Integer activityId) {
         int ownerId = securityContext.getOwnerId();
@@ -51,7 +50,7 @@ public class ActivityInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping(value = "{id}/activities/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/activities", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TrainActivityTypeDto>> getAllActivityInTrain(@PathVariable Integer id) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
@@ -72,7 +71,7 @@ public class ActivityInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping(value = "{id}/activities/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/activities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> addActivity(@PathVariable int id, @RequestBody ActivityInTrainAddDto dto) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
@@ -92,7 +91,7 @@ public class ActivityInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping(value = "{id}/activities/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}/activities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> addActivity(@PathVariable int id,
                                                          @RequestBody List<ActivityInTrainAddDto> dtoList) {
         int ownerId = securityContext.getOwnerId();
@@ -118,7 +117,7 @@ public class ActivityInTrainController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping(value = "{id}/activities/{activityId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}/activities/{activityId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> removeActivity(@PathVariable int id, @PathVariable int activityId) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);

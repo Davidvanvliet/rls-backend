@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "dangerlabels/")
+@RequestMapping(BaseURL.BASE_PATH + "/dangerlabels")
 @Api(value = "All Danger Labels of dangerous good according to the RID chapter 3.2, table A, column 5, excepting the shunting labels Model 13 and 15 (CODE: OTIF RID-Specification).")
 public class DangerLabelController {
     private final DangerLabelRepository dangerLabelRepository;
@@ -27,7 +27,7 @@ public class DangerLabelController {
         this.dangerLabelRepository = dangerLabelRepository;
     }
 
-    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DangerLabelDto> getById(@PathVariable Integer id) {
         Optional<DangerLabel> optional = dangerLabelRepository.findById(id);
         if (optional.isPresent()) {

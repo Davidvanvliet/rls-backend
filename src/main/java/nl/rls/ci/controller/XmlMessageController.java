@@ -4,7 +4,6 @@ import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.domain.XmlMessage;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.repository.XmlMessageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +17,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + XmlMessageController.PATH)
 public class XmlMessageController {
-    public static final String PATH = "xmlmessages";
-    @Autowired
-    private SecurityContext securityContext;
-    @Autowired
-    private XmlMessageRepository xmlMessageRepository;
+    public static final String PATH = "/xmlmessages";
+    private final SecurityContext securityContext;
+    private final XmlMessageRepository xmlMessageRepository;
+
+    public XmlMessageController(SecurityContext securityContext, XmlMessageRepository xmlMessageRepository) {
+        this.securityContext = securityContext;
+        this.xmlMessageRepository = xmlMessageRepository;
+    }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
     @Transactional

@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + TrainCompositionController.PATH)
 public class TrainCompositionController {
-    public static final String PATH = "traincompositions/";
+    public static final String PATH = "/traincompositions";
     private final TrainCompositionRepository trainCompositionRepository;
     private final SecurityContext securityContext;
 
@@ -25,7 +25,7 @@ public class TrainCompositionController {
         this.securityContext = securityContext;
     }
 
-    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> getById(@PathVariable int id) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository.findByIdAndOwnerId(id, ownerId);
@@ -37,7 +37,7 @@ public class TrainCompositionController {
         }
     }
 
-    @PutMapping(value = "{id}/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> update(@PathVariable int id, @RequestBody TrainCompositionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository.findByIdAndOwnerId(id, ownerId);

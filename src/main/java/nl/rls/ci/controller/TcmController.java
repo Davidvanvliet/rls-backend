@@ -7,7 +7,6 @@ import nl.rls.ci.service.CiService;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.repository.TrainCompositionMessageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +18,17 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "tcm")
+@RequestMapping(BaseURL.BASE_PATH + "/tcm")
 public class TcmController {
-    @Autowired
-    private TrainCompositionMessageRepository trainCompositionMessageRepository;
-    @Autowired
-    private CiService ciService;
-    @Autowired
-    private SecurityContext securityContext;
+    private final TrainCompositionMessageRepository trainCompositionMessageRepository;
+    private final CiService ciService;
+    private final SecurityContext securityContext;
+
+    public TcmController(TrainCompositionMessageRepository trainCompositionMessageRepository, CiService ciService, SecurityContext securityContext) {
+        this.trainCompositionMessageRepository = trainCompositionMessageRepository;
+        this.ciService = ciService;
+        this.securityContext = securityContext;
+    }
 
     @ApiOperation(value = "Constructs a tcm-message from data and puts it into de CI-buffer")
     @PostMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)

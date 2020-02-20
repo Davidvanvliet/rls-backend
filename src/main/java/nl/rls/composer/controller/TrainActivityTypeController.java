@@ -5,7 +5,6 @@ import nl.rls.composer.domain.code.TrainActivityType;
 import nl.rls.composer.repository.TrainActivityTypeRepository;
 import nl.rls.composer.rest.dto.TrainActivityTypeDto;
 import nl.rls.composer.rest.dto.mapper.TrainActivityTypeDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "trainactivitytypes/")
+@RequestMapping(BaseURL.BASE_PATH + "/trainactivitytypes")
 public class TrainActivityTypeController {
     private final TrainActivityTypeRepository trainActivityTypeRepository;
 
@@ -23,7 +22,7 @@ public class TrainActivityTypeController {
         this.trainActivityTypeRepository = trainActivityTypeRepository;
     }
 
-    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainActivityTypeDto> getById(@PathVariable Integer id) {
         Optional<TrainActivityType> optional = trainActivityTypeRepository.findById(id);
         if (optional.isPresent()) {

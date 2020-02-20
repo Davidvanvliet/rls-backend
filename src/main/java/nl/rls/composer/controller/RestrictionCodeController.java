@@ -5,7 +5,6 @@ import nl.rls.composer.domain.code.RestrictionCode;
 import nl.rls.composer.repository.RestrictionCodeRepository;
 import nl.rls.composer.rest.dto.RestrictionCodeDto;
 import nl.rls.composer.rest.dto.mapper.RestrictionCodeDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "restrictioncodes/")
+@RequestMapping(BaseURL.BASE_PATH + "/restrictioncodes")
 public class RestrictionCodeController {
     private final RestrictionCodeRepository restrictionCodeRepository;
 
@@ -23,7 +22,7 @@ public class RestrictionCodeController {
         this.restrictionCodeRepository = restrictionCodeRepository;
     }
 
-    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RestrictionCodeDto> getRestrictionCode(@PathVariable Integer id) {
         Optional<RestrictionCode> optional = restrictionCodeRepository.findById(id);
         if (optional.isPresent()) {

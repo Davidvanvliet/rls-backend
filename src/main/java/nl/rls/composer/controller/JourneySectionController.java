@@ -24,7 +24,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + JourneySectionController.PATH)
 public class JourneySectionController {
-    public static final String PATH = "journeysections/";
+    public static final String PATH = "/journeysections";
     private final LocationRepository locationRepository;
     private final JourneySectionRepository journeySectionRepository;
     private final SecurityContext securityContext;
@@ -39,7 +39,7 @@ public class JourneySectionController {
         this.trainCompositionService = trainCompositionService;
     }
 
-    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> getById(@PathVariable int id) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
@@ -51,7 +51,7 @@ public class JourneySectionController {
         }
     }
 
-    @PutMapping(value = "{id}/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> update(@PathVariable int id, @RequestBody JourneySectionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
@@ -76,7 +76,7 @@ public class JourneySectionController {
         }
     }
 
-    @PutMapping(value = "{id}/traincomposition/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}/traincomposition", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> putTrainCompositionToJourneySection(@PathVariable Integer id,
                                                                                  @RequestBody TrainCompositionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
@@ -104,7 +104,7 @@ public class JourneySectionController {
     }
 
     @ApiOperation(value = "Copies or clones a complete TrainComposition including tractions and wagons.")
-    @PutMapping(value = "{id}/clone/")
+    @PutMapping(value = "/{id}/clone")
     public ResponseEntity<TrainDto> copyComposition(@PathVariable Integer id,
                                                     @RequestBody TrainCompositionCloneDto dto) {
         int ownerId = securityContext.getOwnerId();

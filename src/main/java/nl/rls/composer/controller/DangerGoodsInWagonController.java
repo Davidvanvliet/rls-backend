@@ -13,7 +13,6 @@ import nl.rls.composer.rest.dto.DangerGoodsInWagonPostDto;
 import nl.rls.composer.rest.dto.WagonInTrainDto;
 import nl.rls.composer.rest.dto.mapper.DangerGoodsInWagonDtoMapper;
 import nl.rls.composer.rest.dto.mapper.WagonInTrainDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,7 @@ public class DangerGoodsInWagonController {
         this.wagonInTrainRepository = wagonInTrainRepository;
     }
 
-    @GetMapping(value = "{id}/dangergoods/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/dangergoods", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DangerGoodsInWagonDto>> getAllDangerGoodsInWagon(@PathVariable Integer id) {
         System.out.println("getAllDangerGoodsInWagon");
         Integer ownerId = securityContext.getOwnerId();
@@ -56,7 +55,7 @@ public class DangerGoodsInWagonController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping(value = "{id}/dangergoods/{dangerGoodsId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/dangergoods/{dangerGoodsId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DangerGoodsInWagonDto> getDangerGoodsInWagon(@PathVariable Integer id,
                                                                        @PathVariable Integer dangerGoodsId) {
         int ownerId = securityContext.getOwnerId();
@@ -71,7 +70,7 @@ public class DangerGoodsInWagonController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping(value = "{id}/dangergoods/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/dangergoods", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WagonInTrainDto> postDangerGoods(@PathVariable int id,
                                                            @RequestBody DangerGoodsInWagonPostDto postDto) {
         int ownerId = securityContext.getOwnerId();
@@ -97,7 +96,7 @@ public class DangerGoodsInWagonController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping(value = "{id}/dangergoods/{dangerGoodsId}/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}/dangergoods/{dangerGoodsId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WagonInTrainDto> updateDangerGoodsInWagon(@PathVariable int id,
                                                                     @PathVariable int dangerGoodsId, @RequestBody DangerGoodsInWagonPostDto postDto) {
         int ownerId = securityContext.getOwnerId();
@@ -123,7 +122,7 @@ public class DangerGoodsInWagonController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping(value = "{id}/dangergoods/{dangerGoodsId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}/dangergoods/{dangerGoodsId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WagonInTrainDto> deleteDangerGoodsInWagon(@PathVariable int id,
                                                                     @PathVariable int dangerGoodsId) {
         int ownerId = securityContext.getOwnerId();

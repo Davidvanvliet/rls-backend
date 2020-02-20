@@ -12,7 +12,6 @@ import nl.rls.ci.aa.repository.UserRepository;
 import nl.rls.ci.aa.security.SecurityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("aa/users/")
+@RequestMapping("/aa/users")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserRepository userRepository;
@@ -51,7 +50,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable int id) {
         Optional<AppUser> user = userRepository.findById(id);
         if (!user.isPresent()) {
@@ -60,7 +59,7 @@ public class UserController {
         return ResponseEntity.ok(UserDtoMapper.map(user.get()));
     }
 
-    @PutMapping("{username}/")
+    @PutMapping("/{username}")
     @Transactional
     public ResponseEntity<UserDto> signUp(@PathVariable(value = "username") String username,
                                           @RequestBody UserPostDto userPostDtoPost) {
@@ -91,7 +90,7 @@ public class UserController {
         return ResponseEntity.ok(UserDtoMapper.map(user));
     }
 
-    @PutMapping("{userId}/role/{roleName}/")
+    @PutMapping("/{userId}/role/{roleName}")
     public ResponseEntity<UserDto> setRoleToUser(@PathVariable(value = "userId") int userId,
                                                  @PathVariable(value = "roleName") String roleName) {
         log.info("setRoleToUser: " + userId + " " + roleName);
