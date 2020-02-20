@@ -17,5 +17,5 @@ public class TrainDto extends ResourceSupport {
     private String transferPoint;
     private Date scheduledTimeAtHandover;
     private Date scheduledDateTimeAtTransfer;
-    private List<JourneySectionDto> journeySections = new ArrayList<JourneySectionDto>();
+    private List<JourneySectionDto> journeySections = new ArrayList<>();
 }

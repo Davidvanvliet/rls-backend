@@ -18,6 +18,6 @@ public class WagonInTrainDto extends ResourceSupport {
     private int brakeWeight;
     private int wagonMaxSpeed;
     private WagonDto wagon;
-    private List<DangerGoodsInWagonDto> dangerGoods = new ArrayList<DangerGoodsInWagonDto>();
+    private List<DangerGoodsInWagonDto> dangerGoods = new ArrayList<>();
 
 }
