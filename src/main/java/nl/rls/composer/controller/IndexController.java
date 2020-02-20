@@ -20,7 +20,7 @@ public class IndexController {
         indexDto.add(linkTo(methodOn(CompanyController.class).getAll("", "")).withRel("companies"));
         indexDto.add(linkTo(methodOn(DangerLabelController.class).getAll()).withRel("dangerlabels"));
         indexDto.add(linkTo(methodOn(LocationController.class).getAllQuery("", "")).withRel("locationidents"));
-        indexDto.add(linkTo(methodOn(RestrictionCodeController.class).getAll()).withRel("restrictioncodes"));
+        indexDto.add(linkTo(methodOn(RestrictionCodeController.class).getAll("")).withRel("restrictioncodes"));
         indexDto.add(linkTo(methodOn(TractionModeController.class).getAll()).withRel("tractionmodes"));
         indexDto.add(linkTo(methodOn(TrainActivityTypeController.class).getAll()).withRel("trainactivitycodes"));
         indexDto.add(linkTo(methodOn(WagonController.class).getAll()).withRel("wagons"));
