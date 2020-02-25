@@ -11,6 +11,7 @@ import nl.rls.ci.service.CiService;
 import nl.rls.ci.url.BaseURL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,9 +63,8 @@ public class CiController {
         Optional<CiMessage> ciMessage = ciRepository.findByIdAndOwnerId(id, ownerId);
         if (ciMessage.isPresent()) {
             return ResponseEntity.ok(CiDtoMapper.map(ciMessage.get()));
-        } else {
-            return ResponseEntity.notFound().build();
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
