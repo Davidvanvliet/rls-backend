@@ -50,7 +50,7 @@ public class TractionModeController {
             if (optional.isPresent()) {
                 TractionModeDto tractionModeDto = TractionModeDtoMapper
                         .map(optional.get());
-                return ResponseEntity.ok(new ArrayList<>(Collections.singletonList(tractionModeDto)));
+                return ResponseEntity.ok(Collections.singletonList(tractionModeDto));
             } else {
                 return ResponseEntity.notFound().build();
             }
