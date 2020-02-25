@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,30 +35,30 @@ public class RestrictionCodeController {
         }
     }
 
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RestrictionCodeDto> getRestrictionCodeByCode(@RequestParam("code") String code) {
-        Optional<RestrictionCode> optional = restrictionCodeRepository.findByCode(code);
-        if (optional.isPresent()) {
-            RestrictionCodeDto restrictionCodeDto = RestrictionCodeDtoMapper
-                    .map(optional.get());
-            return ResponseEntity.ok(restrictionCodeDto);
+    public ResponseEntity<List<RestrictionCodeDto>> getAll(@RequestParam(value = "code", required = false) String code) {
+        if (code == null) {
+            Iterable<RestrictionCode> restrictionCodeList = restrictionCodeRepository.findAll();
+            List<RestrictionCodeDto> restrictionCodeDtoList = new ArrayList<>();
+
+            for (RestrictionCode restrictionCode : restrictionCodeList) {
+                restrictionCodeDtoList.add(RestrictionCodeDtoMapper.map(restrictionCode));
+            }
+            return ResponseEntity.ok(restrictionCodeDtoList);
         } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+            Optional<RestrictionCode> optional = restrictionCodeRepository.findByCode(code);
+            if (optional.isPresent()) {
+                RestrictionCodeDto restrictionCodeDto = RestrictionCodeDtoMapper
+                        .map(optional.get());
+                return ResponseEntity.ok(Collections.singletonList(restrictionCodeDto));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
 
-
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RestrictionCodeDto>> getAll() {
-        Iterable<RestrictionCode> restrictionCodeList = restrictionCodeRepository.findAll();
-        List<RestrictionCodeDto> restrictionCodeDtoList = new ArrayList<>();
-
-        for (RestrictionCode restrictionCode : restrictionCodeList) {
-            restrictionCodeDtoList.add(RestrictionCodeDtoMapper.map(restrictionCode));
-        }
 //		Link restrictionCodesLink = linkTo(methodOn(RestrictionCodeController.class).getAll()).withSelfRel();
 //		Resources<RestrictionCodeDto> restrictionCodes = new Resources<RestrictionCodeDto>(restrictionCodeDtoList, restrictionCodesLink);
-        return ResponseEntity.ok(restrictionCodeDtoList);
-    }
 
+        }
+    }
 }

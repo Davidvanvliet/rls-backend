@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,28 +36,25 @@ public class TractionModeController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TractionModeDto> getTractionModeByCode(@RequestParam("code") String code) {
-        Optional<TractionMode> optional = tractionModeRepository.findByCode(code);
-        if (optional.isPresent()) {
-            TractionModeDto tractionModeDto = TractionModeDtoMapper
-                    .map(optional.get());
-            return ResponseEntity.ok(tractionModeDto);
+    public ResponseEntity<List<TractionModeDto>> getAll(@RequestParam(value = "code", required = false) String code) {
+        if (code == null) {
+            Iterable<TractionMode> tractionModeList = tractionModeRepository.findAll();
+            List<TractionModeDto> tractionModeDtoList = new ArrayList<>();
+
+            for (TractionMode tractionMode : tractionModeList) {
+                tractionModeDtoList.add(TractionModeDtoMapper.map(tractionMode));
+            }
+            return ResponseEntity.ok(tractionModeDtoList);
         } else {
-            return ResponseEntity.notFound().build();
+            Optional<TractionMode> optional = tractionModeRepository.findByCode(code);
+            if (optional.isPresent()) {
+                TractionModeDto tractionModeDto = TractionModeDtoMapper
+                        .map(optional.get());
+                return ResponseEntity.ok(Collections.singletonList(tractionModeDto));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         }
-    }
-
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TractionModeDto>> getAll() {
-        Iterable<TractionMode> tractionModeList = tractionModeRepository.findAll();
-        List<TractionModeDto> tractionModeDtoList = new ArrayList<>();
-
-        for (TractionMode tractionMode : tractionModeList) {
-            tractionModeDtoList.add(TractionModeDtoMapper.map(tractionMode));
-        }
-//		Link tractionModesLink = linkTo(methodOn(TractionModeController.class).getAll()).withSelfRel();
-//		Resources<TractionModeDto> tractionModes = new Resources<TractionModeDto>(tractionModeDtoList, tractionModesLink);
-        return ResponseEntity.ok(tractionModeDtoList);
     }
 
 }
