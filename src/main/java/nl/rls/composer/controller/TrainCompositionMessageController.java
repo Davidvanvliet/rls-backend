@@ -54,11 +54,6 @@ public class TrainCompositionMessageController {
 	@Autowired
 	private SecurityContext securityContext;
 
-	@GetMapping("/hello")
-	public ResponseEntity<String> getHello() {
-		return ResponseEntity.ok("Hello world");
-	}
-
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TrainCompositionMessageDto>> getAll() {
 		int ownerId = securityContext.getOwnerId();

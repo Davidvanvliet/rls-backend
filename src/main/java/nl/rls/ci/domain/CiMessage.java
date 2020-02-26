@@ -28,6 +28,7 @@ public class CiMessage extends OwnedEntity{
 	private Date createDate;
 	private Date postDate;
 	private boolean posted = false;
+	private String httpError;
 	@OneToOne(cascade = CascadeType.ALL)
 	private UicHeader uicHeader;
 	@OneToOne(cascade = CascadeType.ALL)

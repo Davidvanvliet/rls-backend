@@ -20,13 +20,13 @@ import nl.rls.composer.rest.dto.DangerLabelDto;
 import nl.rls.composer.rest.dto.mapper.DangerLabelDtoMapper;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH+"dangerlabels/")
+@RequestMapping(BaseURL.BASE_PATH+"dangerlabels")
 @Api(description = "All Danger Labels of dangerous good according to the RID chapter 3.2, table A, column 5, excepting the shunting labels Model 13 and 15 (CODE: OTIF RID-Specification).")
 public class DangerLabelController {
 	@Autowired
 	private DangerLabelRepository dangerLabelRepository;
 
-	@GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<DangerLabelDto> getById(@PathVariable Integer id) {
 		Optional<DangerLabel> optional = dangerLabelRepository.findById(id);
 		if (optional.isPresent()) {
@@ -37,7 +37,7 @@ public class DangerLabelController {
 		}
 	}
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<DangerLabelDto>> getAll() {
 		Iterable<DangerLabel> entityList = dangerLabelRepository.findAll();
 

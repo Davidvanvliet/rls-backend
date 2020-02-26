@@ -14,3 +14,5 @@ composition omdraaien
 verplaatsen wagons slimmer
 in de tcm train goed meegeven (links - self) pointer verwijderen
 WebStruct
+
+keytool -import -noprompt -trustcacerts -alias prorail -file cibprprorailnl.crt -keystore cacerts -storepass changeit

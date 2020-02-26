@@ -31,7 +31,6 @@ import nl.rls.ci.aa.repository.OwnerRepository;
 import nl.rls.ci.aa.repository.RoleRepository;
 import nl.rls.ci.aa.repository.UserRepository;
 import nl.rls.composer.domain.Company;
-import nl.rls.composer.domain.CompositIdentifierOperationalType;
 import nl.rls.composer.domain.DangerGoodsInWagon;
 import nl.rls.composer.domain.DangerGoodsType;
 import nl.rls.composer.domain.GenericMessage;
@@ -52,7 +51,6 @@ import nl.rls.composer.domain.code.TrainActivityType;
 import nl.rls.composer.domain.message.MessageStatus;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.repository.CompanyRepository;
-import nl.rls.composer.repository.CompositIdentifierOperationalTypeRepository;
 import nl.rls.composer.repository.DangerGoodsTypeRepository;
 import nl.rls.composer.repository.JourneySectionRepository;
 import nl.rls.composer.repository.LocationRepository;
@@ -82,8 +80,6 @@ public class Main {
 	private LocationRepository locationIdentRepository;
 	@Autowired
 	private CompanyRepository companyRepository;
-	@Autowired
-	private CompositIdentifierOperationalTypeRepository compositIdentifierOperationalTypeRepository;
 	@Autowired
 	DangerGoodsTypeRepository dangerGoodsTypeRepository;
 	@Autowired
@@ -213,6 +209,8 @@ public class Main {
 			trainComposition.setJourneySection(journeySection);
 			trainComposition.setLivestockOrPeopleIndicator(0);
 			trainComposition.setTrainMaxSpeed(100);
+			trainComposition.setBrakeWeight(1000);
+			trainComposition.setMaxAxleWeight(40);
 			journeySection.setTrainComposition(trainComposition);
 
 			/*
@@ -306,22 +304,15 @@ public class Main {
 			/*
 			 * CompositIdentifierOperationalType
 			 */
-			System.out.println("compositIdentifierOperationalType 7.1");
-			CompositIdentifierOperationalType compositIdentifierOperationalType = new CompositIdentifierOperationalType();
-			compositIdentifierOperationalType.setOwnerId(ownerId);
-			compositIdentifierOperationalType.setCompany(companyRepository.findByCode("3502").get(0));
-			compositIdentifierOperationalType.setObjectType("TR");
-			compositIdentifierOperationalType.setCore("041350222700");
+			System.out.println("trainCompositionMessage 7.1");
+			trainCompositionMessage.setCompany(companyRepository.findByCode("9001").get(0));
+			trainCompositionMessage.setObjectType("TR");
+			trainCompositionMessage.setCore("041350222700");
 			Date date = new Date();
-			compositIdentifierOperationalType.setStartDate(date);
-			compositIdentifierOperationalType.setTimetableYear(Calendar.getInstance().get(Calendar.YEAR));
-			compositIdentifierOperationalType.setVariant("00");
-			System.out.println("compositIdentifierOperationalType 7.2");
-			compositIdentifierOperationalTypeRepository.save(compositIdentifierOperationalType);
-			trainCompositionMessage.getCompositIdentifierOperationalType().add(compositIdentifierOperationalType);
-			System.out.println("compositIdentifierOperationalType 7.3");
-			compositIdentifierOperationalTypeRepository.save(compositIdentifierOperationalType);
-
+			trainCompositionMessage.setStartDate(date);
+			trainCompositionMessage.setTimetableYear(Calendar.getInstance().get(Calendar.YEAR));
+			trainCompositionMessage.setVariant("00");
+			System.out.println("trainCompositionMessage 7.2");
 			trainCompositionMessageRepository.save(trainCompositionMessage);
 			System.out.println("trainCompositionMessage 2");
 			info.taf_jsg.schemes.TrainCompositionMessage tcm = TrainCompositionMessageXmlMapper

@@ -1,28 +1,25 @@
 package nl.rls.composer.domain.message;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.domain.CompositIdentifierOperationalType;
+import nl.rls.composer.domain.Company;
 import nl.rls.composer.domain.GenericMessage;
 import nl.rls.composer.domain.Train;
 
 /**
  * @author berend.wilkens
  * 
- *         Train Composition message This message must be sent from the
- *         RU to the next RU, defining the composition of the train. This
- *         message must also be sent from the RU to the IM(s) when requested by
- *         the Conventional Rail TSI Operation and Traffic Management or by the
+ *         Train Composition message This message must be sent from the RU to
+ *         the next RU, defining the composition of the train. This message must
+ *         also be sent from the RU to the IM(s) when requested by the
+ *         Conventional Rail TSI Operation and Traffic Management or by the
  *         contract between IM and RU. Whenever there is a change in the
  *         composition during the journey of a train, the RU responsible has to
  *         update this message to all parties involved. The information, which
@@ -59,12 +56,34 @@ public class TrainCompositionMessage extends GenericMessage {
 	public TrainCompositionMessage(Integer ownerId) {
 		super(ownerId);
 	}
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "train_composition_message_id")
-	private List<CompositIdentifierOperationalType> compositIdentifierOperationalType = new ArrayList<CompositIdentifierOperationalType>();
-	@ManyToOne(cascade=CascadeType.DETACH)
+
+	/**
+	 * Provides a possibility for differentiation between the objects: Train, Path,
+	 * Case Reference and Path Request
+	 */
+	private String objectType;
+	@ManyToOne
+	private Company company;
+	/**
+	 * It is the main part of identifier and is determent by the company that
+	 * creates it.
+	 */
+	private String core;
+	/**
+	 * The variant shows a relationship between two identifiers referring to the
+	 * same business case
+	 */
+	private String variant;
+	/**
+	 * Refers to the timetable period in which the business will be carried out
+	 */
+	private int timetableYear;
+	/**
+	 * The start of the date/time in effect
+	 */
+	private Date startDate;
+
+	@ManyToOne(cascade = CascadeType.DETACH)
 	private Train train;
-	
-	
 
 }

@@ -17,7 +17,6 @@ public class TrainCompositionDto extends ResourceSupport {
     private Integer exceptionalGaugingIndicator;
     private Integer livestockOrPeopleIndicator;
     private Integer dangerousGoodsIndicator;
-	private int trainType;
 	private int trainWeight;
 	private int trainLength;
 	// private List<TrainCC_System> trainCCSystem;

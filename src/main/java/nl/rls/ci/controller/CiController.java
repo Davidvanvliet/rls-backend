@@ -1,8 +1,5 @@
 package nl.rls.ci.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,15 +76,15 @@ public class CiController {
 	 * @param messageXml
 	 * @return de link naar het CI object/resource
 	 */
-	@Transactional
-	@PostMapping(value = "/")
-	@ApiOperation(value = "Stores a CI (XML-)message for a client (UicRequest). This message is not send.")
-	public ResponseEntity<?> postMessage(@RequestBody String messageXml) {
-		System.out.println("POST XML message to databases");
-		CiMessage ciMessage = ciService.makeCiMessage(messageXml);
-		return ResponseEntity.created(linkTo(methodOn(CiController.class).getMessage(ciMessage.getId())).toUri())
-				.build();
-	}
+//	@Transactional
+//	@PostMapping(value = "/")
+//	@ApiOperation(value = "Stores a CI (XML-)message for a client (UicRequest). This message is not send.")
+//	public ResponseEntity<?> postMessage(@RequestBody String messageXml) {
+//		System.out.println("POST XML message to databases");
+//		CiMessage ciMessage = ciService.makeCiMessage(messageXml);
+//		return ResponseEntity.created(linkTo(methodOn(CiController.class).getMessage(ciMessage.getId())).toUri())
+//				.build();
+//	}
 
 	@PutMapping(value = "/{id}")
 	@ApiOperation(value = "Updates a CI (XML-)message for a client (UicRequest). This message is not send.")
@@ -113,11 +110,10 @@ public class CiController {
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		System.out.println("sendMessage XML message: "+ optional.get().getUicRequest().getMessage());
 		String message = ciService.sendMessage(optional.get());
 		if (message != null) {
-			System.out.println(message);
-			return ResponseEntity.accepted().build();
+			System.out.println("Message: "+message);
+			return ResponseEntity.accepted().body(message);
 		} else {
 			return ResponseEntity.status(406).build();
 			

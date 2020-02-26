@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.Company;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.rest.dto.CompanyDto;
@@ -21,12 +22,12 @@ import nl.rls.composer.rest.dto.mapper.CompanyDtoMapper;
 
 @Api(value = "Access to all companies, RU's and IM's")
 @RestController
-@RequestMapping("/api/v1/companies/")
+@RequestMapping(BaseURL.BASE_PATH + "companies")
 public class CompanyController {
 	@Autowired
 	private CompanyRepository companyRepository;
 
-	@GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CompanyDto> getById(@PathVariable Integer id) {
 		Optional<Company> optional = companyRepository.findById(id);
 		if (optional.isPresent()) {
@@ -38,7 +39,7 @@ public class CompanyController {
 		}
 	}
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CompanyDto>> getAll(
 		@RequestParam(name = "country", required = false) String countryIso, 
 		@RequestParam(name= "code", required = false) String code) {

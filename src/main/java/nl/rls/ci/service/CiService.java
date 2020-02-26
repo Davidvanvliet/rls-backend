@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -62,44 +61,43 @@ public class CiService {
 
 	@Transactional
 	public String sendMessage(CiMessage ciMessage) {
+		String message = "";
 		log.info("sendMessage 1 (ciMessage): " + ciMessage);
 		UICMessage uicMessage = CiDtoMapper.map(ciMessage.getUicRequest());
 		log.info("sendMessage 2 (uicMessage): " + uicMessage);
 		System.out.println("WSDL_LOCATION: " + LIReceiveMessageService.LIRECEIVEMESSAGESERVICE_WSDL_LOCATION);
-
-		// URL url = new
-		// URL("http://localhost:8080/04wsdlfirstws/services/customerOrders?wsdl");
-		// CustomerOrdersService service = new CustomerOrdersService(url);
-		// CustomerOrdersPortType port = service.getCustomerOrdersPort();
 
 		LIReceiveMessageService service = new LIReceiveMessageService();
 		log.info("sendMessage 2a (service.getServiceName()): " + service.getServiceName());
 		UICReceiveMessage uicReceiveMessage = service.getUICReceiveMessagePort();
 		// new SSLTool();
 		// SSLTool.disableCertificateValidation();
+		UICMessageResponse uicMessageResponse = null;;
 		log.info("sendMessage 2b (uicReceiveMessage): " + uicReceiveMessage.toString());
 		try {
-			UICMessageResponse uicMessageResponse = uicReceiveMessage.uicMessage(uicMessage,
+			uicMessageResponse = uicReceiveMessage.uicMessage(uicMessage,
 					ciMessage.getUicHeader().getMessageIdentifier(), ciMessage.getUicHeader().getMessageLiHost(), false,
 					false, false);
-			log.info("sendMessage 3 (uicMessageResponse): " + uicMessageResponse.getReturn());
+			log.info("sendMessage 3b (uicMessageResponse): " + uicMessageResponse.getReturn().toString());
 			LITechnicalAck technicalAck = unMarshallResponse(uicMessageResponse.getReturn().toString());
 			System.out.println(technicalAck);
-
 			UicResponse uicResponse = CiDtoMapper.map(technicalAck);
 			ciMessage.setUicResponse(uicResponse);
 			log.info("sendMessage 4 (uicResponse): " + uicResponse);
+			message = uicResponse.getResponseStatus();
 		} catch (Exception e) {
-			return e.getMessage();
+			ciMessage.setHttpError(e.getMessage());
+			message = e.getMessage(); 
+			log.info("Error "+e.getMessage());
 		}
 		ciMessage.setPosted(true);
 		ciMessage.setPostDate(new Date());
 		ciRepository.save(ciMessage);
 		log.info("sendMessage 5 (uicResponse): " + ciMessage);
-		return null;
+		return message;
 	}
 
-	public String makeXmlMessage(TrainCompositionMessage trainCompositionMessage) {
+	public String makeTcmMessage(TrainCompositionMessage trainCompositionMessage) {
 		info.taf_jsg.schemes.TrainCompositionMessage trainCompositionXmlMessage = TrainCompositionMessageXmlMapper
 				.map(trainCompositionMessage);
 		StringWriter xmlMessage = new StringWriter();
@@ -130,8 +128,12 @@ public class CiService {
 		return xmlMessage.toString();
 	}
 
-	public CiMessage makeCiMessage(String messageXml) {
-		// validateAgainstXSD(messageXml, "taf_cat_complete_sector.xsd");
+	public CiMessage makeCiMessage(TrainCompositionMessage trainCompositionMessage, String messageXml)
+			throws SAXException, IOException {
+		InputStream targetStream = new ByteArrayInputStream(messageXml.getBytes());
+		File file = new File("taf_cat_complete_sector.xsd");
+		InputStream xsdStream = new FileInputStream(file);
+		validateAgainstXSD(targetStream, xsdStream);
 		int ownerId = securityContext.getOwnerId();
 		// maak de wrapper voor het bericht
 		CiMessage ciMessage = new CiMessage();
@@ -148,15 +150,15 @@ public class CiService {
 		xmlMessage.setMessage(messageXml.toString());
 		xmlMessageRepository.save(xmlMessage);
 		uicRequest.setMessage(xmlMessage);
-		uicRequest.setSignature("signature");
+		uicRequest.setSenderAlias("82.217.100.12");
 		ciMessage.setUicRequest(uicRequest);
 
 		/*
 		 * maak de het bericht voor de common interface = SOAP header
 		 */
 		UicHeader uicHeader = new UicHeader();
-		uicHeader.setMessageIdentifier(UUID.randomUUID().toString());
-		uicHeader.setMessageLiHost(CiHostName.getPublicHostName());
+		uicHeader.setMessageIdentifier(trainCompositionMessage.getMessageIdentifier());
+		uicHeader.setMessageLiHost("82.217.100.12");
 		ciMessage.setUicHeader(uicHeader);
 		ciMessage.setCreateDate(new Date());
 		ciMessage = ciRepository.save(ciMessage);
