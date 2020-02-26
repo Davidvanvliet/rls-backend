@@ -91,9 +91,6 @@ public class Main {
     public CommandLineRunner demo() {
         return (args) -> {
             log.info("Start CommandLineRunner");
-            roleRepository.save(new Role(Role.ROLE_USER));
-            roleRepository.save(new Role(Role.ROLE_SUPER_USER));
-            roleRepository.save(new Role(Role.ROLE_ADMIN));
             Optional<Role> role = roleRepository.findByName("ROLE_ADMIN");
             AppUser user = new AppUser("Berend", "Wilkens", "berend.wilkens@hu.nl");
             userRepository.save(user);
