@@ -52,7 +52,7 @@ public class TrainActivityTypeController {
             if (optional.isPresent()) {
                 TrainActivityTypeDto trainActivityTypeDto = TrainActivityTypeDtoMapper
                         .map(optional.get());
-                return ResponseEntity.ok(new ArrayList<>(Collections.singletonList(trainActivityTypeDto)));
+                return ResponseEntity.ok(Collections.singletonList(trainActivityTypeDto));
             } else {
                 return ResponseEntity.notFound().build();
             }

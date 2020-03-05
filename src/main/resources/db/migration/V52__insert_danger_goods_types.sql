@@ -1,0 +1,1 @@
+INSERT INTO danger_goods_type (hazard_identification_number, limited_quantity_indicator, packing_group, rid_class, un_number) VALUES ('1.1D', false, 'I','1.1D','0075')
