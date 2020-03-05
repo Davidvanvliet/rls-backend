@@ -9,8 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/restrictioncodes")
@@ -49,7 +51,7 @@ public class RestrictionCodeController {
             if (optional.isPresent()) {
                 RestrictionCodeDto restrictionCodeDto = RestrictionCodeDtoMapper
                         .map(optional.get());
-                return ResponseEntity.ok(new ArrayList<>(Collections.singletonList(restrictionCodeDto)));
+                return ResponseEntity.ok(Collections.singletonList(restrictionCodeDto));
             } else {
                 return ResponseEntity.notFound().build();
             }
