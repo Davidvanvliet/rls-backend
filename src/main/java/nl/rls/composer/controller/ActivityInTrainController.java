@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -72,7 +73,7 @@ public class ActivityInTrainController {
     }
 
     @PostMapping(value = "/{id}/activities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<JourneySectionDto> addActivity(@PathVariable int id, @RequestBody ActivityInTrainAddDto dto) {
+    public ResponseEntity<JourneySectionDto> addActivity(@PathVariable int id, @RequestBody @Valid ActivityInTrainAddDto dto) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {
@@ -93,7 +94,7 @@ public class ActivityInTrainController {
 
     @PutMapping(value = "/{id}/activities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> addActivity(@PathVariable int id,
-                                                         @RequestBody List<ActivityInTrainAddDto> dtoList) {
+                                                         @RequestBody @Valid List<ActivityInTrainAddDto> dtoList) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {

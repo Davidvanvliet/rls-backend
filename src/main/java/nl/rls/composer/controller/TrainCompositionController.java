@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -38,7 +39,7 @@ public class TrainCompositionController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainCompositionDto> update(@PathVariable int id, @RequestBody TrainCompositionPostDto dto) {
+    public ResponseEntity<TrainCompositionDto> update(@PathVariable int id, @RequestBody @Valid TrainCompositionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository.findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {

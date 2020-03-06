@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -52,7 +53,7 @@ public class JourneySectionController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<JourneySectionDto> update(@PathVariable int id, @RequestBody JourneySectionPostDto dto) {
+    public ResponseEntity<JourneySectionDto> update(@PathVariable int id, @RequestBody @Valid JourneySectionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {
@@ -78,7 +79,7 @@ public class JourneySectionController {
 
     @PutMapping(value = "/{id}/traincomposition", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JourneySectionDto> putTrainCompositionToJourneySection(@PathVariable Integer id,
-                                                                                 @RequestBody TrainCompositionPostDto dto) {
+                                                                                 @RequestBody @Valid TrainCompositionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
         if (!optional.isPresent()) {
@@ -106,7 +107,7 @@ public class JourneySectionController {
     @ApiOperation(value = "Copies or clones a complete TrainComposition including tractions and wagons.")
     @PutMapping(value = "/{id}/clone")
     public ResponseEntity<TrainDto> copyComposition(@PathVariable Integer id,
-                                                    @RequestBody TrainCompositionCloneDto dto) {
+                                                    @RequestBody @Valid TrainCompositionCloneDto dto) {
         int ownerId = securityContext.getOwnerId();
         JourneySection toJourneySection = null;
         JourneySection fromJourneySection = null;

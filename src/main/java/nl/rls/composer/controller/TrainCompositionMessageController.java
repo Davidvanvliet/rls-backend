@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -111,7 +112,7 @@ public class TrainCompositionMessageController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainCompositionMessageDto> create(@RequestBody TrainCompositionMessageCreateDto dto) {
+    public ResponseEntity<TrainCompositionMessageDto> create(@RequestBody @Valid TrainCompositionMessageCreateDto dto) {
         int ownerId = securityContext.getOwnerId();
         TrainCompositionMessage trainCompositionMessage = new TrainCompositionMessage();
         trainCompositionMessage.setOwnerId(ownerId);
@@ -155,7 +156,7 @@ public class TrainCompositionMessageController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionMessageDto> update(@PathVariable Integer id,
-                                                             @RequestBody TrainCompositionMessageCreateDto trainCompositionMessageCreateDto) {
+                                                             @RequestBody @Valid TrainCompositionMessageCreateDto trainCompositionMessageCreateDto) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {

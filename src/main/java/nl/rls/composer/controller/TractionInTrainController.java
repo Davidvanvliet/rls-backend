@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,7 +80,7 @@ public class TractionInTrainController {
 
     @PostMapping(value = "/{id}/tractions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainCompositionDto> addTraction(@PathVariable int id,
-                                                           @RequestBody TractionInTrainPostDto dto) {
+                                                           @RequestBody @Valid TractionInTrainPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Optional<TrainComposition> optional = trainCompositionRepository
                 .findByIdAndOwnerId(id, ownerId);

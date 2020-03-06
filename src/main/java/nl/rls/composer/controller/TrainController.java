@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -73,7 +74,7 @@ public class TrainController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainDto> create(@RequestBody TrainPostDto dto) {
+    public ResponseEntity<TrainDto> create(@RequestBody @Valid TrainPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Train train = new Train();
         train.setOwnerId(ownerId);
@@ -105,7 +106,7 @@ public class TrainController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainDto> update(@PathVariable Integer id, @RequestBody TrainPostDto trainCreateDto) {
+    public ResponseEntity<TrainDto> update(@PathVariable Integer id, @RequestBody @Valid TrainPostDto trainCreateDto) {
         int ownerId = securityContext.getOwnerId();
         Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {
@@ -147,7 +148,7 @@ public class TrainController {
 
     @PostMapping(value = "/{id}/journeysections", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainDto> postJourneySection(@PathVariable Integer id,
-                                                       @RequestBody JourneySectionPostDto dto) {
+                                                       @RequestBody @Valid JourneySectionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
         if (!optional.isPresent()) {
