@@ -4,9 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -14,8 +13,7 @@ import java.util.Date;
 @Setter
 public class TrainPostDto {
     @NotBlank(message = "operationalTrainNumber is mandatory")
-    @Min(1)
-    @Max(8)
+    @Size(min = 1, max = 8)
     private String operationalTrainNumber;
     private String transferPoint;
     private Date scheduledTimeAtHandover;

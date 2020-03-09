@@ -5,8 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,8 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 public class TrainDto extends ResourceSupport {
-    @Min(1)
-    @Max(8)
+    @Size(min = 1, max = 8)
     private String operationalTrainNumber;
     private String transferPoint;
     private Date scheduledTimeAtHandover;

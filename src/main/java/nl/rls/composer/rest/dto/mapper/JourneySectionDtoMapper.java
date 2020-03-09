@@ -1,8 +1,6 @@
 package nl.rls.composer.rest.dto.mapper;
 
-import nl.rls.composer.controller.CompanyController;
 import nl.rls.composer.controller.JourneySectionController;
-import nl.rls.composer.controller.LocationController;
 import nl.rls.composer.controller.TrainCompositionController;
 import nl.rls.composer.domain.JourneySection;
 import nl.rls.composer.domain.code.TrainActivityType;
@@ -40,29 +38,29 @@ public class JourneySectionDtoMapper {
         }
         dto.setActivities(trainActivityTypeDtoList);
 
-        dto.add(linkTo(methodOn(CompanyController.class)
-                .getById(entity.getResponsibilityActualSection().getResponsibleRU().getId()))
-                .withRel("responsibilityActualSectionRU")
-                .withTitle(entity.getResponsibilityActualSection().getResponsibleRU().getName()));
-        dto.add(linkTo(methodOn(CompanyController.class)
-                .getById(entity.getResponsibilityActualSection().getResponsibleIM().getId()))
-                .withRel("responsibilityActualSectionIM")
-                .withTitle(entity.getResponsibilityActualSection().getResponsibleIM().getName()));
-        dto.add(linkTo(methodOn(CompanyController.class)
-                .getById(entity.getResponsibilityNextSection().getResponsibleRU().getId()))
-                .withRel("responsibilityNextSectionRU")
-                .withTitle(entity.getResponsibilityNextSection().getResponsibleRU().getName()));
-        dto.add(linkTo(methodOn(CompanyController.class)
-                .getById(entity.getResponsibilityNextSection().getResponsibleIM().getId()))
-                .withRel("responsibilityNextSectionIM")
-                .withTitle(entity.getResponsibilityNextSection().getResponsibleIM().getName()));
-        dto.add(linkTo(methodOn(LocationController.class)
-                .getById(entity.getJourneySectionOrigin().getLocationPrimaryCode())).withRel("journeySectionOrigin")
-                .withTitle(entity.getJourneySectionOrigin().getPrimaryLocationName()));
-        dto.add(linkTo(methodOn(LocationController.class)
-                .getById(entity.getJourneySectionDestination().getLocationPrimaryCode()))
-                .withRel("journeySectionDestination")
-                .withTitle(entity.getJourneySectionDestination().getPrimaryLocationName()));
+//        dto.add(linkTo(methodOn(CompanyController.class)
+//                .getById(entity.getResponsibilityActualSection().getResponsibleRU().getId()))
+//                .withRel("responsibilityActualSectionRU")
+//                .withTitle(entity.getResponsibilityActualSection().getResponsibleRU().getName()));
+//        dto.add(linkTo(methodOn(CompanyController.class)
+//                .getById(entity.getResponsibilityActualSection().getResponsibleIM().getId()))
+//                .withRel("responsibilityActualSectionIM")
+//                .withTitle(entity.getResponsibilityActualSection().getResponsibleIM().getName()));
+//        dto.add(linkTo(methodOn(CompanyController.class)
+//                .getById(entity.getResponsibilityNextSection().getResponsibleRU().getId()))
+//                .withRel("responsibilityNextSectionRU")
+//                .withTitle(entity.getResponsibilityNextSection().getResponsibleRU().getName()));
+//        dto.add(linkTo(methodOn(CompanyController.class)
+//                .getById(entity.getResponsibilityNextSection().getResponsibleIM().getId()))
+//                .withRel("responsibilityNextSectionIM")
+//                .withTitle(entity.getResponsibilityNextSection().getResponsibleIM().getName()));
+//        dto.add(linkTo(methodOn(LocationController.class)
+//                .getById(entity.getJourneySectionOrigin().getLocationPrimaryCode())).withRel("journeySectionOrigin")
+//                .withTitle(entity.getJourneySectionOrigin().getPrimaryLocationName()));
+//        dto.add(linkTo(methodOn(LocationController.class)
+//                .getById(entity.getJourneySectionDestination().getLocationPrimaryCode()))
+//                .withRel("journeySectionDestination")
+//                .withTitle(entity.getJourneySectionDestination().getPrimaryLocationName()));
         if (entity.getTrainComposition() != null) {
             dto.add(linkTo(methodOn(TrainCompositionController.class).getById(entity.getTrainComposition().getId()))
                     .withRel("trainComposition"));

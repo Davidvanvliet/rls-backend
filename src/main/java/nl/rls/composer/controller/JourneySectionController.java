@@ -83,7 +83,7 @@ public class JourneySectionController {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
         if (!optional.isPresent()) {
-            ResponseEntity.status(422).build();
+            return ResponseEntity.status(422).build();
         }
         JourneySection journeySection = optional.get();
         if (journeySection.getTrainComposition() == null) {
