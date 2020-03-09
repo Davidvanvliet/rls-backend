@@ -15,8 +15,8 @@ import nl.rls.composer.rest.dto.*;
 import nl.rls.composer.rest.dto.mapper.JourneySectionDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainDtoMapper;
 import nl.rls.composer.service.TrainCompositionService;
+import nl.rls.util.ResponseEntity;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
