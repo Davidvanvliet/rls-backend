@@ -68,7 +68,7 @@ This operation is used to send the message to the Remote CI.
 <wsdl:service name="LIReceiveMessageService">
 <wsdl:port binding="tns:LIReceiveMessageServiceSoapBinding" name="UICReceiveMessagePort">
 <soap:address 
-				location="https://ci-bpr.prorail.nl/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS"
+				location="http://localhost:8082/ws/ci"
 />
 </wsdl:port>
 </wsdl:service>

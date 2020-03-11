@@ -14,6 +14,13 @@ public class CiDtoMapper {
 
 	public static UICMessage map(UicRequest entity) {
 		DozerBeanMapper mapper = new DozerBeanMapper();
+//		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
+//			protected void configure() {
+//				mapping(UicRequest.class, UICMessage.class)
+//								.fields("message", "message");
+//			}
+//		};
+//		mapper.addMapping(mappingBuilder);		
 		UICMessage uicMessage = mapper.map(entity, UICMessage.class);
 		return uicMessage;
 	}

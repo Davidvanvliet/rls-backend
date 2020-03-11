@@ -4,6 +4,8 @@ package nl.rls.ci.soapinterface;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
+
+import javax.jws.HandlerChain;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
@@ -22,6 +24,7 @@ import javax.xml.ws.WebServiceFeature;
 	targetNamespace = "http://uic.cc.org/UICMessage", 
 	wsdlLocation = "src/main/java/nl/rls/ci/soapinterface/UICCCMessageProcessingInboundWS.wsdl"
 )
+@HandlerChain(file="handler-chain.xml")
 public class LIReceiveMessageService
     extends Service
 {

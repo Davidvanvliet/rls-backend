@@ -34,7 +34,6 @@ import nl.rls.ci.domain.CiMessage;
 import nl.rls.ci.domain.UicHeader;
 import nl.rls.ci.domain.UicRequest;
 import nl.rls.ci.domain.UicResponse;
-import nl.rls.ci.domain.XmlMessage;
 import nl.rls.ci.repository.CiRepository;
 import nl.rls.ci.soap.dto.LITechnicalAck;
 import nl.rls.ci.soap.dto.mapper.CiDtoMapper;
@@ -43,7 +42,6 @@ import nl.rls.ci.soapinterface.UICMessage;
 import nl.rls.ci.soapinterface.UICMessageResponse;
 import nl.rls.ci.soapinterface.UICReceiveMessage;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
-import nl.rls.composer.repository.XmlMessageRepository;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 
 /**
@@ -55,8 +53,6 @@ public class CiService {
 	@Autowired
 	private CiRepository ciRepository;
 	@Autowired
-	private XmlMessageRepository xmlMessageRepository;
-	@Autowired
 	private SecurityContext securityContext;
 
 	@Transactional
@@ -64,7 +60,7 @@ public class CiService {
 		String message = "";
 		log.info("sendMessage 1 (ciMessage): " + ciMessage);
 		UICMessage uicMessage = CiDtoMapper.map(ciMessage.getUicRequest());
-		log.info("sendMessage 2 (uicMessage): " + uicMessage);
+		log.info("sendMessage 2 (uicMessage): " + uicMessage.getMessage());
 		System.out.println("WSDL_LOCATION: " + LIReceiveMessageService.LIRECEIVEMESSAGESERVICE_WSDL_LOCATION);
 
 		LIReceiveMessageService service = new LIReceiveMessageService();
@@ -72,7 +68,7 @@ public class CiService {
 		UICReceiveMessage uicReceiveMessage = service.getUICReceiveMessagePort();
 		// new SSLTool();
 		// SSLTool.disableCertificateValidation();
-		UICMessageResponse uicMessageResponse = null;;
+		UICMessageResponse uicMessageResponse = null;
 		log.info("sendMessage 2b (uicReceiveMessage): " + uicReceiveMessage.toString());
 		try {
 			uicMessageResponse = uicReceiveMessage.uicMessage(uicMessage,
@@ -145,11 +141,7 @@ public class CiService {
 		uicRequest.setOwnerId(ownerId);
 		// zet het specifieke bericht, bijv TCM, dit komt van de client
 		System.out.println("postMessage XML message: " + messageXml);
-		XmlMessage xmlMessage = new XmlMessage();
-		xmlMessage.setOwnerId(ownerId);
-		xmlMessage.setMessage(messageXml.toString());
-		xmlMessageRepository.save(xmlMessage);
-		uicRequest.setMessage(xmlMessage);
+		uicRequest.setMessage(messageXml);
 		uicRequest.setSenderAlias("82.217.100.12");
 		ciMessage.setUicRequest(uicRequest);
 
