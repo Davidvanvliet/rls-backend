@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + JourneySectionController.PATH)
@@ -64,8 +63,8 @@ public class ActivityInTrainController {
             // Link link =
             // linkTo(methodOn(ActivityInTrainController.class).getAllActivityInTrain(id))
             // .withSelfRel();
-            // Resources<TrainActivityTypeDto> dtos = new
-            // Resources<TrainActivityTypeDto>(trainActivityTypeDtoList, link);
+            // CollectionModel<TrainActivityTypeDto> dtos = new
+            // CollectionModel<TrainActivityTypeDto>(trainActivityTypeDtoList, link);
             return ResponseEntity.ok(trainActivityTypeDtoList);
         }
         return ResponseEntity.notFound().build();

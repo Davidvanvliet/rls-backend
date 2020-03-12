@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/wagons")
@@ -40,7 +39,7 @@ public class WagonController {
             wagonDtoList.add(wagonDto);
         }
 //		Link wagonLink = linkTo(methodOn(WagonController.class).getAll()).withSelfRel();
-//		Resources<WagonDto> locations = new Resources<WagonDto>(wagonDtoList, wagonLink);
+//		CollectionModel<WagonDto> locations = new CollectionModel<WagonDto>(wagonDtoList, wagonLink);
         return ResponseEntity.ok(wagonDtoList);
     }
 

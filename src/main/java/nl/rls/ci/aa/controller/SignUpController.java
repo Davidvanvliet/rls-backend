@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/sign-up")
+@RequestMapping("/signup")
 public class SignUpController {
     private static final Logger log = LoggerFactory.getLogger(SignUpController.class);
     private final UserRepository userRepository;
@@ -34,37 +34,29 @@ public class SignUpController {
         this.roleRepository = roleRepository;
     }
 
-    @PutMapping("/{username}")
+    @PostMapping
     @Transactional
-    public ResponseEntity<UserDto> signUp(@PathVariable(value = "username") String username, @RequestBody UserPostDto userPostDtoPost) {
-        log.info("signUp: " + userPostDtoPost);
-        AppUser user = userRepository.findByUsername(username);
-        if (user != null) {
-            user.setEmail(userPostDtoPost.getEmail());
-            user.setFirstName(userPostDtoPost.getFirstName());
-            user.setLastName(userPostDtoPost.getLastName());
-            user.setPassword(bCryptPasswordEncoder.encode(userPostDtoPost.getPassword()));
-        } else {
-            Optional<Role> role = roleRepository.findByName(Role.ROLE_USER);
-            user = new AppUser();
-            user.setPassword(bCryptPasswordEncoder.encode(userPostDtoPost.getPassword()));
-            user.setUsername(username);
-            user.setEmail(userPostDtoPost.getEmail());
-            user.setFirstName(userPostDtoPost.getFirstName());
-            user.setLastName(userPostDtoPost.getLastName());
-            user.setEnabled(true);
-            userRepository.save(user);
-            user = userRepository.findById(user.getId()).get();
-            System.out.println(user);
-            user.setRole(role.get());
-            log.info("signUp: getOwner");
-            Optional<Owner> optional = ownerRepository.findById(1);
-            optional.get().getUsers().add(user);
-            user.setOwner(optional.get());
-        }
-        log.info("signUp: saving ...");
+    public ResponseEntity<UserDto> signUp(@RequestBody UserPostDto userPostDtoPost) {
+        AppUser user = new AppUser();
+
+//        Optional<Role> role = roleRepository.findByName(Role.ROLE_USER);
+//        if (role.isPresent()) {
+//            user.setRole(new Role(role.get().getName()));
+//        }
+        user.setPassword(bCryptPasswordEncoder.encode(userPostDtoPost.getPassword()));
+        user.setUsername(userPostDtoPost.getEmail());
+        user.setEmail(userPostDtoPost.getEmail());
+        user.setFirstName(userPostDtoPost.getFirstName());
+        user.setLastName(userPostDtoPost.getLastName());
+        Optional<Owner> owner = ownerRepository.findByCode(userPostDtoPost.getOwner().getCode());
+        owner.ifPresent(user::setOwner);
+        user.setEnabled(true);
         userRepository.save(user);
         return ResponseEntity.ok(UserDtoMapper.map(user));
     }
 
+    @PutMapping
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserPostDto userPostDtoPost) {
+        return null;
+    }
 }

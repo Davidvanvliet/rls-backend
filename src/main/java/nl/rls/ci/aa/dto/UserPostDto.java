@@ -14,4 +14,5 @@ public class UserPostDto {
     private String firstName;
     private String lastName;
     private String email;
+    private OwnerDtoPost owner;
 }

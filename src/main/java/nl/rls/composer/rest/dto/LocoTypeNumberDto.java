@@ -3,12 +3,12 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 @NoArgsConstructor
 @Getter
 @Setter
-public class LocoTypeNumberDto extends ResourceSupport {
+public class LocoTypeNumberDto extends RepresentationModel {
     private String typeCode1;
     private String typeCode2;
     private String countryCode;

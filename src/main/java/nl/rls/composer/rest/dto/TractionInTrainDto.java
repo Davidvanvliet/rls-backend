@@ -3,12 +3,12 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 @NoArgsConstructor
 @Getter
 @Setter
-public class TractionInTrainDto extends ResourceSupport {
+public class TractionInTrainDto extends RepresentationModel {
     private int driverIndication;
     private int position;
     private TractionDto traction;

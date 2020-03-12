@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 @ToString
 @NoArgsConstructor
 @Getter
 @Setter
-public class ResponsibilityDto extends ResourceSupport {
+public class ResponsibilityDto extends RepresentationModel {
     private CompanyDto responsibleRU;
     private CompanyDto responsibleIM;
 

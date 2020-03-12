@@ -3,12 +3,12 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 @NoArgsConstructor
 @Getter
 @Setter
-public class DangerGoodsInWagonDto extends ResourceSupport {
+public class DangerGoodsInWagonDto extends RepresentationModel {
     /**
      * The weight of the dangerous goods in Kilograms
      */

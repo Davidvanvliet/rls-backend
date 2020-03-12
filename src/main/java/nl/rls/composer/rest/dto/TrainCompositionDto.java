@@ -3,7 +3,7 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TrainCompositionDto extends ResourceSupport {
+public class TrainCompositionDto extends RepresentationModel {
     private List<TractionInTrainDto> tractions = new ArrayList<TractionInTrainDto>();
     ;
     private List<WagonInTrainDto> wagons = new ArrayList<WagonInTrainDto>();

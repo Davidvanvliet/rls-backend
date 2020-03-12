@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Getter
 @Setter
 @ApiModel(description = "Identification code of a freight wagon based on the TSI OPE and CEN Recommendations and CIS wagons coded according to OSJD-UIC leaflet 402, which allows the conversion from 8 digits to 12 digits and viceversa.")
-public class WagonDto extends ResourceSupport {
+public class WagonDto extends RepresentationModel {
     private String numberFreight;
     private String name;
     private String code;

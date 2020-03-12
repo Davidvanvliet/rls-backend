@@ -1,18 +1,10 @@
 import io.restassured.response.ValidatableResponse;
 import nl.rls.Main;
-import nl.rls.ci.rest.dto.CiDto;
 import nl.rls.ci.url.BaseURL;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 

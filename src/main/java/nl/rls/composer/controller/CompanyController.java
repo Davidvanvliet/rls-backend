@@ -55,7 +55,7 @@ public class CompanyController {
             companyDtoList.add(CompanyDtoMapper.map(company));
         }
 //		Link link = linkTo(methodOn(CompanyController.class).getAll(countryIso, code)).withSelfRel();
-//		Resources<CompanyDto> locations = new Resources<CompanyDto>(companyDtoList, link);
+//		CollectionModel<CompanyDto> locations = new CollectionModel<CompanyDto>(companyDtoList, link);
         return ResponseEntity.ok(companyDtoList);
     }
 }

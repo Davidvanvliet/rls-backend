@@ -5,8 +5,8 @@ import nl.rls.composer.rest.dto.RestrictionCodeDto;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class RestrictionCodeDtoMapper {
     public static RestrictionCodeDto map(nl.rls.composer.domain.code.RestrictionCode restrictionCode) {

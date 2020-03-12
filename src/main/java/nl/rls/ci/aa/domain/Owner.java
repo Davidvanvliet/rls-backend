@@ -25,6 +25,11 @@ public class Owner {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<License> licenses = new ArrayList<>();
 
+    public Owner(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
     public boolean isSubscribed() {
 
         return true;
