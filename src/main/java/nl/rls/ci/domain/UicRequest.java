@@ -26,7 +26,7 @@ public class UicRequest extends OwnedEntity {
 	 * This element contains the actual TAF/TAPTSI message. If the message is
 	 * compressed, encrypted or singed, then it should be base64 encoded.
 	 */
-    @Lob
+	@Lob
 	private String message;
 	/**
 	 * Message can be digitally signed for security purpose. For signing, you have

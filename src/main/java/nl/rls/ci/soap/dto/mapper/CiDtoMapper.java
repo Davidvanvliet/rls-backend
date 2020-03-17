@@ -17,10 +17,12 @@ public class CiDtoMapper {
 //		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 //			protected void configure() {
 //				mapping(UicRequest.class, UICMessage.class)
-//								.fields("message", "message");
+//								.fields("message", "message", 
+//										FieldsMappingOptions.customConverter("nl.rls.ci.soap.dto.mapper.TrainCompositionMessageConverter"));
 //			}
 //		};
-//		mapper.addMapping(mappingBuilder);		
+//		mapper.addMapping(mappingBuilder);	
+
 		UICMessage uicMessage = mapper.map(entity, UICMessage.class);
 		return uicMessage;
 	}
@@ -29,12 +31,12 @@ public class CiDtoMapper {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
-				mapping(nl.rls.ci.soap.dto.MessageReference.class, MessageReference.class)
-				.fields("messageType", "messageType", FieldsMappingOptions.customConverter("nl.rls.ci.soap.dto.mapper.MessageTypeConverter"))
-				;
+				mapping(nl.rls.ci.soap.dto.MessageReference.class, MessageReference.class).fields("messageType",
+						"messageType",
+						FieldsMappingOptions.customConverter("nl.rls.ci.soap.dto.mapper.MessageTypeConverter"));
 			}
 		};
-		mapper.addMapping(mappingBuilder);		
+		mapper.addMapping(mappingBuilder);
 		UicResponse uicResponse = mapper.map(dto, UicResponse.class);
 		return uicResponse;
 	}

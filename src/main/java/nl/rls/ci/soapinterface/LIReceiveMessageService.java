@@ -24,7 +24,7 @@ import javax.xml.ws.WebServiceFeature;
 	targetNamespace = "http://uic.cc.org/UICMessage", 
 	wsdlLocation = "src/main/java/nl/rls/ci/soapinterface/UICCCMessageProcessingInboundWS.wsdl"
 )
-@HandlerChain(file="handler-chain.xml")
+//@HandlerChain(file = "handler-chain.xml")
 public class LIReceiveMessageService
     extends Service
 {
