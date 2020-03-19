@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -18,8 +20,16 @@ public class WagonPostDto {
     private String numberFreight;
     private String name;
     private String code;
+    @Min(1)
+    @Max(999999)
     private int lengthOverBuffers;
+    @Min(0)
+    @Max(999)
     private int wagonNumberOfAxles;
+    @Min(1)
+    @Max(999999)
     private int wagonWeightEmpty;
+    @Min(0)
+    @Max(999)
     private int handBrakeBrakedWeight;
 }
