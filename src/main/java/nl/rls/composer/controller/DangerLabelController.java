@@ -10,7 +10,6 @@ import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -40,11 +39,13 @@ public class DangerLabelController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<DangerLabelDto>> getAll() {
+    public Response<List<DangerLabelDto>> getAll() {
         List<DangerLabel> dangerLabelList = dangerLabelRepository.findAll();
         List<DangerLabelDto> dangerLabelDtoList = dangerLabelList.stream()
                 .map(DangerLabelDtoMapper::map)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(dangerLabelDtoList);
+        return ResponseBuilder.ok()
+                .data(dangerLabelDtoList)
+                .build();
     }
 }
