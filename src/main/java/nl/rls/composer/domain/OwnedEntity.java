@@ -3,16 +3,19 @@ package nl.rls.composer.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @MappedSuperclass
+@ToString
 public class OwnedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +28,7 @@ public class OwnedEntity {
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hash(id, ownerId);
     }
 
     @Override

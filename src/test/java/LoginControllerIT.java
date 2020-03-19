@@ -1,15 +1,18 @@
 import nl.rls.Main;
-import nl.rls.ci.aa.dto.UserDto;
+import org.flywaydb.test.FlywayTestExecutionListener;
+import org.flywaydb.test.annotation.FlywayTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.ResponseEntity;
-
-import static io.restassured.RestAssured.given;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Main.class)
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
+        FlywayTestExecutionListener.class})
+@ExtendWith({SpringExtension.class})
 public class LoginControllerIT {
     @LocalServerPort
     int randomServerPort;
