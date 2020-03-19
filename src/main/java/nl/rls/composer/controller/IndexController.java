@@ -1,9 +1,12 @@
 package nl.rls.composer.controller;
 
 import nl.rls.composer.rest.dto.IndexDto;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -13,7 +16,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class IndexController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IndexDto> getIndex() {
+    @ResponseStatus(HttpStatus.OK)
+    public Response<IndexDto> getIndex() {
         IndexDto indexDto = new IndexDto();
         indexDto.setName("RailLinkSystem REST api is running.");
         indexDto.add(linkTo(methodOn(TrainCompositionMessageController.class).getAll()).withRel("tcm"));
@@ -24,16 +28,21 @@ public class IndexController {
         indexDto.add(linkTo(methodOn(TractionModeController.class).getAll("")).withRel("tractionmodes"));
         indexDto.add(linkTo(methodOn(TrainActivityTypeController.class).getAll("")).withRel("trainactivitycodes"));
         indexDto.add(linkTo(methodOn(WagonController.class).getAll()).withRel("wagons"));
-        return ResponseEntity.ok(indexDto);
+        return ResponseBuilder.ok()
+                .data(indexDto)
+                .build();
     }
 
     @GetMapping(path = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IndexDto> getTest() {
+    @ResponseStatus(HttpStatus.OK)
+    public Response<IndexDto> getTest() {
         IndexDto indexDto = new IndexDto();
         indexDto.setName("RailLinkSystem REST api is running.");
         indexDto.add(linkTo(methodOn(TrainCompositionMessageController.class).getAll()).withRel("tcm"));
 
-        return ResponseEntity.ok(indexDto);
+        return ResponseBuilder.ok()
+                .data(indexDto)
+                .build();
     }
 
 }
