@@ -13,4 +13,6 @@ public interface LocationRepository extends CrudRepository<Location, Integer> {
     List<Location> findByCodeIgnoreCaseOrderByCodeAsc(String code);
 
     List<Location> findByPrimaryLocationNameContainingIgnoreCaseOrderByPrimaryLocationNameAsc(String name);
+
+    List<Location> findAll();
 }
