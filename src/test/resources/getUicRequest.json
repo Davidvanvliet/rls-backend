@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "signature": {
+      "type": "string"
+    },
+    "senderAlias": {
+      "type": "string"
+    },
+    "encoding": {
+      "type": "string"
+    },
+    "links": {
+      "type": "array"
+    }
+  },
+  "required": ["signature", "senderAlias", "encoding"]
+}
