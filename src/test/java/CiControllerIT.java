@@ -1,30 +1,35 @@
+import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import nl.rls.Main;
+import nl.rls.ci.controller.CiController;
 import nl.rls.ci.url.BaseURL;
+import org.flywaydb.test.FlywayTestExecutionListener;
+import org.flywaydb.test.annotation.FlywayTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Main.class)
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
+        FlywayTestExecutionListener.class})
+@FlywayTest
+@ExtendWith({SpringExtension.class})
 public class CiControllerIT {
     @LocalServerPort
     int randomServerPort;
 
-    @Test
-    public void getMessages() {
-        ValidatableResponse response = given().when().get("http://localhost:" + randomServerPort + BaseURL.BASE_PATH + "/messages").then();
-        response.assertThat().statusCode(HttpStatus.OK.value());
-
-    }
-
-    @Test
-    public void getMessage() {
-        ValidatableResponse response = given().when().get("http://localhost:" + randomServerPort + BaseURL.BASE_PATH + "/messages/1").then();
-        response.assertThat().statusCode(HttpStatus.OK.value());
+    @BeforeEach
+    public void setup() {
+        RestAssured.baseURI = "http://localhost:";
     }
 
     @Test
@@ -117,7 +122,25 @@ public class CiControllerIT {
                 "        </WagonData>\n" +
                 "    </TrainCompositionJourneySection>\n" +
                 "</TrainCompositionMessage>";
-        ValidatableResponse response = given().body(xmlMessage).when().post("http://localhost:" + randomServerPort + BaseURL.BASE_PATH + "/messages").then();
-        response.assertThat().statusCode(HttpStatus.CREATED.value());
+        String path = "http://localhost:" + randomServerPort + BaseURL.BASE_PATH + CiController.PATH;
+        given().body(xmlMessage).when().post(path).then().assertThat().statusCode(201);
+    }
+
+    @Test
+    public void getMessages() {
+        ValidatableResponse response = given().when().get(RestAssured.baseURI + randomServerPort + BaseURL.BASE_PATH + CiController.PATH).then();
+        response.assertThat().body(matchesJsonSchemaInClasspath("getMessages.json"));
+    }
+
+    @Test
+    public void getMessage() {
+        ValidatableResponse response = given().when().get(RestAssured.baseURI + randomServerPort + BaseURL.BASE_PATH + CiController.PATH + "/1").then();
+        response.assertThat().body(matchesJsonSchemaInClasspath("getMessage.json"));
+    }
+
+    @Test
+    public void sendMessage() {
+        ValidatableResponse response = given().when().post(RestAssured.baseURI +  randomServerPort + BaseURL.BASE_PATH + CiController.PATH + "/1").then();
+        response.assertThat().statusCode(202);
     }
 }
