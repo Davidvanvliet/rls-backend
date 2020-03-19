@@ -6,16 +6,15 @@ import nl.rls.composer.domain.DangerGoodsType;
 import nl.rls.composer.repository.DangerGoodsTypeRepository;
 import nl.rls.composer.rest.dto.DangerGoodsTypeDto;
 import nl.rls.composer.rest.dto.mapper.DangerGoodsTypeDtoMapper;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/dangergoodstypes")
@@ -27,25 +26,27 @@ public class DangerGoodsTypeController {
         this.dangerGoodsTypeRepository = dangerGoodsTypeRepository;
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DangerGoodsTypeDto> getById(@PathVariable Integer id) {
-        Optional<DangerGoodsType> optional = dangerGoodsTypeRepository.findById(id);
-        if (optional.isPresent()) {
-            DangerGoodsTypeDto dangerGoodsTypeDto = DangerGoodsTypeDtoMapper.map(optional.get());
-            return ResponseEntity.ok(dangerGoodsTypeDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping(value = "/{dangerGoodsTypeId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<DangerGoodsTypeDto> getById(@PathVariable int dangerGoodsTypeId) {
+        DangerGoodsType dangerGoodsType = dangerGoodsTypeRepository.findById(dangerGoodsTypeId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find danger goods type with id %d", dangerGoodsTypeId)));
+        DangerGoodsTypeDto dangerGoodsTypeDto = DangerGoodsTypeDtoMapper.map(dangerGoodsType);
+        return ResponseBuilder.ok()
+                .data(dangerGoodsTypeDto)
+                .build();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<DangerGoodsTypeDto>> getAll() {
-        Iterable<DangerGoodsType> entityList = dangerGoodsTypeRepository.findAll();
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<DangerGoodsTypeDto>> getAll() {
+        List<DangerGoodsType> dangerGoodsTypeList = dangerGoodsTypeRepository.findAll();
 
-        List<DangerGoodsTypeDto> dtoList = new ArrayList<>();
-        for (DangerGoodsType entity : entityList) {
-            dtoList.add(DangerGoodsTypeDtoMapper.map(entity));
-        }
-        return ResponseEntity.ok(dtoList);
+        List<DangerGoodsTypeDto> dangerGoodsTypeDtoList = dangerGoodsTypeList.stream()
+                .map(DangerGoodsTypeDtoMapper::map)
+                .collect(Collectors.toList());
+        return ResponseBuilder.ok()
+                .data(dangerGoodsTypeDtoList)
+                .build();
     }
 }
