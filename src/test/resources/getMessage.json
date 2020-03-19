@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "createDate": {
+      "type": "string"
+    },
+    "posted": {
+      "type": "boolean"
+    },
+    "uicHeader": {
+      "type": "object",
+      "properties": {
+        "messageIdentifier": {
+          "type": "string"
+        },
+        "messageLiHost": {
+          "type": "string"
+        },
+        "compressed": {
+          "type": "boolean"
+        },
+        "encrypted": {
+          "type": "boolean"
+        },
+        "signed": {
+          "type": "boolean"
+        },
+        "links": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "messageIdentifier",
+        "messageLiHost",
+        "compressed",
+        "encrypted",
+        "signed"
+      ]
+    },
+    "uicRequest": {
+      "type": "object",
+      "properties": {
+        "signature": {
+          "type": "string"
+        },
+        "senderAlias": {
+          "type": "string"
+        },
+        "encoding": {
+          "type": "string"
+        },
+        "links": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "signature",
+        "senderAlias",
+        "encoding"
+      ]
+    },
+    "links": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "uicHeader",
+    "uicRequest",
+    "createDate",
+    "posted"
+  ]
+}
