@@ -12,16 +12,16 @@ import nl.rls.composer.repository.TractionTypeRepository;
 import nl.rls.composer.rest.dto.TractionCreateDto;
 import nl.rls.composer.rest.dto.TractionDto;
 import nl.rls.composer.rest.dto.mapper.TractionDtoMapper;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/tractions")
@@ -39,48 +39,52 @@ public class TractionController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TractionDto>> getAll() {
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<TractionDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
-        Iterable<Traction> tractionList = tractionRepository.findByOwnerId(ownerId);
-        List<TractionDto> dtoList = new ArrayList<>();
-        for (Traction traction : tractionList) {
-            TractionDto dto = TractionDtoMapper.map(traction);
-            dtoList.add(dto);
-        }
-//		Link dtoLink = linkTo(methodOn(this.getClass()).getAll()).withSelfRel();
-//		Resources<TractionDto> tractionDtoList = new Resources<TractionDto>(dtoList, dtoLink);
-        return ResponseEntity.ok(dtoList);
+        List<Traction> tractionList = tractionRepository.findByOwnerId(ownerId);
+        List<TractionDto> tractionDtos = tractionList.stream()
+                .map(TractionDtoMapper::map)
+                .collect(Collectors.toList());
+        return ResponseBuilder.ok()
+                .data(tractionDtos)
+                .build();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<TractionDto> getById(@PathVariable Integer id) {
+    @RequestMapping(value = "/{tractionId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<TractionDto> getById(@PathVariable int tractionId) {
         int ownerId = securityContext.getOwnerId();
-        TractionDto dto = TractionDtoMapper
-                .map(tractionRepository.findByIdAndOwnerId(id, ownerId).orElseThrow(() -> new TractionNotFoundException(id)));
-        return ResponseEntity.ok(dto);
+        Traction traction = tractionRepository.findByIdAndOwnerId(tractionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find traction with id %d", tractionId)));
+        TractionDto tractionDto = TractionDtoMapper.map(traction);
+        return ResponseBuilder.ok()
+                .data(tractionDto)
+                .build();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TractionDto> create(@RequestBody TractionCreateDto dto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<TractionDto> createTraction(@RequestBody TractionCreateDto tractionDto) {
         int ownerId = securityContext.getOwnerId();
-        Traction entity = TractionDtoMapper.map(dto);
-        entity.setOwnerId(ownerId);
+        Traction traction = TractionDtoMapper.map(tractionDto);
+        traction.setOwnerId(ownerId);
 
-        int tractionTypeId = DecodePath.decodeInteger(dto.getTractionType(), "tractiontypes");
+        int tractionTypeId = DecodePath.decodeInteger(tractionDto.getTractionType(), "tractiontypes");
         Optional<TractionType> tractionType = tractionTypeRepository.findById(tractionTypeId);
         if (tractionType.isPresent()) {
-            entity.setTractionType(tractionType.get());
+            traction.setTractionType(tractionType.get());
         }
-        int tractionModeId = DecodePath.decodeInteger(dto.getTractionMode(), "tractionmodes");
+        int tractionModeId = DecodePath.decodeInteger(tractionDto.getTractionMode(), "tractionmodes");
         Optional<TractionMode> tractionMode = tractionModeRepository.findById(tractionModeId);
         if (tractionMode.isPresent()) {
-            entity.setTractionMode(tractionMode.get());
+            traction.setTractionMode(tractionMode.get());
         }
-        tractionRepository.save(entity);
-        System.out.println("Traction: " + entity);
-        TractionDto resultDto = TractionDtoMapper.map(entity);
-        return ResponseEntity.created(linkTo(methodOn(TractionController.class).getById(entity.getId()))
-                .toUri()).body(resultDto);
+        tractionRepository.save(traction);
+        TractionDto resultDto = TractionDtoMapper.map(traction);
+        return ResponseBuilder.created()
+                .data(resultDto)
+                .build();
     }
 
 
