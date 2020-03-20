@@ -5,14 +5,16 @@ import nl.rls.composer.domain.code.TractionMode;
 import nl.rls.composer.repository.TractionModeRepository;
 import nl.rls.composer.rest.dto.TractionModeDto;
 import nl.rls.composer.rest.dto.mapper.TractionModeDtoMapper;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/tractionmodes")
@@ -23,38 +25,34 @@ public class TractionModeController {
         this.tractionModeRepository = tractionModeRepository;
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TractionModeDto> getTractionMode(@PathVariable Integer id) {
-        Optional<TractionMode> optional = tractionModeRepository.findById(id);
-        if (optional.isPresent()) {
-            TractionModeDto tractionModeDto = TractionModeDtoMapper
-                    .map(optional.get());
-            return ResponseEntity.ok(tractionModeDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping(value = "/{tractionModeId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<TractionModeDto> getTractionMode(@PathVariable int tractionModeId) {
+        TractionMode tractionMode = tractionModeRepository.findById(tractionModeId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find traction mode with id %d", tractionModeId)));
+        TractionModeDto tractionModeDto = TractionModeDtoMapper.map(tractionMode);
+        return ResponseBuilder.ok()
+                .data(tractionModeDto)
+                .build();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TractionModeDto>> getAll(@RequestParam(value = "code", required = false) String code) {
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<TractionModeDto>> getAll(@RequestParam(value = "code", required = false) String code) {
+        List<TractionMode> tractionModes;
         if (code == null) {
-            Iterable<TractionMode> tractionModeList = tractionModeRepository.findAll();
-            List<TractionModeDto> tractionModeDtoList = new ArrayList<>();
-
-            for (TractionMode tractionMode : tractionModeList) {
-                tractionModeDtoList.add(TractionModeDtoMapper.map(tractionMode));
-            }
-            return ResponseEntity.ok(tractionModeDtoList);
+            tractionModes = tractionModeRepository.findAll();
         } else {
-            Optional<TractionMode> optional = tractionModeRepository.findByCode(code);
-            if (optional.isPresent()) {
-                TractionModeDto tractionModeDto = TractionModeDtoMapper
-                        .map(optional.get());
-                return ResponseEntity.ok(Collections.singletonList(tractionModeDto));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            TractionMode tractionMode = tractionModeRepository.findByCode(code)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find traction mode with code %s", code)));
+            tractionModes = Collections.singletonList(tractionMode);
         }
+        List<TractionModeDto> tractionModeDtos = tractionModes.stream()
+                .map(TractionModeDtoMapper::map)
+                .collect(Collectors.toList());
+        return ResponseBuilder.ok()
+                .data(tractionModeDtos)
+                .build();
     }
 
 }
