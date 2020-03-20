@@ -15,16 +15,15 @@ import nl.rls.composer.rest.dto.TrainCompositionDto;
 import nl.rls.composer.rest.dto.mapper.TractionInTrainDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainCompositionDtoMapper;
 import nl.rls.composer.service.TrainCompositionService;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + TrainCompositionController.PATH)
@@ -43,100 +42,92 @@ public class TractionInTrainController {
         this.trainCompositionRepository = trainCompositionRepository;
     }
 
-    @GetMapping(value = "/{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TractionInTrainDto> getTractionInTrain(@PathVariable Integer id, @PathVariable Integer tractionId) {
+    @GetMapping(value = "/{trainCompositionId}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<TractionInTrainDto> getTractionInTrain(@PathVariable int trainCompositionId,
+                                                           @PathVariable Integer tractionId) {
         int ownerId = securityContext.getOwnerId();
-        Optional<TrainComposition> optional = trainCompositionRepository
-                .findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent()) {
-            TrainComposition entity = optional.get();
-            TractionInTrain tractionInTrain = entity.getTractionById(tractionId);
-            TractionInTrainDto tractionInTrainDto = TractionInTrainDtoMapper.map(tractionInTrain);
-            return ResponseEntity.ok(tractionInTrainDto);
-        }
-        return ResponseEntity.notFound().build();
+        TrainComposition trainComposition = trainCompositionRepository.findByIdAndOwnerId(trainCompositionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train composition with id %d", trainCompositionId)));
+        TractionInTrain tractionInTrain = trainComposition.getTractionById(tractionId);
+        TractionInTrainDto tractionInTrainDto = TractionInTrainDtoMapper.map(tractionInTrain);
+        return ResponseBuilder.ok()
+                .data(tractionInTrainDto)
+                .build();
     }
 
-    @GetMapping(value = "/{id}/tractions", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TractionInTrainDto>> getAllTractionInTrain(@PathVariable Integer id) {
+    @GetMapping(value = "/{trainCompositionId}/tractions", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<TractionInTrainDto>> getAllTractionInTrain(@PathVariable int trainCompositionId) {
         int ownerId = securityContext.getOwnerId();
-        Optional<TrainComposition> optional = trainCompositionRepository
-                .findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent()) {
-            TrainComposition entity = optional.get();
-            List<TractionInTrainDto> tractionInTrainDtoList = new ArrayList<TractionInTrainDto>();
-            for (TractionInTrain tractionInTrain : entity.getTractions()) {
-                TractionInTrainDto tractionInTrainDto = TractionInTrainDtoMapper.map(tractionInTrain);
-                tractionInTrainDtoList.add(tractionInTrainDto);
-            }
-//			Link link = linkTo(methodOn(TractionInTrainController.class).getAllTractionInTrain(id))
-//					.withSelfRel();
-//			Resources<TractionInTrainDto> tractionInTrainDtos = new Resources<TractionInTrainDto>(tractionInTrainDtoList, link);
-            return ResponseEntity.ok(tractionInTrainDtoList);
-        }
-        return ResponseEntity.notFound().build();
+        TrainComposition trainComposition = trainCompositionRepository.findByIdAndOwnerId(trainCompositionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train composition with id %d", trainCompositionId)));
+        List<TractionInTrainDto> tractionInTrainDtoList = trainComposition.getTractions().stream()
+                .map(TractionInTrainDtoMapper::map)
+                .collect(Collectors.toList());
+        return ResponseBuilder.ok()
+                .data(tractionInTrainDtoList)
+                .build();
+
     }
 
-    @PostMapping(value = "/{id}/tractions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainCompositionDto> addTraction(@PathVariable int id,
-                                                           @RequestBody TractionInTrainPostDto dto) {
+    @PostMapping(value = "/{trainCompositionId}/tractions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<TrainCompositionDto> addTraction(@PathVariable int trainCompositionId,
+                                                     @RequestBody TractionInTrainPostDto dto) {
         int ownerId = securityContext.getOwnerId();
-        Optional<TrainComposition> optional = trainCompositionRepository
-                .findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent()) {
-            int tractionId = DecodePath.decodeInteger(dto.getTractionUrl(), "tractions");
-            Optional<Traction> traction = tractionRepository.findByIdAndOwnerId(tractionId, ownerId);
-            if (traction.isPresent()) {
-                TrainComposition trainComposition = optional.get();
+        TrainComposition trainComposition = trainCompositionRepository.findByIdAndOwnerId(trainCompositionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train composition with id %d", trainCompositionId)));
+        int tractionId = DecodePath.decodeInteger(dto.getTractionUrl(), "tractions");
 
-                TractionInTrain tractionInTrain = new TractionInTrain();
-                tractionInTrain.setTraction(traction.get());
-                tractionInTrain.setPosition(dto.getPosition());
-                tractionInTrain.setDriverIndication(dto.getDriverIndication());
-                trainCompositionService.addTractionToTrain(trainComposition, tractionInTrain);
-                TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
-                        .map(trainComposition);
-                return ResponseEntity
-                        .created(linkTo(methodOn(TrainCompositionController.class)
-                                .getById(trainComposition.getId())).toUri())
-                        .body(trainCompositionDto);
-            }
-        }
-        return ResponseEntity.notFound().build();
+        Traction traction = tractionRepository.findByIdAndOwnerId(tractionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find traction with id %d", tractionId)));
+
+        TractionInTrain tractionInTrain = new TractionInTrain();
+        tractionInTrain.setTraction(traction);
+        tractionInTrain.setPosition(dto.getPosition());
+        tractionInTrain.setDriverIndication(dto.getDriverIndication());
+        trainCompositionService.addTractionToTrain(trainComposition, tractionInTrain);
+        TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
+                .map(trainComposition);
+        return ResponseBuilder.created()
+                .data(trainCompositionDto)
+                .build();
+
     }
 
-    @PutMapping(value = "/{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainCompositionDto> moveTraction(@PathVariable int id,
-                                                            @PathVariable int tractionId, @RequestParam("position") int position) {
+    @PutMapping(value = "/{trainCompositionId}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<TrainCompositionDto> moveTraction(@PathVariable int trainCompositionId,
+                                                      @PathVariable int tractionId,
+                                                      @RequestParam("position") int position) {
         int ownerId = securityContext.getOwnerId();
-        Optional<TrainComposition> optional = trainCompositionRepository
-                .findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent()) {
-            TrainComposition trainComposition = optional.get();
-            trainCompositionService.moveTractionById(trainComposition, tractionId, position);
-            TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
-                    .map(trainComposition);
-            return ResponseEntity.ok(trainCompositionDto);
-        }
-        return ResponseEntity.notFound().build();
+        TrainComposition trainComposition = trainCompositionRepository.findByIdAndOwnerId(trainCompositionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train composition with id %d", trainCompositionId)));
+        trainCompositionService.moveTractionById(trainComposition, tractionId, position);
+        TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
+                .map(trainComposition);
+        return ResponseBuilder.ok()
+                .data(trainCompositionDto)
+                .build();
     }
 
-    @DeleteMapping(value = "/{id}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainCompositionDto> removeTraction(@PathVariable int id,
-                                                              @PathVariable int tractionId) {
+    @DeleteMapping(value = "/{trainCompositionId}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<TrainCompositionDto> removeTraction(@PathVariable int trainCompositionId,
+                                                        @PathVariable int tractionId) {
         int ownerId = securityContext.getOwnerId();
-        Optional<TrainComposition> optional = trainCompositionRepository
-                .findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent()) {
-            TrainComposition trainComposition = optional.get();
-            trainComposition.removeTractionById(tractionId);
-            tractionInTrainRepository.saveAll(trainComposition.getTractions());
-            trainCompositionRepository.save(trainComposition);
-            TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
-                    .map(trainComposition);
-            return ResponseEntity.ok(trainCompositionDto);
-        }
-        return ResponseEntity.notFound().build();
+
+        TrainComposition trainComposition = trainCompositionRepository.findByIdAndOwnerId(trainCompositionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train composition with id %d", trainCompositionId)));
+        trainComposition.removeTractionById(tractionId);
+        tractionInTrainRepository.saveAll(trainComposition.getTractions());
+        trainCompositionRepository.save(trainComposition);
+        TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
+                .map(trainComposition);
+        return ResponseBuilder.ok()
+                .data(trainCompositionDto)
+                .build();
     }
 
 }
