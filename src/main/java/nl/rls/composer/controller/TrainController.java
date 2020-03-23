@@ -12,17 +12,18 @@ import nl.rls.composer.rest.dto.TrainDto;
 import nl.rls.composer.rest.dto.TrainPostDto;
 import nl.rls.composer.rest.dto.mapper.JourneySectionDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainDtoMapper;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/trains")
@@ -45,36 +46,33 @@ public class TrainController {
 
     @ApiOperation(value = "Gets a complete Train object")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TrainDto>> getAll() {
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<TrainDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
-        System.out.println("TrainController " + ownerId);
-        Iterable<Train> trainList = trainRepository.findByOwnerId(ownerId);
-        System.out.println("TrainController " + ownerId);
-        List<TrainDto> trainDtoList = new ArrayList<>();
-
-        for (Train train : trainList) {
-            trainDtoList.add(TrainDtoMapper.map(train));
-        }
-//		Link trainsLink = linkTo(methodOn(TrainController.class).getAll()).withSelfRel();
-//		Resources<TrainDto> trains = new Resources<TrainDto>(trainDtoList, trainsLink);
-        return ResponseEntity.ok(trainDtoList);
+        List<Train> trainList = trainRepository.findByOwnerId(ownerId);
+        List<TrainDto> trainDtoList = trainList.stream()
+                .map(TrainDtoMapper::map)
+                .collect(Collectors.toList());
+        return ResponseBuilder.ok()
+                .data(trainDtoList)
+                .build();
     }
 
-    //
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainDto> getById(@PathVariable int id) {
+    @GetMapping(value = "/{trainId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<TrainDto> getById(@PathVariable int trainId) {
         int ownerId = securityContext.getOwnerId();
-        Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent()) {
-            TrainDto trainDto = TrainDtoMapper.map(optional.get());
-            return ResponseEntity.ok(trainDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Train train = trainRepository.findByIdAndOwnerId(trainId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train with id %d", trainId)));
+        TrainDto trainDto = TrainDtoMapper.map(train);
+        return ResponseBuilder.ok()
+                .data(trainDto)
+                .build();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainDto> create(@RequestBody @Valid TrainPostDto dto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<TrainDto> create(@RequestBody @Valid TrainPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Train train = new Train();
         train.setOwnerId(ownerId);
@@ -96,65 +94,52 @@ public class TrainController {
         }
 
         train = trainRepository.save(train);
-        if (train != null) {
-            TrainDto resultDto = TrainDtoMapper.map(train);
-            return ResponseEntity.created(linkTo(methodOn(TrainController.class).getById(train.getId())).toUri())
-                    .body(resultDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        TrainDto trainDto = TrainDtoMapper.map(train);
+        return ResponseBuilder.created()
+                .data(trainDto)
+                .build();
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainDto> update(@PathVariable Integer id, @RequestBody @Valid TrainPostDto trainCreateDto) {
+    @PutMapping(value = "/{trainId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<TrainDto> update(@PathVariable int trainId, @RequestBody @Valid TrainPostDto trainCreateDto) {
         int ownerId = securityContext.getOwnerId();
-        Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent()) {
-            Train train = TrainDtoMapper.map(trainCreateDto);
-            train.setOwnerId(ownerId);
-            train = trainRepository.save(train);
-            if (train != null) {
-                TrainDto dto = TrainDtoMapper.map(train);
-
-                return ResponseEntity.created(linkTo(methodOn(TrainController.class).getById(train.getId())).toUri())
-                        .body(dto);
-            }
+        if (!trainRepository.existsByIdAndOwnerId(trainId, ownerId)) {
+            throw new EntityNotFoundException(String.format("Could not find train with id %d", trainId));
         }
-        return ResponseEntity.notFound().build();
+        Train train = TrainDtoMapper.map(trainCreateDto);
+        train.setOwnerId(ownerId);
+        train.setId(trainId);
+        train = trainRepository.save(train);
+        TrainDto dto = TrainDtoMapper.map(train);
+        return ResponseBuilder.created()
+                .data(dto)
+                .build();
     }
 
-    @GetMapping(value = "/{id}/journeysections", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<JourneySectionDto>> getAllJourneySections(@PathVariable int id) {
+    @GetMapping(value = "/{trainId}/journeysections", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<JourneySectionDto>> getAllJourneySections(@PathVariable int trainId) {
         int ownerId = securityContext.getOwnerId();
-        Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent()) {
-
-            Iterable<JourneySection> sectionList = journeySectionRepository
-                    .findByTrainAndOwnerId(optional.get(), ownerId);
-            System.out.println("TrainCompositionJourneySectionController " + ownerId);
-            List<JourneySectionDto> journeySectionDtoList = new ArrayList<>();
-
-            for (JourneySection entity : sectionList) {
-                journeySectionDtoList.add(JourneySectionDtoMapper.map(entity));
-            }
-//			Link trainsLink = linkTo(methodOn(TrainController.class).getAllJourneySections(id)).withSelfRel();
-//			Resources<TrainCompositionJourneySectionDto> trains = new Resources<TrainCompositionJourneySectionDto>(
-//					journeySectionDtoList, trainsLink);
-            return ResponseEntity.ok(journeySectionDtoList);
-        } else {
-            return ResponseEntity.notFound().build();
+        if (!trainRepository.existsByIdAndOwnerId(trainId, ownerId)) {
+            throw new EntityNotFoundException(String.format("Could not find train with id %d", trainId));
         }
+        List<JourneySection> sectionList = journeySectionRepository.findByTrainIdAndOwnerId(trainId, ownerId);
+        List<JourneySectionDto> journeySectionDtoList = sectionList.stream()
+                .map(JourneySectionDtoMapper::map)
+                .collect(Collectors.toList());
+        return ResponseBuilder.ok()
+                .data(journeySectionDtoList)
+                .build();
     }
 
-    @PostMapping(value = "/{id}/journeysections", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainDto> postJourneySection(@PathVariable Integer id,
-                                                       @RequestBody @Valid JourneySectionPostDto dto) {
+    @PostMapping(value = "/{trainId}/journeysections", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<TrainDto> postJourneySection(@PathVariable int trainId,
+                                                 @RequestBody @Valid JourneySectionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
-        Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
-        if (!optional.isPresent()) {
-            ResponseEntity.notFound();
-        }
-        Train train = optional.get();
+        Train train = trainRepository.findByIdAndOwnerId(trainId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train with id %d", trainId)));
         JourneySection journeySection = new JourneySection(ownerId);
         Integer locationIdentId = DecodePath.decodeInteger(dto.getJourneySectionOriginUrl(), "locations");
         Optional<Location> optionalLocation = locationRepository.findByLocationPrimaryCode(locationIdentId);
@@ -182,34 +167,26 @@ public class TrainController {
         train.addJourneySection(journeySection);
         train = trainRepository.save(train);
 
-        if (train != null) {
-            TrainDto resultDto = TrainDtoMapper.map(train);
-
-            return ResponseEntity.created(linkTo(methodOn(JourneySectionController.class)
-                    .getById(journeySection.getId())).toUri()).body(resultDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        TrainDto resultDto = TrainDtoMapper.map(train);
+        return ResponseBuilder.created()
+                .data(resultDto)
+                .build();
     }
 
-    @DeleteMapping(value = "/{id}/journeysections/{sectionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainDto> removeJourneysection(@PathVariable int id, @PathVariable int sectionId) {
+    @DeleteMapping(value = "/{trainId}/journeysections/{journeySectionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<TrainDto> removeJourneySection(@PathVariable int trainId, @PathVariable int journeySectionId) {
         int ownerId = securityContext.getOwnerId();
-        Optional<Train> optional = trainRepository.findByIdAndOwnerId(id, ownerId);
-        if (!optional.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        Train train = optional.get();
-        JourneySection journeySection = train.getJourneySectionById(sectionId);
+        Train train = trainRepository.findByIdAndOwnerId(trainId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train with id %d", trainId)));
+        JourneySection journeySection = train.getJourneySectionById(journeySectionId);
         train.removeJourneySection(journeySection);
         train = trainRepository.save(train);
-        if (train != null) {
-            TrainDto resultDto = TrainDtoMapper.map(train);
-            return ResponseEntity.created(linkTo(methodOn(TrainController.class).getById(train.getId())).toUri())
-                    .body(resultDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        TrainDto resultDto = TrainDtoMapper.map(train);
+        return ResponseBuilder.ok()
+                .data(resultDto)
+                .build();
+
     }
 
 
