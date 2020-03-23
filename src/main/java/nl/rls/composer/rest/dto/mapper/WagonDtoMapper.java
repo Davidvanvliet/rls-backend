@@ -1,5 +1,11 @@
 package nl.rls.composer.rest.dto.mapper;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
+import org.dozer.DozerBeanMapper;
+import org.dozer.loader.api.BeanMappingBuilder;
+
 import nl.rls.composer.controller.WagonController;
 import nl.rls.composer.domain.Wagon;
 import nl.rls.composer.rest.dto.WagonDto;

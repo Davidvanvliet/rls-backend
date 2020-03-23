@@ -98,9 +98,7 @@ Error code number format was wrong - there will be no restrictions on format on 
 	</xs:annotation>
 	<xs:element name="AirBrakeType">
 		<xs:annotation>
-			<xs:documentation>Classification of air brake.
-additional code:
-8	No air brake or brake pipe	The code is defined in UIC Leaflet 920-13.			
+			<xs:documentation>Classification of air brake. additional code: 8 No air brake or brake pipe The code is defined in UIC Leaflet 920-13.			
 			</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>

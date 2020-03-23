@@ -1,9 +1,15 @@
 package nl.rls.composer.domain.message;
 
+import java.util.Date;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.domain.CompositIdentifierOperationalType;
+import nl.rls.composer.domain.Company;
 import nl.rls.composer.domain.GenericMessage;
 import nl.rls.composer.domain.Train;
 
@@ -51,14 +57,37 @@ import java.util.List;
 @Setter
 @Entity
 public class TrainCompositionMessage extends GenericMessage {
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "train_composition_message_id")
-    private List<CompositIdentifierOperationalType> compositIdentifierOperationalType = new ArrayList<CompositIdentifierOperationalType>();
-    @ManyToOne(cascade = CascadeType.DETACH)
-    private Train train;
     public TrainCompositionMessage(Integer ownerId) {
         super(ownerId);
     }
 
+    /**
+     * Provides a possibility for differentiation between the objects: Train, Path,
+     * Case Reference and Path Request
+     */
+    private String objectType;
+    @ManyToOne
+    private Company company;
+    /**
+     * It is the main part of identifier and is determent by the company that
+     * creates it.
+     */
+    private String core;
+    /**
+     * The variant shows a relationship between two identifiers referring to the
+     * same business case
+     */
+    private String variant;
+    /**
+     * Refers to the timetable period in which the business will be carried out
+     */
+    private int timetableYear;
+    /**
+     * The start of the date/time in effect
+     */
+    private Date startDate;
+
+    @ManyToOne(cascade = CascadeType.DETACH)
+    private Train train;
 
 }

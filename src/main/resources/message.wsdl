@@ -112,9 +112,6 @@
 	<wsdl:service name="LIReceiveMessageService">
 		<wsdl:port binding="tns:LIReceiveMessageServiceSoapBinding"
 			name="UICReceiveMessagePort">
-			<soap:address
-	<!--			location="https://ci-bpr.prorail.nl/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS" /> -->
-				location="http://localhost:8082/ws/ci" /> 
-		</wsdl:port>
+			<soap:address location="https://localhost/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS" 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

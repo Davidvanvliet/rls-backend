@@ -1,5 +1,8 @@
 package nl.rls.ci.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,8 +31,8 @@ public class UicRequest extends OwnedEntity {
      * This element contains the actual TAF/TAPTSI message. If the message is
      * compressed, encrypted or singed, then it should be base64 encoded.
      */
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private XmlMessage message;
+    @Lob
+    private String message;
     /**
      * Message can be digitally signed for security purpose. For signing, you have
      * to obtain a client certificate from RNE. If messages are signed, then the
@@ -44,7 +47,7 @@ public class UicRequest extends OwnedEntity {
      * including the senderAllias. This alias name should be filled in the
      * senderAlias field.
      */
-    private String senderAlias = "RailLinkSystems";
+    private String senderAlias = "82.217.100.12";
     /**
      * The encoding field should contain the char encoding used for the message. CI
      * supports the following char encodings: UTF-8

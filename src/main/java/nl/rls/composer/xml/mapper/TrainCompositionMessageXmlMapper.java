@@ -11,8 +11,6 @@ public class TrainCompositionMessageXmlMapper {
             protected void configure() {
                 mapping(nl.rls.composer.domain.message.TrainCompositionMessage.class,
                         info.taf_jsg.schemes.TrainCompositionMessage.class)
-                        .fields("compositIdentifierOperationalType",
-                                field("transportOperationalIdentifiers").accessible(true))
                         .fields("messageStatus", "messageStatus")
                         .fields("sender.code", "messageHeader.sender.value")
                         .fields("recipient.code", "messageHeader.recipient.value")
@@ -29,9 +27,6 @@ public class TrainCompositionMessageXmlMapper {
                         .fields("train.scheduledTimeAtHandover",
                                 "operationalTrainNumberIdentifier.scheduledTimeAtHandover")
                         .fields("train.operationalTrainNumber", "operationalTrainNumber");
-
-                mapping(nl.rls.composer.domain.CompositIdentifierOperationalType.class,
-                        info.taf_jsg.schemes.TransportOperationalIdentifiers.class).fields("company.code", "company");
 
                 mapping(nl.rls.composer.domain.Train.class, info.taf_jsg.schemes.OperationalTrainNumberIdentifier.class)
                         .fields("operationalTrainNumber", "operationalTrainNumber");
@@ -55,6 +50,10 @@ public class TrainCompositionMessageXmlMapper {
                                 "trainRunningData.trainRunningTechData.trainWeight")
                         .fields("trainComposition.trainWeight",
                                 "trainRunningData.trainRunningTechData.trainWeight")
+                        .fields("trainComposition.maxAxleWeight",
+                                "trainRunningData.trainRunningTechData.maxAxleWeight")
+                        .fields("trainComposition.brakeWeight",
+                                "trainRunningData.trainRunningTechData.brakeWeight")
                         .fields("trainComposition.journeySection.train.trainType",
                                 "trainRunningData.trainRunningTechData.trainType")
 

@@ -1,4 +1,4 @@
-<wsdl:definitions xmlns:ns1="http://uic.cc.org/UICMessage/Header"
+<wsdl:definitions xmlns:ns1="http://uic.cc.org/UICMessage/Header" xmlns:ns2="http://schemas.xmlsoap.org/soap/http"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://uic.cc.org/UICMessage"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                   name="LIReceiveMessageService" targetNamespace="http://uic.cc.org/UICMessage">
@@ -26,8 +26,8 @@
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>
-        <xsd:schema xmlns:tns="http://uic.cc.org/UICMessage" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                    xmlns="http://uic.cc.org/UICMessage/Header" attributeFormDefault="unqualified"
+        <xsd:schema xmlns="http://uic.cc.org/UICMessage/Header" xmlns:tns="http://uic.cc.org/UICMessage"
+                    xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
                     elementFormDefault="unqualified" targetNamespace="http://uic.cc.org/UICMessage/Header">
             <xsd:element name="messageIdentifier" nillable="true" type="xsd:string"/>
             <xsd:element name="messageLiHost" nillable="true" type="xsd:string"/>
@@ -76,7 +76,7 @@
     <wsdl:service name="LIReceiveMessageService">
         <wsdl:port binding="tns:LIReceiveMessageServiceSoapBinding" name="UICReceiveMessagePort">
             <soap:address
-                    location="https://ci-bpr.prorail.nl/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS"
+                    location="http://localhost:8082/ws/ci"
             />
         </wsdl:port>
     </wsdl:service>

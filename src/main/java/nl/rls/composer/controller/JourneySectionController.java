@@ -45,8 +45,8 @@ public class JourneySectionController {
         int ownerId = securityContext.getOwnerId();
         Optional<JourneySection> optional = journeySectionRepository.findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {
-            JourneySectionDto trainCompositionJourneySectionDto = JourneySectionDtoMapper.map(optional.get());
-            return ResponseEntity.ok(trainCompositionJourneySectionDto);
+            JourneySectionDto journeySectionDto = JourneySectionDtoMapper.map(optional.get());
+            return ResponseEntity.ok(journeySectionDto);
         } else {
             return ResponseEntity.status(422).build();
         }

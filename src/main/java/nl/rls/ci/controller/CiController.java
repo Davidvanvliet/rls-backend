@@ -1,5 +1,24 @@
 package nl.rls.ci.controller;
 
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.annotations.ApiOperation;
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.domain.CiMessage;
@@ -67,21 +86,20 @@ public class CiController {
         }
     }
 
-    /**
-     * Maakt een nieuw CI bericht aan.
-     *
-     * @param messageXml
-     * @return de link naar het CI object/resource
-     */
-    @Transactional
-    @PostMapping
-    @ApiOperation(value = "Stores a CI (XML-)message for a client (UicRequest). This message is not send.")
-    public ResponseEntity<?> postMessage(@RequestBody String messageXml) {
-        System.out.println("POST XML message to databases");
-        CiMessage ciMessage = ciService.makeCiMessage(messageXml);
-        return ResponseEntity.created(linkTo(methodOn(CiController.class).getMessage(ciMessage.getId())).toUri())
-                .build();
-    }
+	/**
+	 * Maakt een nieuw CI bericht aan.
+	 * 
+	 * @param messageXml
+	 * @return de link naar het CI object/resource
+	 */
+//	@Transactional
+//	@ApiOperation(value = "Stores a CI (XML-)message for a client (UicRequest). This message is not send.")
+//	public ResponseEntity<?> postMessage(@RequestBody String messageXml) {
+//		System.out.println("POST XML message to databases");
+//		CiMessage ciMessage = ciService.makeCiMessage(messageXml);
+//		return ResponseEntity.created(linkTo(methodOn(CiController.class).getMessage(ciMessage.getId())).toUri())
+//				.build();
+//	}
 
     @PutMapping(value = "/{id}")
     @ApiOperation(value = "Updates a CI (XML-)message for a client (UicRequest). This message is not send.")
@@ -107,7 +125,6 @@ public class CiController {
         if (!optional.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        System.out.println("sendMessage XML message: " + optional.get().getUicRequest().getMessage());
         String message = ciService.sendMessage(optional.get());
         if (message != null) {
             System.out.println(message);

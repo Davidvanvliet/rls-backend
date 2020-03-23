@@ -45,12 +45,6 @@ public class TrainCompositionMessageController {
         this.securityContext = securityContext;
     }
 
-    //TODO - remove this endpoint
-    @GetMapping("/hello")
-    public ResponseEntity<String> getHello() {
-        return ResponseEntity.ok("Hello world");
-    }
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TrainCompositionMessageDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
