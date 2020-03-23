@@ -7,13 +7,17 @@ import nl.rls.composer.repository.WagonRepository;
 import nl.rls.composer.rest.dto.WagonDto;
 import nl.rls.composer.rest.dto.WagonPostDto;
 import nl.rls.composer.rest.dto.mapper.WagonDtoMapper;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -31,33 +35,33 @@ public class WagonController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<WagonDto>> getAll() {
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<WagonDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
-        Iterable<Wagon> wagonList = wagonRepository.findByOwnerId(ownerId);
-        List<WagonDto> wagonDtoList = new ArrayList<>();
-        for (Wagon wagon : wagonList) {
-            WagonDto wagonDto = WagonDtoMapper.map(wagon);
-            wagonDtoList.add(wagonDto);
-        }
-//		Link wagonLink = linkTo(methodOn(WagonController.class).getAll()).withSelfRel();
-//		CollectionModel<WagonDto> locations = new CollectionModel<WagonDto>(wagonDtoList, wagonLink);
-        return ResponseEntity.ok(wagonDtoList);
+        List<Wagon> wagons = wagonRepository.findByOwnerId(ownerId);
+        List<WagonDto> wagonDtos = wagons.stream()
+                .map(WagonDtoMapper::map)
+                .collect(Collectors.toList());
+        return ResponseBuilder.ok()
+                .data(wagonDtos)
+                .build();
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WagonDto> getById(@PathVariable Integer id) {
+    @GetMapping(value = "/{wagonId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<WagonDto> getById(@PathVariable int wagonId) {
         int ownerId = securityContext.getOwnerId();
-        Optional<Wagon> entity = wagonRepository.findByOwnerIdAndId(ownerId, id);
-        if (entity.isPresent()) {
-            WagonDto dto = WagonDtoMapper.map(entity.get());
-            return ResponseEntity.ok(dto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Wagon wagon = wagonRepository.findByIdAndOwnerId(wagonId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find wagon with id %d", wagonId)));
+        WagonDto dto = WagonDtoMapper.map(wagon);
+        return ResponseBuilder.ok()
+                .data(dto)
+                .build();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WagonDto> create(@RequestBody @Valid WagonPostDto dto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<WagonDto> create(@RequestBody @Valid WagonPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Wagon entity = new Wagon();
         entity.setOwnerId(ownerId);
@@ -70,8 +74,9 @@ public class WagonController {
         entity.setWagonWeightEmpty(dto.getWagonWeightEmpty());
         wagonRepository.save(entity);
         WagonDto wagonDto = WagonDtoMapper.map(entity);
-        return ResponseEntity.created(linkTo(methodOn(WagonController.class).getById(entity.getId()))
-                .toUri()).body(wagonDto);
+        return ResponseBuilder.created()
+                .data(wagonDto)
+                .build();
     }
 
 }

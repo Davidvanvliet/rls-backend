@@ -5,14 +5,16 @@ import nl.rls.composer.domain.code.TrainActivityType;
 import nl.rls.composer.repository.TrainActivityTypeRepository;
 import nl.rls.composer.rest.dto.TrainActivityTypeDto;
 import nl.rls.composer.rest.dto.mapper.TrainActivityTypeDtoMapper;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/trainactivitytypes")
@@ -23,41 +25,34 @@ public class TrainActivityTypeController {
         this.trainActivityTypeRepository = trainActivityTypeRepository;
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainActivityTypeDto> getById(@PathVariable Integer id) {
-        Optional<TrainActivityType> optional = trainActivityTypeRepository.findById(id);
-        if (optional.isPresent()) {
-            TrainActivityTypeDto trainActivityTypeDto = TrainActivityTypeDtoMapper
-                    .map(optional.get());
-            return ResponseEntity.ok(trainActivityTypeDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping(value = "/{trainActivityTypeId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<TrainActivityTypeDto> getById(@PathVariable int trainActivityTypeId) {
+        TrainActivityType trainActivityType = trainActivityTypeRepository.findById(trainActivityTypeId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train activity type with id %d", trainActivityTypeId)));
+        TrainActivityTypeDto trainActivityTypeDto = TrainActivityTypeDtoMapper.map(trainActivityType);
+        return ResponseBuilder.ok()
+                .data(trainActivityTypeDto)
+                .build();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TrainActivityTypeDto>> getAll(@RequestParam(value = "code", required = false) String code) {
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<TrainActivityTypeDto>> getAll(@RequestParam(value = "code", required = false) String code) {
+        List<TrainActivityType> trainActivityTypes;
         if (code == null) {
-            Iterable<TrainActivityType> trainActivityTypeList = trainActivityTypeRepository.findAll();
-            List<TrainActivityTypeDto> trainActivityTypeDtoList = new ArrayList<>();
-
-            for (TrainActivityType trainActivityType : trainActivityTypeList) {
-                trainActivityTypeDtoList.add(TrainActivityTypeDtoMapper.map(trainActivityType));
-            }
-//		Link trainActivityTypesLink = linkTo(methodOn(TrainActivityTypeController.class).getAll()).withSelfRel();
-//		CollectionModel<TrainActivityTypeDto> trainActivityTypes = new CollectionModel<TrainActivityTypeDto>(trainActivityTypeDtoList, trainActivityTypesLink);
-            return ResponseEntity.ok(trainActivityTypeDtoList);
+            trainActivityTypes = trainActivityTypeRepository.findAll();
         } else {
-            Optional<TrainActivityType> optional = trainActivityTypeRepository.findByCode(code);
-            if (optional.isPresent()) {
-                TrainActivityTypeDto trainActivityTypeDto = TrainActivityTypeDtoMapper
-                        .map(optional.get());
-                return ResponseEntity.ok(Collections.singletonList(trainActivityTypeDto));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            TrainActivityType trainActivityType = trainActivityTypeRepository.findByCode(code)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train activity type with code %s", code)));
+            trainActivityTypes = Collections.singletonList(trainActivityType);
         }
-
+        List<TrainActivityTypeDto> trainActivityTypeDtos = trainActivityTypes.stream()
+                .map(TrainActivityTypeDtoMapper::map)
+                .collect(Collectors.toList());
+        return ResponseBuilder.ok()
+                .data(trainActivityTypeDtos)
+                .build();
     }
 
 }

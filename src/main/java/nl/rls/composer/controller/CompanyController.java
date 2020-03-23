@@ -6,13 +6,16 @@ import nl.rls.composer.domain.Company;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.rest.dto.CompanyDto;
 import nl.rls.composer.rest.dto.mapper.CompanyDtoMapper;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/companies")
@@ -24,20 +27,20 @@ public class CompanyController {
         this.companyRepository = companyRepository;
     }
 
-    @GetMapping(value = "{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CompanyDto> getById(@PathVariable Integer id) {
-        Optional<Company> optional = companyRepository.findById(id);
-        if (optional.isPresent()) {
-            CompanyDto companyDto = CompanyDtoMapper
-                    .map(optional.get());
-            return ResponseEntity.ok(companyDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping(value = "/{companyId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<CompanyDto> getById(@PathVariable int companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find company with id %d", companyId)));
+        CompanyDto companyDto = CompanyDtoMapper.map(company);
+        return ResponseBuilder.ok()
+                .data(companyDto)
+                .build();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CompanyDto>> getAll(
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<CompanyDto>> getAll(
             @RequestParam(name = "country", required = false) String countryIso,
             @RequestParam(name = "code", required = false) String code) {
         Iterable<Company> companyList = null;
@@ -48,14 +51,12 @@ public class CompanyController {
         } else if (code == null && countryIso == null) {
             companyList = companyRepository.findAll();
         }
-
         List<CompanyDto> companyDtoList = new ArrayList<>();
-
         for (Company company : companyList) {
             companyDtoList.add(CompanyDtoMapper.map(company));
         }
-//		Link link = linkTo(methodOn(CompanyController.class).getAll(countryIso, code)).withSelfRel();
-//		CollectionModel<CompanyDto> locations = new CollectionModel<CompanyDto>(companyDtoList, link);
-        return ResponseEntity.ok(companyDtoList);
+        return ResponseBuilder.ok()
+                .data(companyDtoList)
+                .build();
     }
 }

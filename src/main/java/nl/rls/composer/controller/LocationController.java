@@ -8,15 +8,18 @@ import nl.rls.composer.domain.Location;
 import nl.rls.composer.repository.LocationRepository;
 import nl.rls.composer.rest.dto.LocationDto;
 import nl.rls.composer.rest.dto.mapper.LocationDtoMapper;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Api(value = "Access to Locations. ")
+@Api(value = "Access to Locations.")
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/locations")
 public class LocationController {
@@ -27,36 +30,26 @@ public class LocationController {
     }
 
     @ApiOperation(value = "Get a location based on an id, which is the TSI.locationPrimaryCode")
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LocationDto> getById(@PathVariable Integer id) {
-        Optional<Location> optional = locationRepository.findByLocationPrimaryCode(id);
-        if (optional.isPresent()) {
-            LocationDto locationIdentDto = LocationDtoMapper.map(optional.get());
-            return ResponseEntity.ok(locationIdentDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping(value = "/{locationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<LocationDto> getById(@PathVariable int locationId) {
+        Location location = locationRepository.findByLocationPrimaryCode(locationId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find location with id %s", locationId)));
+        LocationDto locationIdentDto = LocationDtoMapper.map(location);
+        return ResponseBuilder.ok()
+                .data(locationIdentDto)
+                .build();
     }
-
-//	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<LocationIdentDto> getByCode(@RequestParam("code") String code) {
-//		Optional<LocationIdent> optional = locationIdentRepository.findByCode(code);
-//		if (optional.isPresent()) {
-//			LocationIdentDto locationIdentDto = LocationIdentDtoMapper.map(optional.get());
-//			return ResponseEntity.ok(locationIdentDto);
-//		} else {
-//			return ResponseEntity.notFound().build();
-//		}
-//	}
 
     @ApiOperation(value = "Get a list of locationIdent based on name, shortname of all")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<LocationDto>> getAllQuery(
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<LocationDto>> getAllQuery(
             @ApiParam(value = "name can also be a fragement of the name (TSI.primaryLocationName) [Optional]")
             @RequestParam(name = "name", required = false) String name,
             @ApiParam(value = "shortname can also be a fragement of the shortName [Optional]")
             @RequestParam(name = "shortname", required = false) String shortname) {
-        Iterable<Location> locationList = null;
+        List<Location> locationList = new ArrayList<>();
         if (name != null) {
             if (name.length() >= 3) {
                 locationList = locationRepository.findByPrimaryLocationNameContainingIgnoreCaseOrderByPrimaryLocationNameAsc(name);
@@ -65,31 +58,16 @@ public class LocationController {
             if (shortname.length() >= 2) {
                 locationList = locationRepository.findByCodeIgnoreCaseOrderByCodeAsc(shortname);
             }
-        } else if (shortname == null && name == null) {
+        } else {
             locationList = locationRepository.findAll();
         }
-        List<LocationDto> locationDtoList = new ArrayList<>();
+        List<LocationDto> locationDtoList = locationList.stream()
+                .map(LocationDtoMapper::map)
+                .collect(Collectors.toList());
 
-        for (Location locationIdent : locationList) {
-            locationDtoList.add(LocationDtoMapper.map(locationIdent));
-        }
-//		Link locationsLink = linkTo(methodOn(LocationIdentController.class).getAllQuery(name, shortname)).withSelfRel();
-//		CollectionModel<LocationIdentDto> locations = new CollectionModel<LocationIdentDto>(locationDtoList, locationsLink);
-        return ResponseEntity.ok(locationDtoList);
+        return ResponseBuilder.ok()
+                .data(locationDtoList)
+                .build();
     }
-
-//	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<CollectionModel<LocationIdentDto>> getAll() {
-//
-//		Iterable<LocationIdent> locationList = locationIdentRepository.findAll();
-//		List<LocationIdentDto> locationDtoList = new ArrayList<>();
-//
-//		for (LocationIdent locationIdent : locationList) {
-//			locationDtoList.add(LocationIdentDtoMapper.map(locationIdent));
-//		}
-//		Link locationsLink = linkTo(methodOn(LocationIdentController.class).getAll()).withSelfRel();
-//		CollectionModel<LocationIdentDto> locations = new CollectionModel<LocationIdentDto>(locationDtoList, locationsLink);
-//		return ResponseEntity.ok(locations);
-//	}
 
 }
