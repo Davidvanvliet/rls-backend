@@ -15,18 +15,23 @@ import nl.rls.composer.rest.dto.TrainCompositionMessageCreateDto;
 import nl.rls.composer.rest.dto.TrainCompositionMessageDto;
 import nl.rls.composer.rest.dto.mapper.TrainCompositionMessageDtoMapper;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
+import nl.rls.util.Response;
+import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.StringWriter;
-import java.util.*;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/traincompositionmessages")
@@ -51,36 +56,29 @@ public class TrainCompositionMessageController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TrainCompositionMessageDto>> getAll() {
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<TrainCompositionMessageDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
-        System.out.println("TrainCompositionMessageController " + ownerId);
-        Iterable<TrainCompositionMessage> trainCompositionMessageList = trainCompositionMessageRepository
-                .findByOwnerId(ownerId);
-        System.out.println("TrainCompositionMessageController " + ownerId);
-        List<TrainCompositionMessageDto> trainCompositionMessageDtoList = new ArrayList<>();
-
-        for (TrainCompositionMessage trainCompositionMessage : trainCompositionMessageList) {
-            trainCompositionMessageDtoList.add(TrainCompositionMessageDtoMapper.map(trainCompositionMessage));
-        }
-//		Link trainCompositionMessagesLink = linkTo(methodOn(TrainCompositionMessageController.class).getAll())
-//				.withSelfRel();
-//		Resources<TrainCompositionMessageDto> trainCompositionMessages = new Resources<TrainCompositionMessageDto>(
-//				trainCompositionMessageDtoList, trainCompositionMessagesLink);
-        return ResponseEntity.ok(trainCompositionMessageDtoList);
+        List<TrainCompositionMessage> trainCompositionMessageList = trainCompositionMessageRepository.findByOwnerId(ownerId);
+        List<TrainCompositionMessageDto> trainCompositionMessageDtoList = trainCompositionMessageList.stream()
+                .map(TrainCompositionMessageDtoMapper::map)
+                .collect(Collectors.toList());
+        return ResponseBuilder.ok()
+                .data(trainCompositionMessageDtoList)
+                .build();
     }
 
-    //
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainCompositionMessageDto> getById(@PathVariable int id) {
+    @GetMapping(value = "/{trainCompositionMessageId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<TrainCompositionMessageDto> getById(@PathVariable int trainCompositionMessageId) {
         int ownerId = securityContext.getOwnerId();
-        Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent()) {
-            TrainCompositionMessageDto trainCompositionMessageDto = TrainCompositionMessageDtoMapper
-                    .map(optional.get());
-            return ResponseEntity.ok(trainCompositionMessageDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        TrainCompositionMessage trainCompositionMessage = trainCompositionMessageRepository.findByIdAndOwnerId(trainCompositionMessageId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train composition message with id %d", trainCompositionMessageId)));
+        TrainCompositionMessageDto trainCompositionMessageDto = TrainCompositionMessageDtoMapper
+                .map(trainCompositionMessage);
+        return ResponseBuilder.ok()
+                .data(trainCompositionMessageDto)
+                .build();
     }
 
     // @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
@@ -111,7 +109,8 @@ public class TrainCompositionMessageController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainCompositionMessageDto> create(@RequestBody TrainCompositionMessageCreateDto dto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<TrainCompositionMessageDto> create(@RequestBody TrainCompositionMessageCreateDto dto) {
         int ownerId = securityContext.getOwnerId();
         TrainCompositionMessage trainCompositionMessage = new TrainCompositionMessage();
         trainCompositionMessage.setOwnerId(ownerId);
@@ -134,45 +133,36 @@ public class TrainCompositionMessageController {
         }
 
         Integer trainId = DecodePath.decodeInteger(dto.getTrain(), "trains");
-        Optional<Train> optional = trainRepository.findByIdAndOwnerId(trainId, ownerId);
-        if (optional.isPresent()) {
-            trainCompositionMessage.setTrain(optional.get());
-            optional.get().getTrainCompositionMessages().add(trainCompositionMessage);
-        }
+        Train train = trainRepository.findByIdAndOwnerId(trainId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train with id %d", trainId)));
+        trainCompositionMessage.setTrain(train);
 
         trainCompositionMessage = trainCompositionMessageRepository.save(trainCompositionMessage);
-        if (trainCompositionMessage != null) {
-            TrainCompositionMessageDto resultDto = TrainCompositionMessageDtoMapper.map(trainCompositionMessage);
+        TrainCompositionMessageDto resultDto = TrainCompositionMessageDtoMapper.map(trainCompositionMessage);
 
-            return ResponseEntity.created(
-                    linkTo(methodOn(TrainCompositionMessageController.class).getById(trainCompositionMessage.getId()))
-                            .toUri())
-                    .body(resultDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseBuilder.created()
+                .data(resultDto)
+                .build();
+
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainCompositionMessageDto> update(@PathVariable Integer id,
-                                                             @RequestBody TrainCompositionMessageCreateDto trainCompositionMessageCreateDto) {
+    @PutMapping(value = "/{trainCompositionMessageId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<TrainCompositionMessageDto> update(@PathVariable int trainCompositionMessageId,
+                                                       @RequestBody TrainCompositionMessageCreateDto trainCompositionMessageCreateDto) {
         int ownerId = securityContext.getOwnerId();
-        Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent()) {
-            TrainCompositionMessage trainCompositionMessage = TrainCompositionMessageDtoMapper
-                    .map(trainCompositionMessageCreateDto);
-            trainCompositionMessage.setOwnerId(ownerId);
-            trainCompositionMessage = trainCompositionMessageRepository.save(trainCompositionMessage);
-            if (trainCompositionMessage != null) {
-                TrainCompositionMessageDto dto = TrainCompositionMessageDtoMapper.map(trainCompositionMessage);
 
-                return ResponseEntity.created(linkTo(
-                        methodOn(TrainCompositionMessageController.class).getById(trainCompositionMessage.getId()))
-                        .toUri())
-                        .body(dto);
-            }
+        if (!trainCompositionMessageRepository.existsByIdAndOwnerId(trainCompositionMessageId, ownerId)) {
+            throw new EntityNotFoundException(String.format("Could not find train composition message with id %d", trainCompositionMessageId));
         }
-        return ResponseEntity.notFound().build();
+        TrainCompositionMessage trainCompositionMessage = TrainCompositionMessageDtoMapper.map(trainCompositionMessageCreateDto);
+        trainCompositionMessage.setOwnerId(ownerId);
+        trainCompositionMessage.setId(trainCompositionMessageId);
+        trainCompositionMessage = trainCompositionMessageRepository.save(trainCompositionMessage);
+        TrainCompositionMessageDto dto = TrainCompositionMessageDtoMapper.map(trainCompositionMessage);
+        return ResponseBuilder.created()
+                .data(dto)
+                .build();
     }
 
 }
