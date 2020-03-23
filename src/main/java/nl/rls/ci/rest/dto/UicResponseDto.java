@@ -3,7 +3,7 @@ package nl.rls.ci.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 /**
  * The response of the Web service is an acknowledgement XML enclosed in a SOAP
@@ -16,7 +16,7 @@ import org.springframework.hateoas.ResourceSupport;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UicResponseDto extends ResourceSupport {
+public class UicResponseDto extends RepresentationModel {
     /**
      * ResponseStatus: The value of this field is either ACK or NACK meaning
      * positive and negative acknowledgment respectively. A positive acknowledgement

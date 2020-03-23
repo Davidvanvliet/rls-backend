@@ -3,7 +3,7 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -11,9 +11,7 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TractionInTrainDto extends ResourceSupport {
-    @Min(0)
-    @Max(1)
+public class TractionInTrainDto extends RepresentationModel {
     private int driverIndication;
     private int position;
     private TractionDto traction;

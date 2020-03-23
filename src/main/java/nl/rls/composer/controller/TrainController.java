@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/trains")
@@ -56,7 +55,7 @@ public class TrainController {
             trainDtoList.add(TrainDtoMapper.map(train));
         }
 //		Link trainsLink = linkTo(methodOn(TrainController.class).getAll()).withSelfRel();
-//		Resources<TrainDto> trains = new Resources<TrainDto>(trainDtoList, trainsLink);
+//		CollectionModel<TrainDto> trains = new CollectionModel<TrainDto>(trainDtoList, trainsLink);
         return ResponseEntity.ok(trainDtoList);
     }
 
@@ -138,7 +137,7 @@ public class TrainController {
                 journeySectionDtoList.add(JourneySectionDtoMapper.map(entity));
             }
 //			Link trainsLink = linkTo(methodOn(TrainController.class).getAllJourneySections(id)).withSelfRel();
-//			Resources<TrainCompositionJourneySectionDto> trains = new Resources<TrainCompositionJourneySectionDto>(
+//			CollectionModel<TrainCompositionJourneySectionDto> trains = new CollectionModel<TrainCompositionJourneySectionDto>(
 //					journeySectionDtoList, trainsLink);
             return ResponseEntity.ok(journeySectionDtoList);
         } else {

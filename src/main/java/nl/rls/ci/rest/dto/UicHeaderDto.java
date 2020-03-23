@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 @ToString
 @NoArgsConstructor
 @Getter
 @Setter
-public class UicHeaderDto extends ResourceSupport {
+public class UicHeaderDto  extends RepresentationModel {
     private String messageIdentifier;
     private String messageLiHost;
     private boolean compressed = false;

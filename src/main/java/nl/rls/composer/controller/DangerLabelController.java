@@ -48,7 +48,7 @@ public class DangerLabelController {
         }
 
 //		Link link = linkTo(methodOn(LocationIdentController.class).getAllQuery("", "")).withSelfRel();
-//		Resources<DangerLabelDto> dtos = new Resources<DangerLabelDto>(dtoList, link);
+//		CollectionModel<DangerLabelDto> dtos = new CollectionModel<DangerLabelDto>(dtoList, link);
         return ResponseEntity.ok(dtoList);
     }
 }

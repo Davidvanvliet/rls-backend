@@ -21,8 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/tractions")
@@ -49,7 +50,7 @@ public class TractionController {
             dtoList.add(dto);
         }
 //		Link dtoLink = linkTo(methodOn(this.getClass()).getAll()).withSelfRel();
-//		Resources<TractionDto> tractionDtoList = new Resources<TractionDto>(dtoList, dtoLink);
+//		CollectionModel<TractionDto> tractionDtoList = new CollectionModel<TractionDto>(dtoList, dtoLink);
         return ResponseEntity.ok(dtoList);
     }
 

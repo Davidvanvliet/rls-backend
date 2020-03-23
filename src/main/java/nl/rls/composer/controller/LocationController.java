@@ -74,12 +74,12 @@ public class LocationController {
             locationDtoList.add(LocationDtoMapper.map(locationIdent));
         }
 //		Link locationsLink = linkTo(methodOn(LocationIdentController.class).getAllQuery(name, shortname)).withSelfRel();
-//		Resources<LocationIdentDto> locations = new Resources<LocationIdentDto>(locationDtoList, locationsLink);
+//		CollectionModel<LocationIdentDto> locations = new CollectionModel<LocationIdentDto>(locationDtoList, locationsLink);
         return ResponseEntity.ok(locationDtoList);
     }
 
 //	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<Resources<LocationIdentDto>> getAll() {
+//	public ResponseEntity<CollectionModel<LocationIdentDto>> getAll() {
 //
 //		Iterable<LocationIdent> locationList = locationIdentRepository.findAll();
 //		List<LocationIdentDto> locationDtoList = new ArrayList<>();
@@ -88,7 +88,7 @@ public class LocationController {
 //			locationDtoList.add(LocationIdentDtoMapper.map(locationIdent));
 //		}
 //		Link locationsLink = linkTo(methodOn(LocationIdentController.class).getAll()).withSelfRel();
-//		Resources<LocationIdentDto> locations = new Resources<LocationIdentDto>(locationDtoList, locationsLink);
+//		CollectionModel<LocationIdentDto> locations = new CollectionModel<LocationIdentDto>(locationDtoList, locationsLink);
 //		return ResponseEntity.ok(locations);
 //	}
 

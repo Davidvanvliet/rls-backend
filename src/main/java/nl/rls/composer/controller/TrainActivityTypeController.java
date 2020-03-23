@@ -45,7 +45,7 @@ public class TrainActivityTypeController {
                 trainActivityTypeDtoList.add(TrainActivityTypeDtoMapper.map(trainActivityType));
             }
 //		Link trainActivityTypesLink = linkTo(methodOn(TrainActivityTypeController.class).getAll()).withSelfRel();
-//		Resources<TrainActivityTypeDto> trainActivityTypes = new Resources<TrainActivityTypeDto>(trainActivityTypeDtoList, trainActivityTypesLink);
+//		CollectionModel<TrainActivityTypeDto> trainActivityTypes = new CollectionModel<TrainActivityTypeDto>(trainActivityTypeDtoList, trainActivityTypesLink);
             return ResponseEntity.ok(trainActivityTypeDtoList);
         } else {
             Optional<TrainActivityType> optional = trainActivityTypeRepository.findByCode(code);

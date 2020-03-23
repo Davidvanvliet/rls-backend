@@ -2,13 +2,13 @@ package nl.rls.composer.rest.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;
 
 @Getter
 @Setter
-public class GenericMessageDto extends ResourceSupport {
+public class GenericMessageDto extends RepresentationModel {
     private int messageStatus;
     private int messageType;
     private String messageTypeVersion;

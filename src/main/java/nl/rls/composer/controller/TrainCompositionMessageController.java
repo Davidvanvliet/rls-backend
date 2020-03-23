@@ -26,8 +26,7 @@ import javax.xml.bind.Marshaller;
 import java.io.StringWriter;
 import java.util.*;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/traincompositionmessages")
@@ -59,7 +58,7 @@ public class TrainCompositionMessageController {
         }
 //		Link trainCompositionMessagesLink = linkTo(methodOn(TrainCompositionMessageController.class).getAll())
 //				.withSelfRel();
-//		Resources<TrainCompositionMessageDto> trainCompositionMessages = new Resources<TrainCompositionMessageDto>(
+//		CollectionModel<TrainCompositionMessageDto> trainCompositionMessages = new CollectionModel<TrainCompositionMessageDto>(
 //				trainCompositionMessageDtoList, trainCompositionMessagesLink);
         return ResponseEntity.ok(trainCompositionMessageDtoList);
     }

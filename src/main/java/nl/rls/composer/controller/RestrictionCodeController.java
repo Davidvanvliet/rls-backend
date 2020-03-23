@@ -57,7 +57,7 @@ public class RestrictionCodeController {
             }
 
 //		Link restrictionCodesLink = linkTo(methodOn(RestrictionCodeController.class).getAll()).withSelfRel();
-//		Resources<RestrictionCodeDto> restrictionCodes = new Resources<RestrictionCodeDto>(restrictionCodeDtoList, restrictionCodesLink);
+//		CollectionModel<RestrictionCodeDto> restrictionCodes = new CollectionModel<RestrictionCodeDto>(restrictionCodeDtoList, restrictionCodesLink);
 
         }
     }

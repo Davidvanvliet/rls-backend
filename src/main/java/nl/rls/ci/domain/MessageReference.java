@@ -16,7 +16,7 @@ import java.util.Date;
  * This element identifies the message
  */
 @ToString
-@Entity
+@Entity(name = "message_reference_ci")
 @NoArgsConstructor
 @Getter
 @Setter
