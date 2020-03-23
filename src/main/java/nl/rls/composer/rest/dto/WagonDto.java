@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rls.composer.rest.dto.hateoas.ResourceSupport;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -17,8 +19,16 @@ public class WagonDto extends ResourceSupport {
     private String numberFreight;
     private String name;
     private String code;
+    @Min(1)
+    @Max(999999)
     private int lengthOverBuffers;
+    @Min(2)
+    @Max(99)
     private int wagonNumberOfAxles;
+    @Min(1)
+    @Max(999999)
     private int wagonWeightEmpty;
+    @Min(0)
+    @Max(999)
     private int handBrakeBrakedWeight;
 }

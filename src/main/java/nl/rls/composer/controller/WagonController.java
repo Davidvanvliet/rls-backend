@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +58,7 @@ public class WagonController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WagonDto> create(@RequestBody WagonPostDto dto) {
+    public ResponseEntity<WagonDto> create(@RequestBody @Valid WagonPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Wagon entity = new Wagon();
         entity.setOwnerId(ownerId);

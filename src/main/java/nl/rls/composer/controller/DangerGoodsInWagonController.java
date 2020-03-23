@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -72,7 +73,7 @@ public class DangerGoodsInWagonController {
 
     @PostMapping(value = "/{id}/dangergoods", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WagonInTrainDto> postDangerGoods(@PathVariable int id,
-                                                           @RequestBody DangerGoodsInWagonPostDto postDto) {
+                                                           @RequestBody @Valid DangerGoodsInWagonPostDto postDto) {
         int ownerId = securityContext.getOwnerId();
         Optional<WagonInTrain> optional = wagonInTrainRepository.findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {
@@ -98,7 +99,7 @@ public class DangerGoodsInWagonController {
 
     @PutMapping(value = "/{id}/dangergoods/{dangerGoodsId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WagonInTrainDto> updateDangerGoodsInWagon(@PathVariable int id,
-                                                                    @PathVariable int dangerGoodsId, @RequestBody DangerGoodsInWagonPostDto postDto) {
+                                                                    @PathVariable int dangerGoodsId, @RequestBody @Valid DangerGoodsInWagonPostDto postDto) {
         int ownerId = securityContext.getOwnerId();
         Optional<WagonInTrain> optional = wagonInTrainRepository.findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {

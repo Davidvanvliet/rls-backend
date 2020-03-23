@@ -36,7 +36,7 @@ public class TrainActivityTypeController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TrainActivityTypeDto>> getAll(@RequestParam("code") String code) {
+    public ResponseEntity<List<TrainActivityTypeDto>> getAll(@RequestParam(value = "code", required = false) String code) {
         if (code == null) {
             Iterable<TrainActivityType> trainActivityTypeList = trainActivityTypeRepository.findAll();
             List<TrainActivityTypeDto> trainActivityTypeDtoList = new ArrayList<>();
