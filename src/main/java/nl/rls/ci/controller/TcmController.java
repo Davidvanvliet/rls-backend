@@ -47,7 +47,7 @@ public class TcmController {
 
     @ApiOperation(value = "Constructs a tcm-message from data and puts it into de CI-buffer")
     @PostMapping(value = "/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<String> createTcm(@PathVariable Integer id) {
+    public ResponseEntity<String> createTcm(@PathVariable Integer id) throws IOException, SAXException {
         int ownerId = securityContext.getOwnerId();
 		Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
 		if (optional.isPresent()) {
