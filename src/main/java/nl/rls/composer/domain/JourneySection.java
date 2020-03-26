@@ -2,6 +2,7 @@ package nl.rls.composer.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import nl.rls.composer.domain.code.TrainActivityType;
 
@@ -33,12 +34,14 @@ public class JourneySection extends OwnedEntity {
      * This element identifies the responsible RU or IM for the actual path section
      */
     @ManyToOne
+    @NonNull
     private Responsibility responsibilityActualSection;
     /**
      * This element identifies the responsible RU and IM for the following path
      * section
      */
     @ManyToOne
+    @NonNull
     private Responsibility responsibilityNextSection;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private TrainComposition trainComposition;

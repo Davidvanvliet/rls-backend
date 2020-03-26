@@ -13,6 +13,5 @@ import javax.persistence.Lob;
 @Getter
 @Setter
 public class XmlMessage extends OwnedEntity {
-    @Lob
     String message;
 }

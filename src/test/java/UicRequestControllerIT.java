@@ -19,19 +19,19 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Main.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
         FlywayTestExecutionListener.class})
-@ExtendWith({SpringExtension.class})
+@ExtendWith({SpringExtension.class, GlobalSettings.class})
 public class UicRequestControllerIT {
     @LocalServerPort
     int randomServerPort;
 
     @BeforeEach
     public void setup() {
-        RestAssured.baseURI = "http://localhost:";
+        RestAssured.port = randomServerPort;
     }
 
     @Test
     public void getUicRequest() {
-        ValidatableResponse response = given().when().get(RestAssured.baseURI + randomServerPort + BaseURL.BASE_PATH + UicRequestController.PATH + "/1").then();
+        ValidatableResponse response = given().when().get(RestAssured.baseURI + RestAssured.port + BaseURL.BASE_PATH + UicRequestController.PATH + "/1").then();
         response.assertThat().body(matchesJsonSchemaInClasspath("getUicRequest.json"));
     }
 }

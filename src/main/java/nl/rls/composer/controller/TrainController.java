@@ -28,8 +28,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(BaseURL.BASE_PATH + "/trains")
+@RequestMapping(BaseURL.BASE_PATH + TrainController.PATH)
 public class TrainController {
+    public static final String PATH = "/trains";
     private final TrainRepository trainRepository;
     private final CompanyRepository companyRepository;
     private final ResponsibilityRepository responsibilityRepository;

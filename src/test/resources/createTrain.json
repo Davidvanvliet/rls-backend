@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "operationalTrainNumber": {
+      "type": "string"
+    },
+    "transferPoint": {
+      "type": "string"
+    },
+    "scheduledTimeAtHandover": {
+      "type": "string"
+    },
+    "scheduledDateTimeAtTransfer": {
+      "type": "string"
+    }
+  },
+  "required": ["operationalTrainNumber", "transferPoint", "scheduledTimeAtHandover", "scheduledDateTimeAtTransfer"]
+}

@@ -22,14 +22,14 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
         FlywayTestExecutionListener.class})
 @FlywayTest
-@ExtendWith({SpringExtension.class})
+@ExtendWith({SpringExtension.class, GlobalSettings.class})
 public class CiControllerIT {
     @LocalServerPort
     int randomServerPort;
 
     @BeforeEach
     public void setup() {
-        RestAssured.baseURI = "http://localhost:";
+        RestAssured.port = randomServerPort;
     }
 
     @Test
@@ -122,25 +122,25 @@ public class CiControllerIT {
                 "        </WagonData>\n" +
                 "    </TrainCompositionJourneySection>\n" +
                 "</TrainCompositionMessage>";
-        String path = "http://localhost:" + randomServerPort + BaseURL.BASE_PATH + CiController.PATH;
+        String path = "http://localhost:" + RestAssured.port + BaseURL.BASE_PATH + CiController.PATH;
         given().body(xmlMessage).when().post(path).then().assertThat().statusCode(201);
     }
 
     @Test
     public void getMessages() {
-        ValidatableResponse response = given().when().get(RestAssured.baseURI + randomServerPort + BaseURL.BASE_PATH + CiController.PATH).then();
+        ValidatableResponse response = given().when().get(RestAssured.baseURI + RestAssured.port + BaseURL.BASE_PATH + CiController.PATH).then();
         response.assertThat().body(matchesJsonSchemaInClasspath("getMessages.json"));
     }
 
     @Test
     public void getMessage() {
-        ValidatableResponse response = given().when().get(RestAssured.baseURI + randomServerPort + BaseURL.BASE_PATH + CiController.PATH + "/1").then();
+        ValidatableResponse response = given().when().get(RestAssured.baseURI + RestAssured.port + BaseURL.BASE_PATH + CiController.PATH + "/1").then();
         response.assertThat().body(matchesJsonSchemaInClasspath("getMessage.json"));
     }
 
     @Test
     public void sendMessage() {
-        ValidatableResponse response = given().when().post(RestAssured.baseURI +  randomServerPort + BaseURL.BASE_PATH + CiController.PATH + "/1").then();
+        ValidatableResponse response = given().when().post(RestAssured.baseURI +  RestAssured.port + BaseURL.BASE_PATH + CiController.PATH + "/1").then();
         response.assertThat().statusCode(202);
     }
 }

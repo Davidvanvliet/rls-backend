@@ -29,9 +29,12 @@ public class TrainDtoMapper {
         mapper.addMapping(mappingBuilder);
         TrainDto dto = mapper.map(entity, TrainDto.class);
 
-        List<JourneySectionDto> dtoList = new ArrayList<JourneySectionDto>();
-        for (JourneySection listItem : entity.getJourneySections()) {
-            dtoList.add(JourneySectionDtoMapper.map(listItem));
+        List<JourneySectionDto> dtoList = new ArrayList<>();
+        for (JourneySection journeySection : entity.getJourneySections()) {
+            if (journeySection != null) {
+                System.out.println(journeySection);
+                dtoList.add(JourneySectionDtoMapper.map(journeySection));
+            }
         }
         dto.setJourneySections(dtoList);
 

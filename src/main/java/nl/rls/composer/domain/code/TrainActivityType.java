@@ -7,7 +7,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-@ToString
 @Entity
 @NoArgsConstructor
 @Getter

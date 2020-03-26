@@ -51,8 +51,7 @@ public class Train extends OwnedEntity {
      */
     @ManyToOne
     private Company transfereeIM;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "train_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "train")
     private List<JourneySection> journeySections = new ArrayList<JourneySection>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

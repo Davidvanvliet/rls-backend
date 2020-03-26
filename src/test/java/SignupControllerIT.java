@@ -21,7 +21,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
         FlywayTestExecutionListener.class})
 @FlywayTest
-@ExtendWith({SpringExtension.class})
+@ExtendWith({SpringExtension.class, GlobalSettings.class})
 public class SignupControllerIT {
     @LocalServerPort
     int randomServerPort;
@@ -31,7 +31,7 @@ public class SignupControllerIT {
 
     @BeforeEach
     public void setup() {
-        RestAssured.baseURI = "http://localhost:";
+        RestAssured.port = randomServerPort;
         ownerRepository.save(new Owner("3502", "RaillinkSystems 123"));
     }
 
@@ -46,7 +46,7 @@ public class SignupControllerIT {
                 "  \"password\": \"password\",\n" +
                 "  \"owner\": {\"code\": \"3502\"}\n" +
                 "}";
-        given().body(jsonString).contentType("application/json").post(RestAssured.baseURI + randomServerPort + "/signup")
+        given().body(jsonString).contentType("application/json").post(RestAssured.baseURI + RestAssured.port + "/signup")
                 .then().assertThat().body(matchesJsonSchemaInClasspath("signUp-schema.json"));
 
     }
