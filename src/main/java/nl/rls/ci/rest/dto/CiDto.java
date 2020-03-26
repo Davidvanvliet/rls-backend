@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 import java.util.Date;
 
@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CiDto extends RepresentationModel {
+public class CiDto extends IdentifiableRepresentationModel<CiDto> {
     private Date createDate;
     private Date postDate;
     private boolean posted = false;

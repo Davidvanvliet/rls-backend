@@ -3,7 +3,7 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TrainCompositionDto extends RepresentationModel {
+public class TrainCompositionDto extends IdentifiableRepresentationModel<TrainCompositionDto> {
     private List<TractionInTrainDto> tractions = new ArrayList<TractionInTrainDto>();
     private List<WagonInTrainDto> wagons = new ArrayList<WagonInTrainDto>();
     private Integer exceptionalGaugingIndicator;

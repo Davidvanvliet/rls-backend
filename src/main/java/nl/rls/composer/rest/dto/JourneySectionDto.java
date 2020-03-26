@@ -3,7 +3,7 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class JourneySectionDto extends RepresentationModel {
+public class JourneySectionDto extends IdentifiableRepresentationModel<JourneySectionDto> {
     //    private LocationIdentDto journeySectionOrigin;
 //    private LocationIdentDto journeySectionDestination;
 //    private CompanyDto responsibilityActualSectionIM;

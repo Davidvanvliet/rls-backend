@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NoArgsConstructor
 @Getter
 @Setter
-public class WagonTypeDto extends RepresentationModel {
+public class WagonTypeDto extends IdentifiableRepresentationModel<WagonTypeDto> {
     private String name;
     private String code;
     @Min(1)
