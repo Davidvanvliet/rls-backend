@@ -1,12 +1,34 @@
 package nl.rls.composer.controller;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Traction;
 import nl.rls.composer.domain.TractionInTrain;
 import nl.rls.composer.domain.TrainComposition;
+import nl.rls.composer.domain.code.TractionMode;
 import nl.rls.composer.repository.TractionInTrainRepository;
+import nl.rls.composer.repository.TractionModeRepository;
 import nl.rls.composer.repository.TractionRepository;
 import nl.rls.composer.repository.TrainCompositionRepository;
 import nl.rls.composer.rest.dto.TractionInTrainDto;
@@ -17,18 +39,6 @@ import nl.rls.composer.rest.dto.mapper.TrainCompositionDtoMapper;
 import nl.rls.composer.service.TrainCompositionService;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + TrainCompositionController.PATH)
@@ -38,13 +48,16 @@ public class TractionInTrainController {
     private final TractionInTrainRepository tractionInTrainRepository;
     private final TrainCompositionService trainCompositionService;
     private final TrainCompositionRepository trainCompositionRepository;
+    private final TractionModeRepository tractionModeRepository;
 
-    public TractionInTrainController(SecurityContext securityContext, TractionRepository tractionRepository, TractionInTrainRepository tractionInTrainRepository, TrainCompositionService trainCompositionService, TrainCompositionRepository trainCompositionRepository) {
+
+    public TractionInTrainController(SecurityContext securityContext, TractionRepository tractionRepository, TractionInTrainRepository tractionInTrainRepository, TrainCompositionService trainCompositionService, TrainCompositionRepository trainCompositionRepository, TractionModeRepository tractionModeRepository) {
         this.securityContext = securityContext;
         this.tractionRepository = tractionRepository;
         this.tractionInTrainRepository = tractionInTrainRepository;
         this.trainCompositionService = trainCompositionService;
         this.trainCompositionRepository = trainCompositionRepository;
+        this.tractionModeRepository = tractionModeRepository;
     }
 
     @GetMapping(value = "/{trainCompositionId}/tractions/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -92,6 +105,12 @@ public class TractionInTrainController {
         tractionInTrain.setTraction(traction);
         tractionInTrain.setPosition(dto.getPosition());
         tractionInTrain.setDriverIndication(dto.getDriverIndication());
+        int tractionModeId = DecodePath.decodeInteger(dto.getTractionMode(), "tractionmodes");
+        Optional<TractionMode> tractionMode = tractionModeRepository.findById(tractionModeId);
+        if (tractionMode.isPresent()) {
+        	tractionInTrain.setTractionMode(tractionMode.get());
+        }
+
         trainCompositionService.addTractionToTrain(trainComposition, tractionInTrain);
         TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
                 .map(trainComposition);

@@ -7,7 +7,5 @@ create table uic_request
     encoding     varchar(255),
     sender_alias varchar(255),
     signature    varchar(255),
-    message_id   integer
-        constraint fk_uic_request_xml_message
-            references xml_message
+    message      varchar(64000)
 );

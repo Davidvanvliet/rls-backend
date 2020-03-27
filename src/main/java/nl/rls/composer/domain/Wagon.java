@@ -16,7 +16,7 @@ import javax.persistence.Entity;
 @Setter
 public class Wagon extends OwnedEntity {
     private String numberFreight;
-    private String name;
+    private String typeName;
     private String code;
     /**
      * Length over buffers is expressed in cm.

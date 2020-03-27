@@ -13,10 +13,6 @@ import nl.rls.composer.domain.Company;
 import nl.rls.composer.domain.GenericMessage;
 import nl.rls.composer.domain.Train;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author berend.wilkens
  * <p>

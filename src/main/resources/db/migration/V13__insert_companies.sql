@@ -4046,3 +4046,6 @@ INSERT INTO company (code, name, short_name, url, country_iso, passenger_flag, f
                      other_company_flag, national_entity_flag, central_entity_flag, active_flag)
 VALUES ('0099', 'Iraqi Republic Railways Establishment', 'IRR', 'http://www.iraqrailways.com/', 'IQ', 1, 1, 1, 0, 0, 0,
         1);
+INSERT INTO company (code, name, short_name, url, country_iso, passenger_flag, freight_flag, infrastructure_flag,
+                     other_company_flag, national_entity_flag, central_entity_flag, active_flag)
+VALUES ('3708', 'Eurailscout Inspection & Analysis B.V.', 'Eurailscout', 'http://www.eurailscout.com/', 'NL', 0, 0, 1, 1, 0, 0, 1);

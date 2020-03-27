@@ -1,17 +1,11 @@
 package nl.rls.ci.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rls.composer.domain.OwnedEntity;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
 
 /**
  * @author berend.wilkens
@@ -31,7 +25,6 @@ public class UicRequest extends OwnedEntity {
      * This element contains the actual TAF/TAPTSI message. If the message is
      * compressed, encrypted or singed, then it should be base64 encoded.
      */
-    @Lob
     private String message;
     /**
      * Message can be digitally signed for security purpose. For signing, you have

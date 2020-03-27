@@ -34,8 +34,11 @@ public class CiDtoMapper {
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
 			protected void configure() {
-				mapping(nl.rls.ci.soap.dto.MessageReference.class, MessageReference.class).fields("messageType",
-						"messageType",
+				mapping(nl.rls.ci.soap.dto.LITechnicalAck.class, UicResponse.class)
+					.fields("messageReference.messageTypeVersion", "messageTypeVersion")
+					.fields("messageReference.messageIdentifier", "messageIdentifier")
+					.fields("messageReference.messageDateTime", "messageDateTime")
+					.fields("messageReference.messageType", "messageType",
 						FieldsMappingOptions.customConverter("nl.rls.ci.soap.dto.mapper.MessageTypeConverter"));
 			}
 		};
