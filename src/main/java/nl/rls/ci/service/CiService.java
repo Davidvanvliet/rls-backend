@@ -90,8 +90,6 @@ public class CiService {
         }
         ciMessage.setPosted(true);
         ciMessage.setPostDate(new Date());
-        System.out.println("ciMessage.getUicResponse().getId(): "+ciMessage.getUicResponse().getId());
-        System.out.println("ciMessage.getUicResponse().getRemoteLIInstanceNumber(): "+ciMessage.getUicResponse().getRemoteLIInstanceNumber());
         ciRepository.save(ciMessage);
         log.info("sendMessage 5 (uicResponse): " + ciMessage);
         return message;
