@@ -31,14 +31,7 @@ public class Traction extends OwnedEntity {
      * on 12N. It is currently not restricted only to numeric values.
      */
     protected String locoNumber;
-    /**
-     * Identifies the mode of deployment of a traction within a train First digit –
-     * traction role Second digit – position in group of traction units with the
-     * same role
-     */
-    @ManyToOne
-    protected TractionMode tractionMode;
-    private String type;
+    private String typeName;
     private int lengthOverBuffers;
     private int numberOfAxles;
     private int weight;

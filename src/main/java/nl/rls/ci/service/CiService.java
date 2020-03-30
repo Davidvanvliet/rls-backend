@@ -23,14 +23,12 @@ import javax.xml.validation.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import nl.rls.ci.aa.security.SecurityContext;
-import nl.rls.ci.domain.*;
 import nl.rls.ci.domain.CiMessage;
 import nl.rls.ci.domain.UicHeader;
 import nl.rls.ci.domain.UicRequest;
@@ -44,27 +42,6 @@ import nl.rls.ci.soapinterface.UICMessageResponse;
 import nl.rls.ci.soapinterface.UICReceiveMessage;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-import java.io.*;
-import java.util.Date;
-import java.util.UUID;
 
 /**
  * @author berend.wilkens Localhost: 145.89.169.134
@@ -149,7 +126,7 @@ public class CiService {
         return xmlMessage.toString();
     }
 
-    public CiMessage makeCiMessage(TrainCompositionMessage trainCompositionMessage, String messageXml)
+    public CiMessage makeCiMessage(String messageIdentifier, String messageXml)
             throws SAXException, IOException {
         InputStream targetStream = new ByteArrayInputStream(messageXml.getBytes());
         File file = new File("taf_cat_complete_sector.xsd");
@@ -174,7 +151,7 @@ public class CiService {
          * maak de het bericht voor de common interface = SOAP header
          */
         UicHeader uicHeader = new UicHeader();
-        uicHeader.setMessageIdentifier(trainCompositionMessage.getMessageIdentifier());
+        uicHeader.setMessageIdentifier(messageIdentifier);
         uicHeader.setMessageLiHost("82.217.100.12");
         ciMessage.setUicHeader(uicHeader);
         ciMessage.setCreateDate(new Date());

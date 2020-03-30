@@ -3,6 +3,7 @@ package nl.rls.composer.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rls.composer.domain.code.TractionMode;
 
 import javax.persistence.*;
 
@@ -23,6 +24,14 @@ public class TractionInTrain {
      * after which wagon (specified by order number) the unit is placed.
      */
     private Integer position;
+    /**
+     * Identifies the mode of deployment of a traction within a train First digit –
+     * traction role Second digit – position in group of traction units with the
+     * same role
+     */
+    @ManyToOne
+    protected TractionMode tractionMode;
+
     @ManyToOne
     private Traction traction;
     @ManyToOne

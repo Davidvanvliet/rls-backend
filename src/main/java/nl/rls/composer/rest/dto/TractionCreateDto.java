@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -13,15 +14,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Getter
 @Setter
 public class TractionCreateDto {
+	@Size(min = 2, max = 2)
     private String tractionType;
-    private String tractionMode;
     @Min(5)
     @Max(12)
     private String locoTypeNumber;
     @Min(4)
     @Max(12)
     private String locoNumber;
-    private String type;
+    private String typeName;
     @Min(1)
     @Max(999999)
     private int lengthOverBuffers;

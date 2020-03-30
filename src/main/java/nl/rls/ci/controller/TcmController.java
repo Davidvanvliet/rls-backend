@@ -43,7 +43,7 @@ public class TcmController {
             TrainCompositionMessage trainCompositionMessage = optional.get();
             System.out.println(trainCompositionMessage);
             String tcmMessage = ciService.makeTcmMessage(trainCompositionMessage);
-            CiMessage ciMessage = ciService.makeCiMessage(trainCompositionMessage, tcmMessage);
+            CiMessage ciMessage = ciService.makeCiMessage(trainCompositionMessage.getMessageIdentifier(), tcmMessage);
 
             System.out.println("POST XML message to databases");
             return ResponseEntity.created(linkTo(methodOn(CiController.class).getMessage(ciMessage.getId())).toUri())
@@ -53,21 +53,5 @@ public class TcmController {
         }
     }
 
-    /**
-     * Maakt een nieuw CI bericht aan.
-     *
-     * @param messageXml
-     * @return de link naar het CI object/resource
-     */
-//	@Transactional
-//	@PostMapping(value = "/")
-//	@ApiOperation(value = "Stores a CI (XML-)message for a client (UicRequest). This message is not send.")
-//	public ResponseEntity<?> postMessage(@RequestBody String messageXml) {
-//		System.out.println("POST XML message to databases");
-//		CiMessage ciMessage = ciService.makeCiMessage(messageXml);
-//		return ResponseEntity.created(linkTo(methodOn(CiController.class).getMessage(ciMessage.getId())).toUri())
-//				.build();
-//	}
-//
 
 }

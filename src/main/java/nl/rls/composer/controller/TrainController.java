@@ -1,11 +1,39 @@
 package nl.rls.composer.controller;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.annotations.ApiOperation;
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
-import nl.rls.composer.domain.*;
-import nl.rls.composer.repository.*;
+import nl.rls.composer.domain.Company;
+import nl.rls.composer.domain.JourneySection;
+import nl.rls.composer.domain.Location;
+import nl.rls.composer.domain.Responsibility;
+import nl.rls.composer.domain.Train;
+import nl.rls.composer.domain.TrainComposition;
+import nl.rls.composer.repository.CompanyRepository;
+import nl.rls.composer.repository.JourneySectionRepository;
+import nl.rls.composer.repository.LocationRepository;
+import nl.rls.composer.repository.ResponsibilityRepository;
+import nl.rls.composer.repository.TrainRepository;
 import nl.rls.composer.rest.dto.JourneySectionDto;
 import nl.rls.composer.rest.dto.JourneySectionPostDto;
 import nl.rls.composer.rest.dto.TrainDto;
@@ -14,18 +42,6 @@ import nl.rls.composer.rest.dto.mapper.JourneySectionDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainDtoMapper;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/trains")

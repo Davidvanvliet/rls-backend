@@ -10,8 +10,9 @@ import org.springframework.hateoas.RepresentationModel;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UicRequestDto extends RepresentationModel {
+public class UicRequestDto extends RepresentationModel<UicRequestDto> {
     private String signature;
     private String senderAlias;
     private String encoding;
+    private String message;
 }

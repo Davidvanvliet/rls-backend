@@ -20,7 +20,7 @@ public class TractionDto extends RepresentationModel {
     @Max(12)
     private String locoNumber;
     private TractionModeDto tractionMode;
-    private String type;
+    private String typeName;
     @Min(1)
     @Max(999999)
     private int lengthOverBuffers;
