@@ -100,10 +100,6 @@ public class TrainCompositionMessageXmlMapper {
                         info.taf_jsg.schemes.ResponsibilityNextSection.class)
                         .fields("responsibleRU.code", "responsibleRU")
                         .fields("responsibleIM.code", "responsibleIM");
-                mapping(nl.rls.composer.domain.Traction.class,
-                        info.taf_jsg.schemes.TrainCompositionJourneySection.LocoIdent.class)
-                        .fields("tractionType.code", "tractionType")
-                        .fields("tractionMode.code", "tractionMode");
                 // mapping(nl.rls.composer.domain.code.TrainActivityType.class,
                 // info.taf_jsg.schemes.TrainRunningData.Activities.class)
                 // .fields("code", "trainActivityType");
@@ -112,7 +108,7 @@ public class TrainCompositionMessageXmlMapper {
                         .fields("driverIndication", "driverIndication")
                         .fields("position", "tractionPositionInTrain")
                         .fields("traction.tractionType.code", "tractionType")
-                        .fields("traction.tractionMode.code", "tractionMode")
+                        .fields("tractionMode.code", "tractionMode")
                         .fields("traction.locoTypeNumber", "locoTypeNumber")
                         .fields("traction.locoNumber", "locoNumber");
             }

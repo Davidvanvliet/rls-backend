@@ -14,4 +14,5 @@ public class UicRequestDto extends IdentifiableRepresentationModel<UicRequestDto
     private String signature;
     private String senderAlias;
     private String encoding;
+    private String message;
 }

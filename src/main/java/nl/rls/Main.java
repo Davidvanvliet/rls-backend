@@ -1,13 +1,16 @@
 package nl.rls;
 
-import nl.rls.ci.aa.repository.LicenseRepository;
-import nl.rls.ci.aa.repository.OwnerRepository;
-import nl.rls.ci.aa.repository.RoleRepository;
-import nl.rls.ci.aa.repository.UserRepository;
-import nl.rls.composer.domain.Company;
-import nl.rls.composer.domain.GenericMessage;
-import nl.rls.composer.domain.code.MessageType;
-import nl.rls.composer.repository.*;
+import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +22,44 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.UUID;
+import nl.rls.ci.aa.repository.LicenseRepository;
+import nl.rls.ci.aa.repository.OwnerRepository;
+import nl.rls.ci.aa.repository.RoleRepository;
+import nl.rls.ci.aa.repository.UserRepository;
+import nl.rls.composer.domain.Company;
+import nl.rls.composer.domain.DangerGoodsInWagon;
+import nl.rls.composer.domain.DangerGoodsType;
+import nl.rls.composer.domain.GenericMessage;
+import nl.rls.composer.domain.JourneySection;
+import nl.rls.composer.domain.Location;
+import nl.rls.composer.domain.Responsibility;
+import nl.rls.composer.domain.Traction;
+import nl.rls.composer.domain.TractionInTrain;
+import nl.rls.composer.domain.Train;
+import nl.rls.composer.domain.TrainComposition;
+import nl.rls.composer.domain.Wagon;
+import nl.rls.composer.domain.WagonInTrain;
+import nl.rls.composer.domain.code.BrakeType;
+import nl.rls.composer.domain.code.MessageType;
+import nl.rls.composer.domain.code.TractionMode;
+import nl.rls.composer.domain.code.TractionType;
+import nl.rls.composer.domain.code.TrainActivityType;
+import nl.rls.composer.domain.message.MessageStatus;
+import nl.rls.composer.domain.message.TrainCompositionMessage;
+import nl.rls.composer.repository.CompanyRepository;
+import nl.rls.composer.repository.CompositIdentifierOperationalTypeRepository;
+import nl.rls.composer.repository.DangerGoodsTypeRepository;
+import nl.rls.composer.repository.JourneySectionRepository;
+import nl.rls.composer.repository.LocationRepository;
+import nl.rls.composer.repository.ResponsibilityRepository;
+import nl.rls.composer.repository.TractionModeRepository;
+import nl.rls.composer.repository.TractionRepository;
+import nl.rls.composer.repository.TractionTypeRepository;
+import nl.rls.composer.repository.TrainActivityTypeRepository;
+import nl.rls.composer.repository.TrainCompositionMessageRepository;
+import nl.rls.composer.repository.TrainRepository;
+import nl.rls.composer.repository.WagonRepository;
+import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class Main {
@@ -71,28 +110,6 @@ public class Main {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    @Transactional
-    public CommandLineRunner demo() {
-        return (args) -> {
-            log.info("RLS - Application started");
-        };
-
-    }
-
-    private void addMessageHeader(GenericMessage message) {
-        message.setMessageDateTime(new Date());
-        message.setMessageIdentifier(UUID.randomUUID().toString());
-        message.setMessageType(MessageType.TRAIN_COMPOSITION_MESSAGE.code());
-        message.setMessageTypeVersion(MessageType.TRAIN_COMPOSITION_MESSAGE.version());
-        message.setSenderReference(UUID.randomUUID().toString());
-        Company recipient = companyRepository.findByCode("0084").get(0);
-        Company sender = companyRepository.findByCode("9001").get(0);
-        message.setRecipient(recipient);
-        message.setSender(sender);
-        System.out.println("message(header attributes): " + message.toString());
     }
 
 }

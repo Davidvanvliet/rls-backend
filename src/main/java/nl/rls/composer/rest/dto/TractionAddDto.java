@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -20,5 +21,7 @@ public class TractionAddDto {
     @Min(0)
     @Max(1)
     private int driverIndication;
+	@Size(min = 2, max = 2)
+    private String tractionMode;
 
 }

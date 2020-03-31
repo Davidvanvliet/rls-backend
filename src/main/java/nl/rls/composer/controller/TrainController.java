@@ -20,11 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -161,10 +158,6 @@ public class TrainController {
         journeySection.setTrainComposition(new TrainComposition(ownerId));
         journeySection.getTrainComposition().setJourneySection(journeySection);
         journeySection.getTrainComposition().setLivestockOrPeopleIndicator(dto.getLivestockOrPeopleIndicator());
-        journeySection.getTrainComposition().setBrakeType(dto.getBrakeType());
-        journeySection.getTrainComposition().setBrakeWeight(dto.getBrakeWeight());
-        journeySection.getTrainComposition().setTrainMaxSpeed(dto.getTrainMaxSpeed());
-        journeySection.getTrainComposition().setMaxAxleWeight(dto.getMaxAxleWeight());
         journeySection = journeySectionRepository.save(journeySection);
         train.addJourneySection(journeySection);
         train = trainRepository.save(train);

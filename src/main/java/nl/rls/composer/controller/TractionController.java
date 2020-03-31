@@ -1,10 +1,27 @@
 package nl.rls.composer.controller;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Traction;
-import nl.rls.composer.domain.code.TractionMode;
 import nl.rls.composer.domain.code.TractionType;
 import nl.rls.composer.repository.TractionModeRepository;
 import nl.rls.composer.repository.TractionRepository;
@@ -14,33 +31,17 @@ import nl.rls.composer.rest.dto.TractionDto;
 import nl.rls.composer.rest.dto.mapper.TractionDtoMapper;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/tractions")
 public class TractionController {
     private final TractionRepository tractionRepository;
     private final TractionTypeRepository tractionTypeRepository;
-    private final TractionModeRepository tractionModeRepository;
     private final SecurityContext securityContext;
 
-    public TractionController(TractionRepository tractionRepository, TractionTypeRepository tractionTypeRepository, TractionModeRepository tractionModeRepository, SecurityContext securityContext) {
+    public TractionController(TractionRepository tractionRepository, TractionTypeRepository tractionTypeRepository, SecurityContext securityContext) {
         this.tractionRepository = tractionRepository;
         this.tractionTypeRepository = tractionTypeRepository;
-        this.tractionModeRepository = tractionModeRepository;
         this.securityContext = securityContext;
     }
 
@@ -80,11 +81,6 @@ public class TractionController {
         Optional<TractionType> tractionType = tractionTypeRepository.findById(tractionTypeId);
         if (tractionType.isPresent()) {
             traction.setTractionType(tractionType.get());
-        }
-        int tractionModeId = DecodePath.decodeInteger(tractionDto.getTractionMode(), "tractionmodes");
-        Optional<TractionMode> tractionMode = tractionModeRepository.findById(tractionModeId);
-        if (tractionMode.isPresent()) {
-            traction.setTractionMode(tractionMode.get());
         }
         tractionRepository.save(traction);
         TractionDto resultDto = TractionDtoMapper.map(traction);

@@ -9,7 +9,8 @@ create table uic_response
     recipient                   varchar(255),
     response_status             varchar(255),
     sender                      varchar(255),
-    message_reference_id        integer
-        constraint fk_uic_response_message_reference
-            references message_reference
+    message_date_time    		timestamp,
+    message_identifier   		varchar(255),
+    message_type         		integer not null,
+    message_type_version 		varchar(255)
 );

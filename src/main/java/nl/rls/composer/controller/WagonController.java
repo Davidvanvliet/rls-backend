@@ -69,7 +69,7 @@ public class WagonController {
         entity.setCode(dto.getCode());
         entity.setHandBrakeBrakedWeight(dto.getHandBrakeBrakedWeight());
         entity.setLengthOverBuffers(dto.getLengthOverBuffers());
-        entity.setName(dto.getName());
+        entity.setTypeName(dto.getName());
         entity.setWagonNumberOfAxles(dto.getWagonNumberOfAxles());
         entity.setWagonWeightEmpty(dto.getWagonWeightEmpty());
         wagonRepository.save(entity);
