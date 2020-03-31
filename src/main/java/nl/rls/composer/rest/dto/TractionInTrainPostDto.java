@@ -3,7 +3,7 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TractionInTrainPostDto extends RepresentationModel<TractionInTrainPostDto> {
+public class TractionInTrainPostDto extends IdentifiableRepresentationModel<TractionInTrainPostDto> {
     @Min(0)
     @Max(99)
     private int position;

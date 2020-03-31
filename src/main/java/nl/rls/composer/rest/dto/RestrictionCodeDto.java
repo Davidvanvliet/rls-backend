@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 /**
  * @author berend.wilkens
@@ -19,7 +19,7 @@ import org.springframework.hateoas.RepresentationModel;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RestrictionCodeDto extends RepresentationModel {
+public class RestrictionCodeDto extends IdentifiableRepresentationModel<RestrictionCodeDto> {
     private String code;
     private String forp;
     private String description;

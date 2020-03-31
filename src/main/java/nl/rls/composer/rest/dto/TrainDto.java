@@ -3,7 +3,7 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TrainDto extends RepresentationModel {
+public class TrainDto extends IdentifiableRepresentationModel<TrainDto> {
     @Size(min = 1, max = 8)
     private String operationalTrainNumber;
     private String transferPoint;

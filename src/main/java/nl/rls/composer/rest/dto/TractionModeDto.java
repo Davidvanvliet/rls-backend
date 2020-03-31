@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 /**
  * Identifies the mode of deployment of a traction within a train First digit –
@@ -15,7 +15,7 @@ import org.springframework.hateoas.RepresentationModel;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TractionModeDto extends RepresentationModel {
+public class TractionModeDto extends IdentifiableRepresentationModel<TractionModeDto> {
     private String code;
     private String description;
 

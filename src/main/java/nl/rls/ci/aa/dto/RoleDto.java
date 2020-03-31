@@ -4,12 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class RoleDto extends RepresentationModel {
+public class RoleDto extends IdentifiableRepresentationModel<RoleDto> {
     private String name;
 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 import java.util.Date;
 
@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CompositIdentifierOperationalTypeDto extends RepresentationModel {
+public class CompositIdentifierOperationalTypeDto extends IdentifiableRepresentationModel<CompositIdentifierOperationalTypeDto> {
     private String objectType;
     private CompanyDto company;
     private String core;

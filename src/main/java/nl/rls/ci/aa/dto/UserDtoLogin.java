@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class UserDtoLogin extends RepresentationModel {
+public class UserDtoLogin extends IdentifiableRepresentationModel<UserDtoLogin> {
     private String username;
     private String password;
 }
