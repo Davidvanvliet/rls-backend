@@ -41,7 +41,7 @@ public class TrainComposition extends OwnedEntity {
     @JoinColumn(name = "train_composition_id")
     @OrderBy("position")
     private List<TractionInTrain> tractions = new ArrayList<TractionInTrain>();
-    @OneToOne
+    @OneToOne(mappedBy = "trainComposition")
     private JourneySection journeySection;
 
     public TrainComposition(Integer ownerId) {
