@@ -3,3 +3,5 @@
 /.project
 /train_composition_message.xml
 *.xml
+*.iml
+.idea/.name
