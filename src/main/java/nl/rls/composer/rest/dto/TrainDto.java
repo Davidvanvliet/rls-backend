@@ -19,5 +19,6 @@ public class TrainDto extends IdentifiableRepresentationModel<TrainDto> {
     private String transferPoint;
     private Date scheduledTimeAtHandover;
     private Date scheduledDateTimeAtTransfer;
+    private Integer trainType;
     private List<JourneySectionDto> journeySections = new ArrayList<>();
 }
