@@ -5,11 +5,9 @@ import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.*;
+import nl.rls.composer.domain.code.TrainActivityType;
 import nl.rls.composer.repository.*;
-import nl.rls.composer.rest.dto.JourneySectionDto;
-import nl.rls.composer.rest.dto.JourneySectionPostDto;
-import nl.rls.composer.rest.dto.TrainDto;
-import nl.rls.composer.rest.dto.TrainPostDto;
+import nl.rls.composer.rest.dto.*;
 import nl.rls.composer.rest.dto.mapper.JourneySectionDtoMapper;
 import nl.rls.composer.rest.dto.mapper.TrainDtoMapper;
 import nl.rls.util.Response;
@@ -33,14 +31,16 @@ public class TrainController {
     private final LocationRepository locationRepository;
     private final JourneySectionRepository journeySectionRepository;
     private final SecurityContext securityContext;
+    private final TrainActivityTypeRepository trainActivityTypeRepository;
 
-    public TrainController(TrainRepository trainRepository, CompanyRepository companyRepository, ResponsibilityRepository responsibilityRepository, LocationRepository locationRepository, JourneySectionRepository journeySectionRepository, SecurityContext securityContext) {
+    public TrainController(TrainRepository trainRepository, CompanyRepository companyRepository, ResponsibilityRepository responsibilityRepository, LocationRepository locationRepository, JourneySectionRepository journeySectionRepository, SecurityContext securityContext, TrainActivityTypeRepository trainActivityTypeRepository) {
         this.trainRepository = trainRepository;
         this.companyRepository = companyRepository;
         this.responsibilityRepository = responsibilityRepository;
         this.locationRepository = locationRepository;
         this.journeySectionRepository = journeySectionRepository;
         this.securityContext = securityContext;
+        this.trainActivityTypeRepository = trainActivityTypeRepository;
     }
 
     @ApiOperation(value = "Gets a complete Train object")
@@ -154,6 +154,12 @@ public class TrainController {
         Responsibility responsibility = responsibilityRepository.findByOwnerId(ownerId);
         journeySection.setResponsibilityActualSection(responsibility);
         journeySection.setResponsibilityNextSection(responsibility);
+        for (ActivityInTrainAddDto activity : dto.getActivities()) {
+            Integer activityId = DecodePath.decodeInteger(activity.getTrainActivityTypeUrl(), "trainactivitytypes");
+            TrainActivityType trainActivityType = trainActivityTypeRepository.findById(activityId)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train activity type with id %d", activityId)));
+            journeySection.addActivity(trainActivityType);
+        }
 
         journeySection.setTrainComposition(new TrainComposition(ownerId));
         journeySection.getTrainComposition().setJourneySection(journeySection);

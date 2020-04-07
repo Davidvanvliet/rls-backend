@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -16,4 +17,5 @@ public class JourneySectionPostDto {
     @Min(0)
     @Max(1)
     private Integer livestockOrPeopleIndicator;
+    private List<ActivityInTrainAddDto> activities;
 }
