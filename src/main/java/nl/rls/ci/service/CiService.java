@@ -1,33 +1,5 @@
 package nl.rls.ci.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.Date;
-
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.domain.CiMessage;
 import nl.rls.ci.domain.UicHeader;
@@ -42,6 +14,26 @@ import nl.rls.ci.soapinterface.UICMessageResponse;
 import nl.rls.ci.soapinterface.UICReceiveMessage;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import java.io.*;
+import java.util.Date;
 
 /**
  * @author berend.wilkens Localhost: 145.89.169.134
@@ -60,38 +52,25 @@ public class CiService {
     @Transactional
     public String sendMessage(CiMessage ciMessage) {
         String message = "";
-        log.info("sendMessage 1 (ciMessage): " + ciMessage);
         UICMessage uicMessage = CiDtoMapper.map(ciMessage.getUicRequest());
-        log.info("sendMessage 2 (uicMessage): " + uicMessage.getMessage());
-        System.out.println("WSDL_LOCATION: " + LIReceiveMessageService.LIRECEIVEMESSAGESERVICE_WSDL_LOCATION);
 
         LIReceiveMessageService service = new LIReceiveMessageService();
-        log.info("sendMessage 2a (service.getServiceName()): " + service.getServiceName());
         UICReceiveMessage uicReceiveMessage = service.getUICReceiveMessagePort();
-        // new SSLTool();
-        // SSLTool.disableCertificateValidation();
-        UICMessageResponse uicMessageResponse = null;
-        log.info("sendMessage 2b (uicReceiveMessage): " + uicReceiveMessage.toString());
         try {
-            uicMessageResponse = uicReceiveMessage.uicMessage(uicMessage,
+            UICMessageResponse uicMessageResponse = uicReceiveMessage.uicMessage(uicMessage,
                     ciMessage.getUicHeader().getMessageIdentifier(), ciMessage.getUicHeader().getMessageLiHost(), false,
                     false, false);
-            log.info("sendMessage 3b (uicMessageResponse): " + uicMessageResponse.getReturn().toString());
             LITechnicalAck technicalAck = unMarshallResponse(uicMessageResponse.getReturn().toString());
-            System.out.println(technicalAck);
             UicResponse uicResponse = CiDtoMapper.map(technicalAck);
             ciMessage.setUicResponse(uicResponse);
-            log.info("sendMessage 4 (uicResponse): " + uicResponse);
             message = uicResponse.getResponseStatus();
         } catch (Exception e) {
-            ciMessage.setHttpError(e.getMessage());
             message = e.getMessage();
-            log.info("Error " + e.getMessage());
+            e.printStackTrace();
         }
         ciMessage.setPosted(true);
         ciMessage.setPostDate(new Date());
         ciRepository.save(ciMessage);
-        log.info("sendMessage 5 (uicResponse): " + ciMessage);
         return message;
     }
 

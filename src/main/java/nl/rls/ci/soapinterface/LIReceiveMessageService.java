@@ -1,16 +1,13 @@
 package nl.rls.ci.soapinterface;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Logger;
+import org.springframework.core.io.ClassPathResource;
 
-import javax.jws.HandlerChain;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.WebServiceFeature;
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -34,12 +31,9 @@ public class LIReceiveMessageService
     static {
         URL url = null;
         try {
-            URL baseUrl;
-            baseUrl = nl.rls.ci.soapinterface.LIReceiveMessageService.class.getResource(".");
-            url = new URL(baseUrl, "UICCCMessageProcessingInboundWS.wsdl");
-        } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'src/main/java/nl/rls/ci/soapinterface/UICCCMessageProcessingInboundWS.wsdl', retrying as a local file");
-            logger.warning(e.getMessage());
+            url = new ClassPathResource("UICCCMessageProcessingInboundWS.wsdl").getURL();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         LIRECEIVEMESSAGESERVICE_WSDL_LOCATION = url;
     }
@@ -57,9 +51,9 @@ public class LIReceiveMessageService
      */
     @WebEndpoint(name = "UICReceiveMessagePort")
     public UICReceiveMessage getUICReceiveMessagePort() {
-        System.out.println("UICReceiveMessagePort " + this.getServiceName());
-        System.out.println("getWSDLDocumentLocation " + this.getWSDLDocumentLocation());
-        System.out.println("getPorts().next(): " + this.getPorts().next());
+//        System.out.println("UICReceiveMessagePort " + this.getServiceName());
+//        System.out.println("getWSDLDocumentLocation " + this.getWSDLDocumentLocation());
+//        System.out.println("getPorts().next(): " + this.getPorts().next());
         return super.getPort(new QName("http://uic.cc.org/UICMessage", "UICReceiveMessagePort"), UICReceiveMessage.class);
     }
 

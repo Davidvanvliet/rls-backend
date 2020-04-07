@@ -41,7 +41,6 @@ public class TcmController {
         Optional<TrainCompositionMessage> optional = trainCompositionMessageRepository.findByIdAndOwnerId(id, ownerId);
         if (optional.isPresent()) {
             TrainCompositionMessage trainCompositionMessage = optional.get();
-            System.out.println(trainCompositionMessage);
             String tcmMessage = ciService.makeTcmMessage(trainCompositionMessage);
             CiMessage ciMessage = ciService.makeCiMessage(trainCompositionMessage.getMessageIdentifier(), tcmMessage);
 

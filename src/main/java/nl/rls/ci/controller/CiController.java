@@ -117,7 +117,6 @@ public class CiController {
         }
         String message = ciService.sendMessage(optional.get());
         if (message != null) {
-            System.out.println(message);
             return ResponseEntity.accepted().build();
         } else {
             return ResponseEntity.status(406).build();
