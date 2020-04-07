@@ -8,8 +8,10 @@ import nl.rls.composer.domain.JourneySection;
 import nl.rls.composer.domain.Location;
 import nl.rls.composer.domain.Train;
 import nl.rls.composer.domain.TrainComposition;
+import nl.rls.composer.domain.code.TrainActivityType;
 import nl.rls.composer.repository.JourneySectionRepository;
 import nl.rls.composer.repository.LocationRepository;
+import nl.rls.composer.repository.TrainActivityTypeRepository;
 import nl.rls.composer.repository.TrainRepository;
 import nl.rls.composer.rest.dto.*;
 import nl.rls.composer.rest.dto.mapper.JourneySectionDtoMapper;
@@ -34,13 +36,15 @@ public class JourneySectionController {
     private final SecurityContext securityContext;
     private final TrainRepository trainRepository;
     private final TrainCompositionService trainCompositionService;
+    private final TrainActivityTypeRepository trainActivityTypeRepository;
 
-    public JourneySectionController(LocationRepository locationRepository, JourneySectionRepository journeySectionRepository, SecurityContext securityContext, TrainRepository trainRepository, TrainCompositionService trainCompositionService) {
+    public JourneySectionController(LocationRepository locationRepository, JourneySectionRepository journeySectionRepository, SecurityContext securityContext, TrainRepository trainRepository, TrainCompositionService trainCompositionService, TrainActivityTypeRepository trainActivityTypeRepository) {
         this.locationRepository = locationRepository;
         this.journeySectionRepository = journeySectionRepository;
         this.securityContext = securityContext;
         this.trainRepository = trainRepository;
         this.trainCompositionService = trainCompositionService;
+        this.trainActivityTypeRepository = trainActivityTypeRepository;
     }
 
     @GetMapping(value = "/{journeySectionId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -71,6 +75,12 @@ public class JourneySectionController {
         location = locationRepository.findByLocationPrimaryCode(locationId);
         if (location.isPresent()) {
             journeySection.setJourneySectionDestination(location.get());
+        }
+        for (ActivityInTrainAddDto activity : dto.getActivities()) {
+            Integer activityId = DecodePath.decodeInteger(activity.getTrainActivityTypeUrl(), "trainactivitytypes");
+            TrainActivityType trainActivityType = trainActivityTypeRepository.findById(activityId)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train activity type with id %d", activityId)));
+            journeySection.addActivity(trainActivityType);
         }
         journeySectionRepository.save(journeySection);
         JourneySectionDto journeySectionDto = JourneySectionDtoMapper.map(journeySection);
