@@ -83,6 +83,7 @@ public class JourneySectionController {
                     .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train activity type with id %d", activityId)));
             journeySection.addActivity(trainActivityType);
         }
+        journeySection.getTrainComposition().setLivestockOrPeopleIndicator(dto.getLivestockOrPeopleIndicator());
         journeySectionRepository.save(journeySection);
         JourneySectionDto journeySectionDto = JourneySectionDtoMapper.map(journeySection);
         return ResponseBuilder.accepted()
