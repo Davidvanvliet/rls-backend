@@ -76,6 +76,7 @@ public class JourneySectionController {
         if (location.isPresent()) {
             journeySection.setJourneySectionDestination(location.get());
         }
+        journeySection.getActivities().clear();
         for (ActivityInTrainAddDto activity : dto.getActivities()) {
             Integer activityId = DecodePath.decodeInteger(activity.getTrainActivityTypeUrl(), "trainactivitytypes");
             TrainActivityType trainActivityType = trainActivityTypeRepository.findById(activityId)
