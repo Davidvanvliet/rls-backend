@@ -14,13 +14,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Getter
 @Setter
 public class TractionCreateDto {
-	@Size(min = 2, max = 2)
     private String tractionType;
-    @Min(5)
-    @Max(12)
+    @Size(min = 5, max = 12)
     private String locoTypeNumber;
-    @Min(4)
-    @Max(12)
+    @Size(min = 4, max = 12)
     private String locoNumber;
     private String typeName;
     @Min(1)
