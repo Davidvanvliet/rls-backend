@@ -12,14 +12,13 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TractionInTrainPostDto extends IdentifiableRepresentationModel<TractionInTrainPostDto> {
+public class TractionInTrainPostDto {
     @Min(0)
     @Max(99)
     private int position;
     @Min(0)
     @Max(1)
     private int driverIndication;
-	@Size(min = 2, max = 2)
     private String tractionMode;
     private String tractionUrl;
 }
