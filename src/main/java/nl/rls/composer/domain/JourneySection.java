@@ -61,22 +61,16 @@ public class JourneySection extends OwnedEntity {
         return null;
     }
 
-    public boolean addActivity(TrainActivityType entity) {
+    public void addActivity(TrainActivityType entity) {
         if (!activities.contains(entity)) {
             activities.add(entity);
-            return true;
-        } else {
-            return false;
         }
     }
 
-    public boolean removeActivityById(int id) {
+    public void removeActivityById(int id) {
         TrainActivityType entity = getActivityById(id);
         if (entity != null) {
             removeActivity(entity);
-            return true;
-        } else {
-            return false;
         }
     }
 
