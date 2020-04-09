@@ -91,7 +91,7 @@ public class WagonInTrainController {
         wagonInTrain.setWagon(wagon);
         wagonInTrain.setPosition(dto.getPosition());
 
-        wagonInTrain.setBrakeType(BrakeType.G);
+        wagonInTrain.setBrakeType(BrakeType.valueOf(dto.getBrakeType()));
         wagonInTrain.setBrakeWeight(dto.getBrakeWeight());
         wagonInTrain.setTotalLoadWeight(dto.getTotalLoadWeight());
         wagonInTrain.setWagonMaxSpeed(dto.getWagonMaxSpeed());
