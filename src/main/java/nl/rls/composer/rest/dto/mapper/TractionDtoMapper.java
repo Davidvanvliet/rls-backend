@@ -29,8 +29,8 @@ public class TractionDtoMapper {
         DozerBeanMapper mapper = new DozerBeanMapper();
         BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
             protected void configure() {
-                mapping(TractionCreateDto.class, Traction.class)
-                        .fields("tractionType", "tractionType", FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.TractionTypeConverter"));
+//                mapping(TractionCreateDto.class, Traction.class)
+//                        .fields("tractionType", "tractionType", FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.TractionTypeConverter"));
             }
         };
         mapper.addMapping(mappingBuilder);

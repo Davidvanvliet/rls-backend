@@ -1,5 +1,24 @@
 package nl.rls.composer.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
@@ -17,18 +36,6 @@ import nl.rls.composer.rest.dto.mapper.WagonInTrainDtoMapper;
 import nl.rls.composer.service.TrainCompositionService;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + TrainCompositionController.PATH)
@@ -90,11 +97,12 @@ public class WagonInTrainController {
         wagonInTrain.setOwnerId(ownerId);
         wagonInTrain.setWagon(wagon);
         wagonInTrain.setPosition(dto.getPosition());
-
-        wagonInTrain.setBrakeType(BrakeType.G);
-        wagonInTrain.setBrakeWeight(dto.getBrakeWeight());
+        if (dto.getBrakeType().contentEquals("G")) {
+            wagonInTrain.setBrakeType(BrakeType.G);
+        } else {
+            wagonInTrain.setBrakeType(BrakeType.P);
+        }
         wagonInTrain.setTotalLoadWeight(dto.getTotalLoadWeight());
-        wagonInTrain.setWagonMaxSpeed(dto.getWagonMaxSpeed());
         trainCompositionService.addWagonToTrain(trainComposition, wagonInTrain);
         TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
                 .map(trainComposition);

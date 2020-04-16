@@ -1,14 +1,12 @@
 package nl.rls.composer.rest.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @NoArgsConstructor
@@ -19,16 +17,10 @@ public class WagonDto extends IdentifiableRepresentationModel<WagonDto> {
     private String numberFreight;
     private String name;
     private String code;
-    @Min(1)
-    @Max(999999)
     private int lengthOverBuffers;
-    @Min(2)
-    @Max(99)
     private int wagonNumberOfAxles;
-    @Min(1)
-    @Max(999999)
-    private int wagonWeightEmpty;
-    @Min(0)
-    @Max(999)
-    private int handBrakeBrakedWeight;
+    private int weightEmpty;
+    private int brakeWeightG;
+    private int brakeWeightP;
+    private int maxSpeed;
 }

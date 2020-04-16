@@ -19,12 +19,6 @@ public class WagonInTrainDto extends IdentifiableRepresentationModel<WagonInTrai
     @Min(0)
     @Max(999999)
     private int totalLoadWeight;
-    @Min(1)
-    @Max(99999)
-    private int brakeWeight;
-    @Min(0)
-    @Max(999)
-    private int wagonMaxSpeed;
     private WagonDto wagon;
     private List<DangerGoodsInWagonDto> dangerGoods = new ArrayList<>();
 
