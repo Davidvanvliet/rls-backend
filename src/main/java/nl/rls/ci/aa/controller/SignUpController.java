@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import nl.rls.ci.aa.domain.AppUser;
 import nl.rls.ci.aa.domain.Owner;
+import nl.rls.ci.aa.domain.Role;
 import nl.rls.ci.aa.dto.UserDto;
 import nl.rls.ci.aa.dto.UserDtoMapper;
 import nl.rls.ci.aa.dto.UserPostDto;
@@ -48,10 +49,10 @@ public class SignUpController {
         int ownerId = securityContext.getOwnerId();
         AppUser user = new AppUser();
 
-//        Optional<Role> role = roleRepository.findByName(Role.ROLE_USER);
-//        if (role.isPresent()) {
-//            user.setRole(new Role(role.get().getName()));
-//        }
+        Optional<Role> role = roleRepository.findByName(Role.ROLE_USER);
+        if (role.isPresent()) {
+            user.setRole(new Role(role.get().getName()));
+        }
         user.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
         user.setUsername(dto.getEmail());
         user.setEmail(dto.getEmail());
