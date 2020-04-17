@@ -18,7 +18,6 @@ public class TractionInTrainPostDto {
     @Min(0)
     @Max(1)
     private int driverIndication;
-	@Size(min = 2, max = 2)
     private String tractionMode;
     private String tractionUrl;
 }
