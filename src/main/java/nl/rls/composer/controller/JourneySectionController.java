@@ -91,28 +91,6 @@ public class JourneySectionController {
                 .build();
     }
 
-    @PutMapping(value = "/{journeySectionId}/traincomposition", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Response<JourneySectionDto> putTrainCompositionToJourneySection(@PathVariable int journeySectionId,
-                                                                           @RequestBody @Valid TrainCompositionPostDto dto) {
-        int ownerId = securityContext.getOwnerId();
-        JourneySection journeySection = journeySectionRepository.findByIdAndOwnerId(journeySectionId, ownerId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find journey section with id %d", journeySectionId)));
-        if (journeySection.getTrainComposition() == null) {
-            journeySection.setTrainComposition(new TrainComposition(ownerId));
-            journeySection.getTrainComposition().setJourneySection(journeySection);
-        }
-        journeySection.getTrainComposition().setLivestockOrPeopleIndicator(dto.getLivestockOrPeopleIndicator());
-        journeySection.getTrainComposition().setBrakeType(dto.getBrakeType());
-        journeySection.getTrainComposition().setBrakeWeight(dto.getBrakeWeight());
-        journeySection.getTrainComposition().setTrainMaxSpeed(dto.getTrainMaxSpeed());
-        journeySection.getTrainComposition().setMaxAxleWeight(dto.getMaxAxleWeight());
-        journeySection = journeySectionRepository.save(journeySection);
-        JourneySectionDto resultDto = JourneySectionDtoMapper.map(journeySection);
-        return ResponseBuilder.accepted()
-                .data(resultDto)
-                .build();
-    }
 
     @ApiOperation(value = "Copies or clones a complete TrainComposition including tractions and wagons.")
     @PutMapping(value = "/{journeySectionId}/clone")

@@ -1,5 +1,30 @@
 package nl.rls.composer.controller;
 
+import java.io.StringWriter;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
@@ -17,25 +42,6 @@ import nl.rls.composer.rest.dto.mapper.TrainCompositionMessageDtoMapper;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.StringWriter;
-import java.util.*;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/traincompositionmessages")

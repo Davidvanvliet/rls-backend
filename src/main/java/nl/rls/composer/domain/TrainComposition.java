@@ -21,10 +21,7 @@ public class TrainComposition extends OwnedEntity {
     // @ManyToMany
     // private List<TrainCC_System> trainCCSystem;
     // private TrainRadioSystem trainRadioSystem;
-    private int trainMaxSpeed;
-    private int maxAxleWeight;
     private String brakeType;
-    private int brakeWeight;
     /**
      * Indicates that livestock and people (other than train crew) will be carried.
      * Coding: if live animals or people are transported = 1, in opposite case = 0.
@@ -209,7 +206,7 @@ public class TrainComposition extends OwnedEntity {
         for (TractionInTrain traction : getTractions()) {
             trainLength += traction.getTraction().getLengthOverBuffers();
         }
-        return trainLength;
+        return trainLength / 100;
     }
 
     public Integer getNumberOfVehicles() {
@@ -228,5 +225,27 @@ public class TrainComposition extends OwnedEntity {
         }
         return numberOfAxles;
     }
+    
+    public Integer getTrainMaxSpeed( ) {
+        Integer maxSpeed = 1000;
+        for (WagonInTrain wagon : getWagons()) {
+        	if (maxSpeed > wagon.getWagon().getMaxSpeed()) {
+        		maxSpeed = wagon.getWagon().getMaxSpeed();
+        	}
+        }
+    	return maxSpeed;
+    }
+
+    public Integer getBrakeWeight() {
+    	//TODO: verder uitwerken
+    	return 100;
+    }
+    
+    public Integer getMaxAxleWeight() {
+    	//TODO: verder uitwerken
+    	return 100;
+    }
+    
+
 
 }

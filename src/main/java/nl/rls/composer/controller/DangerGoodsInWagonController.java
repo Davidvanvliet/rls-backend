@@ -1,5 +1,25 @@
 package nl.rls.composer.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
@@ -15,18 +35,6 @@ import nl.rls.composer.rest.dto.mapper.DangerGoodsInWagonDtoMapper;
 import nl.rls.composer.rest.dto.mapper.WagonInTrainDtoMapper;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + WagonInTrainController.PATH)
@@ -71,7 +79,7 @@ public class DangerGoodsInWagonController {
 
     @PostMapping(value = "/{wagonInTrainId}/dangergoods", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<WagonInTrainDto> postDangerGoods(@PathVariable int wagonInTrainId,
+    public Response<List<DangerGoodsInWagonDto>> postDangerGoods(@PathVariable int wagonInTrainId,
                                                      @RequestBody @Valid DangerGoodsInWagonPostDto postDto) {
         int ownerId = securityContext.getOwnerId();
         WagonInTrain wagonInTrain = wagonInTrainRepository.findByIdAndOwnerId(wagonInTrainId, ownerId)
@@ -85,15 +93,20 @@ public class DangerGoodsInWagonController {
         dangerGoodsInWagon.setWagonInTrain(wagonInTrain);
         wagonInTrain.addDangerGoodsInWagon(dangerGoodsInWagon);
         wagonInTrainRepository.save(wagonInTrain);
-        WagonInTrainDto wagonInTrainDto = WagonInTrainDtoMapper.map(wagonInTrain);
+        Optional<WagonInTrain> optional = wagonInTrainRepository.findByIdAndOwnerId(wagonInTrainId, ownerId);
+        wagonInTrain = optional.get();
+        List<DangerGoodsInWagonDto> dangerGoodsInWagonDtoList = new ArrayList<DangerGoodsInWagonDto>();
+        for (DangerGoodsInWagon dangerGoodsInWagons : wagonInTrain.getDangerGoodsInWagons()) {
+        	dangerGoodsInWagonDtoList.add(DangerGoodsInWagonDtoMapper.map(dangerGoodsInWagons));
+        }
         return ResponseBuilder.created()
-                .data(wagonInTrainDto)
+                .data(dangerGoodsInWagonDtoList)
                 .build();
     }
 
     @PutMapping(value = "/{wagonInTrainId}/dangergoods/{dangerGoodsId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Response<WagonInTrainDto> updateDangerGoodsInWagon(@PathVariable int wagonInTrainId,
+    public Response<List<DangerGoodsInWagonDto>> updateDangerGoodsInWagon(@PathVariable int wagonInTrainId,
                                                               @PathVariable int dangerGoodsId,
                                                               @RequestBody @Valid DangerGoodsInWagonPostDto postDto) {
         int ownerId = securityContext.getOwnerId();
@@ -119,7 +132,7 @@ public class DangerGoodsInWagonController {
 
     @DeleteMapping(value = "/{wagonInTrainId}/dangergoods/{dangerGoodsId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Response<WagonInTrainDto> deleteDangerGoodsInWagon(@PathVariable int wagonInTrainId,
+    public Response<List<DangerGoodsInWagonDto>> deleteDangerGoodsInWagon(@PathVariable int wagonInTrainId,
                                                               @PathVariable int dangerGoodsId) {
         int ownerId = securityContext.getOwnerId();
         WagonInTrain wagonInTrain = wagonInTrainRepository.findByIdAndOwnerId(wagonInTrainId, ownerId)

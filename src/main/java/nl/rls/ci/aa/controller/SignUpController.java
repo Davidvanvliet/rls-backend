@@ -24,7 +24,6 @@ import nl.rls.ci.aa.repository.RoleRepository;
 import nl.rls.ci.aa.repository.UserRepository;
 import nl.rls.ci.aa.security.SecurityContext;
 
-
 @RestController
 @RequestMapping("/signup")
 public class SignUpController {

@@ -6,6 +6,7 @@ import nl.rls.composer.rest.dto.DangerGoodsInWagonDto;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.dozer.loader.api.FieldsMappingOptions;
+import org.springframework.hateoas.Link;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -23,7 +24,10 @@ public class DangerGoodsInWagonDtoMapper {
         };
         mapper.addMapping(mappingBuilder);
         DangerGoodsInWagonDto dto = mapper.map(entity, DangerGoodsInWagonDto.class);
-        dto.add(linkTo(methodOn(DangerGoodsInWagonController.class).getDangerGoodsInWagon(entity.getWagonInTrain().getId(), entity.getId())).withSelfRel());
+        int wagonInTrainId = entity.getWagonInTrain().getId();
+        int dangerGoodsId = entity.getId();
+        Link link = linkTo(methodOn(DangerGoodsInWagonController.class).getDangerGoodsInWagon(wagonInTrainId, dangerGoodsId)).withSelfRel();
+        dto.add(link);
         return dto;
     }
 
