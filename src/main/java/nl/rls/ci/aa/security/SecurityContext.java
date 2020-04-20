@@ -31,5 +31,9 @@ public class SecurityContext {
             return 1;
         }
     }
+    
+    public String getCompanyCode() {
+    	return "3708";
+    }
 
 }

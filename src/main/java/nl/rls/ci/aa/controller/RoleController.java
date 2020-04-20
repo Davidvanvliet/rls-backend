@@ -4,6 +4,8 @@ import nl.rls.ci.aa.domain.Role;
 import nl.rls.ci.aa.dto.RoleDto;
 import nl.rls.ci.aa.dto.RoleDtoMapper;
 import nl.rls.ci.aa.repository.RoleRepository;
+import nl.rls.ci.url.BaseURL;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/aa/roles")
+@RequestMapping(BaseURL.BASE_PATH + "/roles")
 public class RoleController {
     private final RoleRepository roleRepository;
 

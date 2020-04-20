@@ -31,8 +31,8 @@ public class XmlMessageController {
     public ResponseEntity<String> getById(@PathVariable Integer id) {
         int ownerId = securityContext.getOwnerId();
         Optional<XmlMessage> xmlMessage = xmlMessageRepository.findByIdAndOwnerId(id, ownerId);
-        System.out.println("xmlMessage: " + xmlMessage.get().getId());
         if (xmlMessage.isPresent()) {
+            System.out.println("xmlMessage: " + xmlMessage.get().getId());
             return ResponseEntity.ok(xmlMessage.get().getMessage());
         } else {
             return ResponseEntity.notFound().build();

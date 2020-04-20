@@ -1,13 +1,14 @@
 package nl.rls.composer.rest.dto.mapper;
 
-import nl.rls.composer.controller.WagonController;
-import nl.rls.composer.domain.Wagon;
-import nl.rls.composer.rest.dto.WagonDto;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import nl.rls.composer.controller.WagonController;
+import nl.rls.composer.domain.Wagon;
+import nl.rls.composer.rest.dto.WagonDto;
 
 public class WagonDtoMapper {
 
@@ -15,6 +16,9 @@ public class WagonDtoMapper {
         DozerBeanMapper mapper = new DozerBeanMapper();
         BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
             protected void configure() {
+                mapping(Wagon.class, WagonDto.class)
+                .fields("wagonWeightEmpty", "weightEmpty")
+                ;
             }
         };
         mapper.addMapping(mappingBuilder);

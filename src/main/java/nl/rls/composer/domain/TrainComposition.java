@@ -243,7 +243,7 @@ public class TrainComposition extends OwnedEntity {
     
     public Integer getMaxAxleWeight() {
     	//TODO: verder uitwerken
-    	return 100;
+    	return 10;
     }
     
 

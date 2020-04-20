@@ -131,6 +131,7 @@ public class CiService {
         InputStream targetStream = new ByteArrayInputStream(messageXml.getBytes());
         File file = new File("taf_cat_complete_sector.xsd");
         InputStream xsdStream = new FileInputStream(file);
+        System.out.println(messageXml);
         validateAgainstXSD(targetStream, xsdStream);
         int ownerId = securityContext.getOwnerId();
         // maak de wrapper voor het bericht

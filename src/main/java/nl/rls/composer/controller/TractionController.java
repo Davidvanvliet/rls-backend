@@ -79,6 +79,7 @@ public class TractionController {
         traction.setLengthOverBuffers(dto.getLengthOverBuffers());
         traction.setLocoNumber(dto.getLocoNumber());
         traction.setLocoTypeNumber(dto.getLocoTypeNumber());
+        traction.setNumberOfAxles(dto.getNumberOfAxles());
         Optional<TractionType> tractionType = tractionTypeRepository.findByCode(dto.getTractionType());
         if (tractionType.isPresent()) {
             traction.setTractionType(tractionType.get());
