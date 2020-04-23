@@ -97,11 +97,8 @@ public class WagonInTrainController {
         wagonInTrain.setOwnerId(ownerId);
         wagonInTrain.setWagon(wagon);
         wagonInTrain.setPosition(dto.getPosition());
-        if (dto.getBrakeType().contentEquals("G")) {
-            wagonInTrain.setBrakeType(BrakeType.G);
-        } else {
-            wagonInTrain.setBrakeType(BrakeType.P);
-        }
+        wagonInTrain.setBrakeType(BrakeType.valueOf(dto.getBrakeType()));
+        wagonInTrain.setBrakeWeight(dto.getBrakeWeight());
         wagonInTrain.setTotalLoadWeight(dto.getTotalLoadWeight());
         trainCompositionService.addWagonToTrain(trainComposition, wagonInTrain);
         TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper
