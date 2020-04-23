@@ -10,19 +10,25 @@ import nl.rls.ci.aa.repository.OwnerRepository;
 import nl.rls.ci.aa.repository.RoleRepository;
 import nl.rls.ci.aa.repository.UserRepository;
 import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.ci.url.BaseURL;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import io.swagger.annotations.Api;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/aa/users")
+@RequestMapping(BaseURL.BASE_PATH + "/users")
+@Api(value = "Access to users and register new user")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserRepository userRepository;
@@ -39,7 +45,7 @@ public class UserController {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDto>> getAll() {
         log.debug("public List<UserDto> getAll()");
         Iterable<AppUser> userList = userRepository.findAll();
@@ -50,7 +56,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getUser(@PathVariable int id) {
         Optional<AppUser> user = userRepository.findById(id);
         if (!user.isPresent()) {
@@ -59,9 +65,9 @@ public class UserController {
         return ResponseEntity.ok(UserDtoMapper.map(user.get()));
     }
 
-    @PutMapping("/{username}")
+    @PutMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
-    public ResponseEntity<UserDto> signUp(@PathVariable(value = "username") String username,
+    public ResponseEntity<UserDto> signUpPut(@PathVariable(value = "username") String username,
                                           @RequestBody UserPostDto userPostDtoPost) {
         int ownerId = securityContext.getOwnerId();
         log.info("signUp: " + userPostDtoPost);
@@ -70,26 +76,32 @@ public class UserController {
             user.setFirstName(userPostDtoPost.getFirstName());
             user.setLastName(userPostDtoPost.getLastName());
             user.setPassword(bCryptPasswordEncoder.encode(userPostDtoPost.getPassword()));
-        } else {
-            Optional<Role> role = roleRepository.findByName(Role.ROLE_USER);
-            user = new AppUser();
-            user.setPassword(bCryptPasswordEncoder.encode(userPostDtoPost.getPassword()));
-            user.setUsername(userPostDtoPost.getEmail());
-            user.setEmail(userPostDtoPost.getEmail());
-            user.setFirstName(userPostDtoPost.getFirstName());
-            user.setLastName(userPostDtoPost.getLastName());
-            user.setEnabled(true);
-            user.setRole(role.get());
-            log.info("signUp: getOwner");
-            Optional<Owner> optional = ownerRepository.findById(ownerId);
-            optional.get().getUsers().add(user);
-            user.setOwner(optional.get());
         }
-        log.info("signUp: saving ...");
+        assert user != null;
         userRepository.save(user);
         return ResponseEntity.ok(UserDtoMapper.map(user));
     }
 
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<UserDto> signUp(@RequestBody UserPostDto userPostDtoPost) {
+        int ownerId = securityContext.getOwnerId();
+        log.info("signUp: " + userPostDtoPost);
+        AppUser user = new AppUser();
+        Optional<Role> role = roleRepository.findByName(Role.ROLE_USER);
+        user = new AppUser();
+        user.setPassword(bCryptPasswordEncoder.encode(userPostDtoPost.getPassword()));
+        user.setUsername(userPostDtoPost.getEmail());
+        user.setEmail(userPostDtoPost.getEmail());
+        user.setFirstName(userPostDtoPost.getFirstName());
+        user.setLastName(userPostDtoPost.getLastName());
+        user.setEnabled(true);
+        user.setRole(role.get());
+        Optional<Owner> optional = ownerRepository.findById(ownerId);
+        user.setOwner(optional.get());
+        userRepository.save(user);
+        return ResponseEntity.ok(UserDtoMapper.map(user));
+    }
     @PutMapping("/{userId}/role/{roleName}")
     public ResponseEntity<UserDto> setRoleToUser(@PathVariable(value = "userId") int userId,
                                                  @PathVariable(value = "roleName") String roleName) {

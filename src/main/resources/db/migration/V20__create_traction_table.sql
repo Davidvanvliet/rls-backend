@@ -4,10 +4,11 @@ create table traction
         constraint traction_pkey
             primary key,
     owner_id            integer,
-    brake_weight        integer not null,
+    brake_weightg       integer not null,
+    brake_weightp       integer not null,
     length_over_buffers integer not null,
     loco_number         varchar(255),
-    loco_type_number    varchar(255),
+    loco_type_number    varchar(255) UNIQUE,
     number_of_axles     integer not null,
     type_name           varchar(255),
     weight              integer not null,

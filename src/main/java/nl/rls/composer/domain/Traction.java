@@ -1,13 +1,12 @@
 package nl.rls.composer.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.domain.code.TractionMode;
 import nl.rls.composer.domain.code.TractionType;
-
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 /**
  * @author berend.wilkens Defines the actual Type, the number and the mode of
@@ -35,7 +34,8 @@ public class Traction extends OwnedEntity {
     private int lengthOverBuffers;
     private int numberOfAxles;
     private int weight;
-    private int brakeWeight;
+    private int brakeWeightG;
+    private int brakeWeightP;
     public Traction(Integer ownerId) {
         super(ownerId);
     }

@@ -1,5 +1,31 @@
 package nl.rls.composer.controller;
 
+import java.io.StringWriter;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.crypto.Data;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
@@ -17,25 +43,6 @@ import nl.rls.composer.rest.dto.mapper.TrainCompositionMessageDtoMapper;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.StringWriter;
-import java.util.*;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/traincompositionmessages")
@@ -110,30 +117,33 @@ public class TrainCompositionMessageController {
     @ResponseStatus(HttpStatus.CREATED)
     public Response<TrainCompositionMessageDto> create(@RequestBody @Valid TrainCompositionMessageCreateDto dto) {
         int ownerId = securityContext.getOwnerId();
+        Date now = new Date();
         TrainCompositionMessage trainCompositionMessage = new TrainCompositionMessage();
         trainCompositionMessage.setOwnerId(ownerId);
         trainCompositionMessage.setMessageIdentifier(UUID.randomUUID().toString());
-        trainCompositionMessage.setMessageDateTime(new Date());
+        trainCompositionMessage.setMessageDateTime(now);
         trainCompositionMessage.setMessageType(MessageType.TRAIN_COMPOSITION_MESSAGE.code());
         trainCompositionMessage.setMessageTypeVersion(MessageType.TRAIN_COMPOSITION_MESSAGE.version());
         trainCompositionMessage.setMessageStatus(MessageStatus.creation.getValue());
-        trainCompositionMessage.setSenderReference(UUID.randomUUID().toString());
-
+        
         /* ProRail = 0084 */
-        List<Company> recipient = companyRepository.findByCode("0084");
-        if (recipient.size() == 1) {
-            trainCompositionMessage.setRecipient(recipient.get(0));
+        // TODO make this from hardcoded to dynamic
+        Optional<Company> recipient = companyRepository.findByCode("0084");
+        if (recipient.isPresent()) {
+            trainCompositionMessage.setRecipient(recipient.get());
         }
-
-        List<Company> sender = companyRepository.findByCode("9001");
-        if (sender.size() == 1) {
-            trainCompositionMessage.setSender(sender.get(0));
+        /* RailLinkSystems = 9001*/
+        // TODO make this from hardcoded to dynamic
+        Optional<Company> sender = companyRepository.findByCode("9001");
+        if (sender.isPresent()) {
+            trainCompositionMessage.setSender(sender.get());
         }
 
         Integer trainId = DecodePath.decodeInteger(dto.getTrain(), "trains");
         Train train = trainRepository.findByIdAndOwnerId(trainId, ownerId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train with id %d", trainId)));
         trainCompositionMessage.setTrain(train);
+        trainCompositionMessage.setSenderReference("RLS-9001-"+securityContext.getCompanyCode()+"-train:"+train.getId()+"-"+now.toString());
 
         trainCompositionMessage = trainCompositionMessageRepository.save(trainCompositionMessage);
         TrainCompositionMessageDto resultDto = TrainCompositionMessageDtoMapper.map(trainCompositionMessage);

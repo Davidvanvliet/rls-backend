@@ -1,5 +1,21 @@
 package nl.rls.composer.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.Wagon;
@@ -9,24 +25,11 @@ import nl.rls.composer.rest.dto.WagonPostDto;
 import nl.rls.composer.rest.dto.mapper.WagonDtoMapper;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.Optional;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/wagons")
 public class WagonController {
     private final WagonRepository wagonRepository;
-
     private final SecurityContext securityContext;
 
     public WagonController(WagonRepository wagonRepository, SecurityContext securityContext) {
@@ -61,17 +64,19 @@ public class WagonController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<WagonDto> create(@RequestBody @Valid WagonPostDto dto) {
+    public Response<WagonDto> createWagon(@RequestBody @Valid WagonPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Wagon entity = new Wagon();
         entity.setOwnerId(ownerId);
         entity.setNumberFreight(dto.getNumberFreight());
         entity.setCode(dto.getCode());
-        entity.setHandBrakeBrakedWeight(dto.getHandBrakeBrakedWeight());
+        entity.setBrakeWeightG(dto.getBrakeWeightG());
+        entity.setBrakeWeightP(dto.getBrakeWeightP());
         entity.setLengthOverBuffers(dto.getLengthOverBuffers());
-        entity.setTypeName(dto.getName());
-        entity.setWagonNumberOfAxles(dto.getWagonNumberOfAxles());
-        entity.setWagonWeightEmpty(dto.getWagonWeightEmpty());
+        entity.setTypeName(dto.getTypeName());
+        entity.setWagonNumberOfAxles(dto.getNumberOfAxles());
+        entity.setWagonWeightEmpty(dto.getWeightEmpty());
+        entity.setMaxSpeed(dto.getMaxSpeed());
         wagonRepository.save(entity);
         WagonDto wagonDto = WagonDtoMapper.map(entity);
         return ResponseBuilder.created()

@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// TODO rounding of numbers by divinding
 /**
  * @author berend.wilkens
  * <p>
@@ -21,10 +23,7 @@ public class TrainComposition extends OwnedEntity {
     // @ManyToMany
     // private List<TrainCC_System> trainCCSystem;
     // private TrainRadioSystem trainRadioSystem;
-    private int trainMaxSpeed;
-    private int maxAxleWeight;
     private String brakeType;
-    private int brakeWeight;
     /**
      * Indicates that livestock and people (other than train crew) will be carried.
      * Coding: if live animals or people are transported = 1, in opposite case = 0.
@@ -202,14 +201,14 @@ public class TrainComposition extends OwnedEntity {
      * and traction units). Expressed in Meters
      */
     public Integer getTrainLength() {
-        int trainLength = 0;
+        double trainLength = 0;
         for (WagonInTrain wagon : getWagons()) {
             trainLength += wagon.getWagon().getLengthOverBuffers();
         }
         for (TractionInTrain traction : getTractions()) {
             trainLength += traction.getTraction().getLengthOverBuffers();
         }
-        return trainLength;
+        return Math.toIntExact(Math.round(trainLength / 100));
     }
 
     public Integer getNumberOfVehicles() {
@@ -228,5 +227,27 @@ public class TrainComposition extends OwnedEntity {
         }
         return numberOfAxles;
     }
+    
+    public Integer getTrainMaxSpeed( ) {
+        Integer maxSpeed = 1000;
+        for (WagonInTrain wagon : getWagons()) {
+        	if (maxSpeed > wagon.getWagon().getMaxSpeed()) {
+        		maxSpeed = wagon.getWagon().getMaxSpeed();
+        	}
+        }
+    	return maxSpeed;
+    }
+
+    public Integer getBrakeWeight() {
+    	//TODO: verder uitwerken
+    	return 100;
+    }
+    
+    public Integer getMaxAxleWeight() {
+    	//TODO: verder uitwerken
+    	return 10;
+    }
+    
+
 
 }

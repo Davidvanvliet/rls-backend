@@ -13,6 +13,8 @@ import java.util.List;
 @Setter
 public class Role {
     @Transient
+    public static String ROLE_READ_ONLY = "ROLE_READ_ONLY";
+    @Transient
     public static String ROLE_USER = "ROLE_USER";
     @Transient
     public static String ROLE_SUPER_USER = "ROLE_SUPER_USER";

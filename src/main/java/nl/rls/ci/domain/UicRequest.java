@@ -40,7 +40,7 @@ public class UicRequest extends OwnedEntity {
      * including the senderAllias. This alias name should be filled in the
      * senderAlias field.
      */
-    private String senderAlias = "82.217.100.12";
+    private String senderAlias = "RailLinkSystems";
     /**
      * The encoding field should contain the char encoding used for the message. CI
      * supports the following char encodings: UTF-8

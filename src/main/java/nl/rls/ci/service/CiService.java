@@ -43,6 +43,8 @@ import nl.rls.ci.soapinterface.UICReceiveMessage;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 
+
+// TODO clean up this class
 /**
  * @author berend.wilkens Localhost: 145.89.169.134
  */
@@ -105,7 +107,7 @@ public class CiService {
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
             // output pretty printed
-            // jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
             jaxbMarshaller.marshal(trainCompositionXmlMessage, file);
             jaxbMarshaller.marshal(trainCompositionXmlMessage, System.out);
 

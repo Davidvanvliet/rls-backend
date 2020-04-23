@@ -5,10 +5,8 @@ create table wagon_in_train
             primary key,
     owner_id integer,
     brake_type integer,
-    brake_weight integer not null,
     position integer not null,
     total_load_weight integer not null,
-    wagon_max_speed integer not null,
     train_composition_id integer
         constraint fk_wagon_in_train_train_composition
             references train_composition,

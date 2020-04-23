@@ -17,5 +17,6 @@ public class JourneySectionPostDto {
     @Min(0)
     @Max(1)
     private Integer livestockOrPeopleIndicator;
+    private String brakeType;
     private List<ActivityInTrainAddDto> activities;
 }
