@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @RestController
@@ -32,10 +33,9 @@ public class XmlMessageController {
         int ownerId = securityContext.getOwnerId();
         Optional<XmlMessage> xmlMessage = xmlMessageRepository.findByIdAndOwnerId(id, ownerId);
         if (xmlMessage.isPresent()) {
-            System.out.println("xmlMessage: " + xmlMessage.get().getId());
             return ResponseEntity.ok(xmlMessage.get().getMessage());
         } else {
-            return ResponseEntity.notFound().build();
+            throw new EntityNotFoundException();
         }
     }
 }

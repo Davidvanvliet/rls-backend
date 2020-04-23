@@ -92,15 +92,9 @@ public class DangerGoodsInWagonController {
         dangerGoodsInWagon.setDangerGoodsType(dangerGoodsType);
         dangerGoodsInWagon.setWagonInTrain(wagonInTrain);
         wagonInTrain.addDangerGoodsInWagon(dangerGoodsInWagon);
-        wagonInTrainRepository.save(wagonInTrain);
-        Optional<WagonInTrain> optional = wagonInTrainRepository.findByIdAndOwnerId(wagonInTrainId, ownerId);
-        wagonInTrain = optional.get();
-        List<DangerGoodsInWagonDto> dangerGoodsInWagonDtoList = new ArrayList<DangerGoodsInWagonDto>();
-        for (DangerGoodsInWagon dangerGoodsInWagons : wagonInTrain.getDangerGoodsInWagons()) {
-        	dangerGoodsInWagonDtoList.add(DangerGoodsInWagonDtoMapper.map(dangerGoodsInWagons));
-        }
+        WagonInTrain postedWagonInTrain = wagonInTrainRepository.save(wagonInTrain);
         return ResponseBuilder.created()
-                .data(dangerGoodsInWagonDtoList)
+                .data(postedWagonInTrain.getDangerGoodsInWagons())
                 .build();
     }
 
@@ -123,10 +117,10 @@ public class DangerGoodsInWagonController {
             dangerGoodsInWagon.setDangerousGoodsVolume(postDto.getDangerousGoodsVolume());
         }
         dangerGoodsInWagon.setDangerGoodsType(dangerGoodsType);
-        wagonInTrainRepository.save(wagonInTrain);
-        WagonInTrainDto dto = WagonInTrainDtoMapper.map(wagonInTrain);
+        WagonInTrain postedWagonInTrain = wagonInTrainRepository.save(wagonInTrain);
+        List<DangerGoodsInWagonDto> dangerGoodsInWagonDtos = postedWagonInTrain.getDangerGoodsInWagons().stream().map(DangerGoodsInWagonDtoMapper::map).collect(Collectors.toList());
         return ResponseBuilder.accepted()
-                .data(dto)
+                .data(dangerGoodsInWagonDtos)
                 .build();
     }
 

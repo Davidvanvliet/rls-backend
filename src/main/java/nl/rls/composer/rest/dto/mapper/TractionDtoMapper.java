@@ -29,10 +29,10 @@ public class TractionDtoMapper {
 
     public static Traction map(TractionCreateDto dto) {
         DozerBeanMapper mapper = new DozerBeanMapper();
-        BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
+        BeanMappingBuilder mappingBuilder = new BeanMappingBuilder(){
+            @Override
             protected void configure() {
-//                mapping(TractionCreateDto.class, Traction.class)
-//                        .fields("tractionType", "tractionType", FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.TractionTypeConverter"));
+
             }
         };
         mapper.addMapping(mappingBuilder);

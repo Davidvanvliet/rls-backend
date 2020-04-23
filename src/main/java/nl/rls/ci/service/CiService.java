@@ -43,6 +43,8 @@ import nl.rls.ci.soapinterface.UICReceiveMessage;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 
+
+// TODO clean up this class
 /**
  * @author berend.wilkens Localhost: 145.89.169.134
  */
@@ -131,7 +133,6 @@ public class CiService {
         InputStream targetStream = new ByteArrayInputStream(messageXml.getBytes());
         File file = new File("taf_cat_complete_sector.xsd");
         InputStream xsdStream = new FileInputStream(file);
-        System.out.println(messageXml);
         validateAgainstXSD(targetStream, xsdStream);
         int ownerId = securityContext.getOwnerId();
         // maak de wrapper voor het bericht

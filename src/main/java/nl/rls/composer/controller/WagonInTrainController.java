@@ -98,7 +98,6 @@ public class WagonInTrainController {
         wagonInTrain.setWagon(wagon);
         wagonInTrain.setPosition(dto.getPosition());
         wagonInTrain.setBrakeType(BrakeType.valueOf(dto.getBrakeType()));
-        wagonInTrain.setBrakeWeight(dto.getBrakeWeight());
         wagonInTrain.setTotalLoadWeight(dto.getTotalLoadWeight());
         trainCompositionService.addWagonToTrain(trainComposition, wagonInTrain);
         TrainCompositionDto trainCompositionDto = TrainCompositionDtoMapper

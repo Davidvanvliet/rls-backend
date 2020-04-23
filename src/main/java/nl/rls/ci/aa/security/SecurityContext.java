@@ -33,6 +33,7 @@ public class SecurityContext {
     }
     
     public String getCompanyCode() {
+        // TODO make this from hardcoded to dynamic
     	return "3708";
     }
 

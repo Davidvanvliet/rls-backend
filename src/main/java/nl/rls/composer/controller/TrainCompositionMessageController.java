@@ -127,11 +127,13 @@ public class TrainCompositionMessageController {
         trainCompositionMessage.setMessageStatus(MessageStatus.creation.getValue());
         
         /* ProRail = 0084 */
+        // TODO make this from hardcoded to dynamic
         Optional<Company> recipient = companyRepository.findByCode("0084");
         if (recipient.isPresent()) {
             trainCompositionMessage.setRecipient(recipient.get());
         }
         /* RailLinkSystems = 9001*/
+        // TODO make this from hardcoded to dynamic
         Optional<Company> sender = companyRepository.findByCode("9001");
         if (sender.isPresent()) {
             trainCompositionMessage.setSender(sender.get());

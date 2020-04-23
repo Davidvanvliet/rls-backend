@@ -39,6 +39,8 @@ import nl.rls.ci.url.BaseURL;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
 
+import javax.persistence.EntityNotFoundException;
+
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/owners")
@@ -97,12 +99,11 @@ public class OwnerController {
     @Transactional
     @PostMapping(value = "/{id}/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> postUser(@PathVariable Integer id, @RequestBody UserPostDto dto) {
+    public ResponseEntity<UserDto> postUser(@PathVariable Integer id, @RequestBody UserPostDto dto) {
         Optional<Owner> optional = ownerRepository.findById(id);
         if (!optional.isPresent()) {
-        	System.out.println("Owner not found");
+        	throw new EntityNotFoundException();
         }
-    	System.out.println("Owner id: "+id);
         AppUser user = UserDtoMapper.map(dto);
         user.setOwner(optional.get());
         user.setUsername(dto.getEmail());
@@ -121,7 +122,7 @@ public class OwnerController {
     public Response<List<UserDto>> getUsersByOwner(@PathVariable Integer id) {
         Optional<Owner> optional = ownerRepository.findById(id);
         if (!optional.isPresent()) {
-            return ResponseBuilder.notFound().error("Owner not found with id = "+id.toString()).build();
+            throw new EntityNotFoundException("Owner not found with id = "+id.toString());
         }
         Owner owner = optional.get();
         List<UserDto> users = new ArrayList<>();

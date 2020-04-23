@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// TODO rounding of numbers by divinding
 /**
  * @author berend.wilkens
  * <p>
@@ -199,14 +201,14 @@ public class TrainComposition extends OwnedEntity {
      * and traction units). Expressed in Meters
      */
     public Integer getTrainLength() {
-        int trainLength = 0;
+        double trainLength = 0;
         for (WagonInTrain wagon : getWagons()) {
             trainLength += wagon.getWagon().getLengthOverBuffers();
         }
         for (TractionInTrain traction : getTractions()) {
             trainLength += traction.getTraction().getLengthOverBuffers();
         }
-        return trainLength / 100;
+        return Math.toIntExact(Math.round(trainLength / 100));
     }
 
     public Integer getNumberOfVehicles() {

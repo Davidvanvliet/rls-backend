@@ -76,22 +76,8 @@ public class UserController {
             user.setFirstName(userPostDtoPost.getFirstName());
             user.setLastName(userPostDtoPost.getLastName());
             user.setPassword(bCryptPasswordEncoder.encode(userPostDtoPost.getPassword()));
-        } else {
-            Optional<Role> role = roleRepository.findByName(Role.ROLE_USER);
-            user = new AppUser();
-            user.setPassword(bCryptPasswordEncoder.encode(userPostDtoPost.getPassword()));
-            user.setUsername(userPostDtoPost.getEmail());
-            user.setEmail(userPostDtoPost.getEmail());
-            user.setFirstName(userPostDtoPost.getFirstName());
-            user.setLastName(userPostDtoPost.getLastName());
-            user.setEnabled(true);
-            user.setRole(role.get());
-            log.info("signUp: getOwner");
-            Optional<Owner> optional = ownerRepository.findById(ownerId);
-            optional.get().getUsers().add(user);
-            user.setOwner(optional.get());
         }
-        log.info("signUp: saving ...");
+        assert user != null;
         userRepository.save(user);
         return ResponseEntity.ok(UserDtoMapper.map(user));
     }
@@ -111,10 +97,8 @@ public class UserController {
         user.setLastName(userPostDtoPost.getLastName());
         user.setEnabled(true);
         user.setRole(role.get());
-        log.info("signUp: getOwner");
         Optional<Owner> optional = ownerRepository.findById(ownerId);
         user.setOwner(optional.get());
-        log.info("signUp: saving ...");
         userRepository.save(user);
         return ResponseEntity.ok(UserDtoMapper.map(user));
     }

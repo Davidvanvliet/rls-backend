@@ -70,7 +70,6 @@ public class TractionController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Response<TractionDto> createTraction(@RequestBody @Valid TractionCreateDto dto) {
-    	System.out.println("createTraction");
         int ownerId = securityContext.getOwnerId();
         Traction traction = new Traction();
         traction.setOwnerId(ownerId);
@@ -81,9 +80,7 @@ public class TractionController {
         traction.setLocoTypeNumber(dto.getLocoTypeNumber());
         traction.setNumberOfAxles(dto.getNumberOfAxles());
         Optional<TractionType> tractionType = tractionTypeRepository.findByCode(dto.getTractionType());
-        if (tractionType.isPresent()) {
-            traction.setTractionType(tractionType.get());
-        }
+        tractionType.ifPresent(traction::setTractionType);
         traction.setTypeName(dto.getTypeName());
         traction.setWeight(dto.getWeight());
         tractionRepository.save(traction);
