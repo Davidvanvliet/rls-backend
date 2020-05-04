@@ -86,11 +86,8 @@ public class TrainController {
             train.setTransfereeIM(recipient.get(0));
         }
 
-        Integer locationId = DecodePath.decodeInteger(dto.getTransferPoint(), "locations");
-        Optional<Location> locationIdent = locationRepository.findById(locationId);
-        if (locationIdent.isPresent()) {
-            train.setTransferPoint(locationIdent.get());
-        }
+        Location location = getLocationIdent(dto);
+        train.setTransferPoint(location);
 
         train = trainRepository.save(train);
         TrainDto trainDto = TrainDtoMapper.map(train);
@@ -109,12 +106,21 @@ public class TrainController {
         Train train = TrainDtoMapper.map(trainCreateDto);
         train.setOwnerId(ownerId);
         train.setId(trainId);
+        Location location = getLocationIdent(trainCreateDto);
+        train.setTransferPoint(location);
         train = trainRepository.save(train);
         TrainDto dto = TrainDtoMapper.map(train);
         return ResponseBuilder.created()
                 .data(dto)
                 .build();
     }
+
+    private Location getLocationIdent(TrainPostDto trainCreateDto) {
+        Integer locationId = DecodePath.decodeInteger(trainCreateDto.getTransferPoint(), "locations");
+        return locationRepository.findById(locationId).orElseThrow(() -> new EntityNotFoundException(String.format("Location with id %d", locationId)));
+    }
+
+
 
     @GetMapping(value = "/{trainId}/journeysections", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
