@@ -45,6 +45,7 @@ public class TrainDtoMapper {
         DozerBeanMapper mapper = new DozerBeanMapper();
         BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
             protected void configure() {
+                mapping(TrainPostDto.class, Train.class).exclude("transferPoint");
             }
         };
         mapper.addMapping(mappingBuilder);
