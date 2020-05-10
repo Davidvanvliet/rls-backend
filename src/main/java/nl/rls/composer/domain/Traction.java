@@ -31,6 +31,10 @@ public class Traction extends OwnedEntity {
      */
     protected String locoNumber;
     private String typeName;
+    /**
+     * used for displaying icons in the front-end
+     */
+    private String code;
     private int lengthOverBuffers;
     private int numberOfAxles;
     private int weight;

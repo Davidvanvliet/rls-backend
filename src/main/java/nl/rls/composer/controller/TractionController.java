@@ -82,6 +82,7 @@ public class TractionController {
         Optional<TractionType> tractionType = tractionTypeRepository.findByCode(dto.getTractionType());
         tractionType.ifPresent(traction::setTractionType);
         traction.setTypeName(dto.getTypeName());
+        traction.setCode(dto.getCode());
         traction.setWeight(dto.getWeight());
         tractionRepository.save(traction);
         TractionDto resultDto = TractionDtoMapper.map(traction);
