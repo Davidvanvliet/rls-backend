@@ -24,8 +24,6 @@ public class WagonInTrain extends OwnedEntity {
      */
     private BrakeType brakeType;
     private int totalLoadWeight;
-    private int brakeWeight;
-    private int wagonMaxSpeed;
     //	@ManyToOne
 //	private ExceptionalGaugingProfile exceptionalGaugingProfile;
 //	@ManyToOne

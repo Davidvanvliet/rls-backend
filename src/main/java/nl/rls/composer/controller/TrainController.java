@@ -81,16 +81,13 @@ public class TrainController {
         train.setTrainType(dto.getTrainType());
 
         /* ProRail = 0084 */
-        List<Company> recipient = companyRepository.findByCode("0084");
-        if (recipient.size() == 1) {
-            train.setTransfereeIM(recipient.get(0));
+        Optional<Company> recipient = companyRepository.findByCode("0084");
+        if (recipient.isPresent()) {
+            train.setTransfereeIM(recipient.get());
         }
 
-        Integer locationId = DecodePath.decodeInteger(dto.getTransferPoint(), "locations");
-        Optional<Location> locationIdent = locationRepository.findById(locationId);
-        if (locationIdent.isPresent()) {
-            train.setTransferPoint(locationIdent.get());
-        }
+        Location location = getLocationIdent(dto);
+        train.setTransferPoint(location);
 
         train = trainRepository.save(train);
         TrainDto trainDto = TrainDtoMapper.map(train);
@@ -109,12 +106,21 @@ public class TrainController {
         Train train = TrainDtoMapper.map(trainCreateDto);
         train.setOwnerId(ownerId);
         train.setId(trainId);
+        Location location = getLocationIdent(trainCreateDto);
+        train.setTransferPoint(location);
         train = trainRepository.save(train);
         TrainDto dto = TrainDtoMapper.map(train);
         return ResponseBuilder.created()
                 .data(dto)
                 .build();
     }
+
+    private Location getLocationIdent(TrainPostDto trainCreateDto) {
+        Integer locationId = DecodePath.decodeInteger(trainCreateDto.getTransferPoint(), "locations");
+        return locationRepository.findById(locationId).orElseThrow(() -> new EntityNotFoundException(String.format("Location with id %d", locationId)));
+    }
+
+
 
     @GetMapping(value = "/{trainId}/journeysections", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -142,18 +148,38 @@ public class TrainController {
         JourneySection journeySection = new JourneySection(ownerId);
         Integer locationIdentId = DecodePath.decodeInteger(dto.getJourneySectionOriginUrl(), "locations");
         Optional<Location> optionalLocation = locationRepository.findByLocationPrimaryCode(locationIdentId);
+        Location origin = null;
         if (optionalLocation.isPresent()) {
-            journeySection.setJourneySectionOrigin(optionalLocation.get());
+        	origin = optionalLocation.get();
+            journeySection.setJourneySectionOrigin(origin);
         }
 
         locationIdentId = DecodePath.decodeInteger(dto.getJourneySectionDestinationUrl(), "locations");
         optionalLocation = locationRepository.findByLocationPrimaryCode(locationIdentId);
+        Location destination = null;
         if (optionalLocation.isPresent()) {
-            journeySection.setJourneySectionDestination(optionalLocation.get());
+        	destination = optionalLocation.get();
+            journeySection.setJourneySectionDestination(destination);
         }
-        Responsibility responsibility = responsibilityRepository.findByOwnerId(ownerId);
+
+        Responsibility responsibility = null;
+        Optional<Responsibility> optionalResponsibility = responsibilityRepository.findByOwnerId(ownerId);
+        if (!optionalResponsibility.isPresent()) {
+            Company responsibleRU = null;
+            Optional<Company> optional = companyRepository.findByCode(securityContext.getCompanyCode());
+            if (optional.isPresent()) {
+            	responsibleRU = optional.get();
+                responsibility = new Responsibility(ownerId);
+                responsibility.setResponsibleIM(origin.getResponsible());
+                responsibility.setResponsibleRU(responsibleRU);
+                responsibilityRepository.save(responsibility);    	
+            }
+        } else {
+        	responsibility = optionalResponsibility.get();
+        }
         journeySection.setResponsibilityActualSection(responsibility);
         journeySection.setResponsibilityNextSection(responsibility);
+        
         for (ActivityInTrainAddDto activity : dto.getActivities()) {
             Integer activityId = DecodePath.decodeInteger(activity.getTrainActivityTypeUrl(), "trainactivitytypes");
             TrainActivityType trainActivityType = trainActivityTypeRepository.findById(activityId)
@@ -164,6 +190,7 @@ public class TrainController {
         journeySection.setTrainComposition(new TrainComposition(ownerId));
         journeySection.getTrainComposition().setJourneySection(journeySection);
         journeySection.getTrainComposition().setLivestockOrPeopleIndicator(dto.getLivestockOrPeopleIndicator());
+        journeySection.getTrainComposition().setBrakeType(dto.getBrakeType());
         journeySection = journeySectionRepository.save(journeySection);
         train.addJourneySection(journeySection);
         train = trainRepository.save(train);

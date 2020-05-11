@@ -1,10 +1,10 @@
 package nl.rls.composer.domain;
 
+import javax.persistence.Entity;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.Entity;
 
 /**
  * @author berend.wilkens
@@ -29,8 +29,10 @@ public class Wagon extends OwnedEntity {
     /**
      * Coding in 404-2, chapter 1.7
      */
-    private int handBrakeBrakedWeight;
+    private int brakeWeightG;
+    private int brakeWeightP;
     private int wagonWeightEmpty;
+    private int maxSpeed;	
 
 
     // private List<Integer> technicalRestrictions;

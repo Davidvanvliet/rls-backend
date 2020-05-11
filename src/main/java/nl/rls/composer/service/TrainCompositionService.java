@@ -51,24 +51,24 @@ public class TrainCompositionService {
     public TrainComposition copyTrainComposition(TrainComposition trainComposition) {
         TrainComposition newTrainComposition = new TrainComposition();
         newTrainComposition.setLivestockOrPeopleIndicator(trainComposition.getLivestockOrPeopleIndicator());
+        newTrainComposition.setBrakeType(trainComposition.getBrakeType());
         newTrainComposition.setOwnerId(trainComposition.getOwnerId());
-        newTrainComposition.setTrainMaxSpeed(trainComposition.getTrainMaxSpeed());
         newTrainComposition.setJourneySection(trainComposition.getJourneySection());
         for (TractionInTrain tractionInTrain : trainComposition.getTractions()) {
             TractionInTrain newTractionInTrain = new TractionInTrain();
             newTractionInTrain.setDriverIndication(tractionInTrain.getDriverIndication());
             newTractionInTrain.setPosition(tractionInTrain.getPosition());
             newTractionInTrain.setTraction(tractionInTrain.getTraction());
+            newTractionInTrain.setTractionMode(tractionInTrain.getTractionMode());
             newTractionInTrain.setTrainComposition(tractionInTrain.getTrainComposition());
             newTrainComposition.addTraction(newTractionInTrain);
         }
         for (WagonInTrain wagonInTrain : trainComposition.getWagons()) {
             WagonInTrain newWagonInTrain = new WagonInTrain();
+            newWagonInTrain.setOwnerId(wagonInTrain.getOwnerId());
             newWagonInTrain.setPosition(wagonInTrain.getPosition());
             newWagonInTrain.setBrakeType(wagonInTrain.getBrakeType());
-            newWagonInTrain.setBrakeWeight(wagonInTrain.getBrakeWeight());
             newWagonInTrain.setTotalLoadWeight(wagonInTrain.getTotalLoadWeight());
-            newWagonInTrain.setWagonMaxSpeed(wagonInTrain.getWagonMaxSpeed());
             newWagonInTrain.setTrainComposition(wagonInTrain.getTrainComposition());
             newWagonInTrain.setWagon(wagonInTrain.getWagon());
             newTrainComposition.addWagon(newWagonInTrain);

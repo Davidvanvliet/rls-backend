@@ -17,11 +17,8 @@ public class TrainCompositionDto extends IdentifiableRepresentationModel<TrainCo
     private List<TractionInTrainDto> tractions = new ArrayList<TractionInTrainDto>();
     private List<WagonInTrainDto> wagons = new ArrayList<WagonInTrainDto>();
     private Integer exceptionalGaugingIndicator;
-    @Min(0)
-    @Max(1)
     private Integer livestockOrPeopleIndicator;
     private Integer dangerousGoodsIndicator;
-    private int trainType;
     private int trainWeight;
     private int trainLength;
     // private List<TrainCC_System> trainCCSystem;
@@ -29,8 +26,6 @@ public class TrainCompositionDto extends IdentifiableRepresentationModel<TrainCo
     private int trainMaxSpeed;
     private int maxAxleWeight;
     private String brakeType;
-    @Min(1)
-    @Max(99999)
     private int brakeWeight;
     private int numberOfVehicles;
     private int numberOfAxles;

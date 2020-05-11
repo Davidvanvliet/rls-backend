@@ -76,9 +76,9 @@ public class TrainCompositionMessageXmlMapper {
                         .fields("position", "wagonTrainPosition").fields("wagon.numberFreight", "wagonNumberFreight")
                         .fields("wagon", "wagonTechData")
                         .fields("totalLoadWeight", "wagonOperationalData.totalLoadWeight.")
-                        .fields("brakeWeight", "wagonOperationalData.brakeWeight")
+                        .fields("wagon.brakeWeightP", "wagonOperationalData.brakeWeight")
                         .fields("brakeType", "wagonOperationalData.brakeType")
-                        .fields("wagonMaxSpeed", "wagonOperationalData.wagonMaxSpeed")
+                        .fields("wagon.maxSpeed", "wagonOperationalData.wagonMaxSpeed")
                         .fields("dangerGoodsInWagons", field("wagonOperationalData.dangerousGoodsDetails").accessible(true))
                 ;
 
