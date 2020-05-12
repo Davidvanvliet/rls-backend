@@ -1,6 +1,7 @@
 package nl.rls.composer.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.Wagon;
@@ -62,13 +64,20 @@ public class WagonController {
                 .build();
     }
 
+    @ApiOperation(value = "Creates or Updates a wagon, if numberFreight already exists the wagon will be updated otherwise the wagon will be created.")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Response<WagonDto> createWagon(@RequestBody @Valid WagonPostDto dto) {
         int ownerId = securityContext.getOwnerId();
-        Wagon entity = new Wagon();
-        entity.setOwnerId(ownerId);
-        entity.setNumberFreight(dto.getNumberFreight());
+        Wagon entity = null;
+        Optional<Wagon> optional = wagonRepository.findByNumberFreightAndOwnerId(dto.getNumberFreight(), ownerId);
+        if (optional.isPresent()) {
+        	entity = optional.get();
+        } else {
+        	entity = new Wagon();
+            entity.setOwnerId(ownerId);
+            entity.setNumberFreight(dto.getNumberFreight());
+        }
         entity.setCode(dto.getCode());
         entity.setBrakeWeightG(dto.getBrakeWeightG());
         entity.setBrakeWeightP(dto.getBrakeWeightP());

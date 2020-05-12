@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.Traction;
@@ -67,17 +68,24 @@ public class TractionController {
                 .build();
     }
 
+    @ApiOperation(value = "Creates or Updates a traction unit, if locoTypeNumber already exists the traction unit will be updated otherwise the traction unit will be created.")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Response<TractionDto> createTraction(@RequestBody @Valid TractionCreateDto dto) {
         int ownerId = securityContext.getOwnerId();
-        Traction traction = new Traction();
-        traction.setOwnerId(ownerId);
+        Traction traction = null;
+        Optional<Traction> optional = tractionRepository.findByLocoTypeNumberAndOwnerId(dto.getLocoTypeNumber(), ownerId);
+        if (optional.isPresent()) {
+        	traction = optional.get();
+        } else {
+        	traction = new Traction();
+        	traction.setOwnerId(ownerId);
+        	traction.setLocoTypeNumber(dto.getLocoTypeNumber());
+        }
         traction.setBrakeWeightG(dto.getBrakeWeightG());
         traction.setBrakeWeightP(dto.getBrakeWeightP());
         traction.setLengthOverBuffers(dto.getLengthOverBuffers());
         traction.setLocoNumber(dto.getLocoNumber());
-        traction.setLocoTypeNumber(dto.getLocoTypeNumber());
         traction.setNumberOfAxles(dto.getNumberOfAxles());
         Optional<TractionType> tractionType = tractionTypeRepository.findByCode(dto.getTractionType());
         tractionType.ifPresent(traction::setTractionType);

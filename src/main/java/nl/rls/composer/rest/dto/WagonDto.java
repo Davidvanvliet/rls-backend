@@ -15,7 +15,7 @@ import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 @ApiModel(description = "Identification code of a freight wagon based on the TSI OPE and CEN Recommendations and CIS wagons coded according to OSJD-UIC leaflet 402, which allows the conversion from 8 digits to 12 digits and viceversa.")
 public class WagonDto extends IdentifiableRepresentationModel<WagonDto> {
     private String numberFreight;
-    private String name;
+    private String typeName;
     private String code;
     private int lengthOverBuffers;
     private int wagonNumberOfAxles;

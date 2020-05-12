@@ -23,21 +23,26 @@ public class WagonPostDto {
     private String numberFreight;
     private String typeName;
     private String code;
+    @ApiModelProperty(notes = "Length of wagon in cm")
     @Min(1)
     @Max(999999)
     private int lengthOverBuffers;
     @Min(0)
     @Max(999)
     private int numberOfAxles;
+    @ApiModelProperty(notes = "Weigth of empty wagon in tonnes")
     @Min(1)
     @Max(999999)
     private int weightEmpty;
+    @ApiModelProperty(notes = "Brake weigth of wagon expressed in tonnes")
     @Min(0)
     @Max(999)
     private int brakeWeightG;
+    @ApiModelProperty(notes = "Brake weigth of wagon expressed in tonnes")
     @Min(0)
     @Max(999)
     private int brakeWeightP;
+    @ApiModelProperty(notes = "Maximum speed of wagon expressed in km/h")
     @Min(0)
     @Max(999)
     private int maxSpeed;
