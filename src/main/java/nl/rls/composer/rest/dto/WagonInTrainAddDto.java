@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 @XmlRootElement
 @NoArgsConstructor
@@ -20,4 +21,5 @@ public class WagonInTrainAddDto {
     private int totalLoadWeight;
     private String wagonUrl;
     private String breakTypeUrl;
+    private List<DangerGoodsInWagonPostDto> dangerGoodsInWagonPostDtos;
 }
