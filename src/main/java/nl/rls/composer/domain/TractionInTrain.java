@@ -62,4 +62,11 @@ public class TractionInTrain {
         return true;
     }
 
+    public Integer getWeight() {
+        if (traction != null) {
+            return traction.getWeight();
+        }
+        return 0;
+    }
+
 }

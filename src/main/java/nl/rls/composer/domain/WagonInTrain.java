@@ -61,6 +61,15 @@ public class WagonInTrain extends OwnedEntity {
         }
 
     }
+    
+    public Integer getWeight() {
+        int weight = 0;
+        weight += totalLoadWeight;
+        if (wagon != null) {
+            weight += wagon.getWagonWeightEmpty();
+        }
+        return weight;
+    }
 
 
 }

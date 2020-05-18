@@ -185,15 +185,12 @@ public class TrainComposition extends OwnedEntity {
     public Integer getTrainWeight() {
         int trainWeight = 0;
         for (WagonInTrain wagon : getWagons()) {
-            if (wagon.getWagon() != null) {
-                trainWeight += wagon.getWagon().getWagonWeightEmpty();
-                trainWeight += wagon.getTotalLoadWeight();
-            }
+            trainWeight += wagon.getWeight();
         }
         for (TractionInTrain traction : getTractions()) {
-            trainWeight += traction.getTraction().getWeight();
+            trainWeight += traction.getWeight();
         }
-        return trainWeight / 1000;
+        return trainWeight;
     }
 
     /**
