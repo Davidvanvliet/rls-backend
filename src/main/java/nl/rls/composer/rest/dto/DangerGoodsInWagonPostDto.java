@@ -11,7 +11,7 @@ import javax.validation.constraints.DecimalMin;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DangerGoodsInWagonPostDto extends IdentifiableRepresentationModel<DangerGoodsInWagonPostDto> {
+public class DangerGoodsInWagonPostDto {
     /**
      * The weight of the dangerous goods in Kilograms
      */

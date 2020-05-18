@@ -10,7 +10,6 @@ import javax.persistence.*;
  */
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class DangerGoodsInWagon {
@@ -30,4 +29,11 @@ public class DangerGoodsInWagon {
      */
     private Float dangerousGoodsVolume;
 
+
+    public DangerGoodsInWagon(DangerGoodsType dangerGoodsType, WagonInTrain wagonInTrain, int dangerousGoodsWeight, Float dangerousGoodsVolume) {
+        this.dangerGoodsType = dangerGoodsType;
+        this.wagonInTrain = wagonInTrain;
+        this.dangerousGoodsWeight = dangerousGoodsWeight;
+        this.dangerousGoodsVolume = dangerousGoodsVolume;
+    }
 }

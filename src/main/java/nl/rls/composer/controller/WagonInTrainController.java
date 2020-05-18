@@ -99,7 +99,6 @@ public class WagonInTrainController {
                 int dangerGoodsTypeId = DecodePath.decodeInteger(dangerGoodsInWagonPostDto.getDangerGoodsTypeUrl(), "dangergoodstypes");
                 DangerGoodsType dangerGoodsType = dangerGoodsTypeRepository.findById(dangerGoodsTypeId).orElseThrow(() -> new EntityNotFoundException(String.format("Could not find dangerous goods type with id %d", dangerGoodsTypeId)));
                 wagonInTrain.addDangerGoodsInWagon(new DangerGoodsInWagon(
-                        dangerGoodsInWagonPostDto.getId(),
                         dangerGoodsType,
                         wagonInTrain,
                         dangerGoodsInWagonPostDto.getDangerousGoodsWeight(),
