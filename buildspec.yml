@@ -9,6 +9,7 @@ phases:
     commands:
       - echo Build started on `date`
       - docker-compose up -d
+      - mvn integration-test
   post_build:
     commands:
       - echo Build completed on `date`
