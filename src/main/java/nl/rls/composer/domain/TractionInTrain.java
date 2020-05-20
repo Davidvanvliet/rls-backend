@@ -69,4 +69,11 @@ public class TractionInTrain {
         return 0;
     }
 
+    public Integer getNumberOfAxles() {
+        if (traction != null) {
+            return traction.getNumberOfAxles();
+        }
+        return 0;
+    }
+
 }
