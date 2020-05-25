@@ -69,16 +69,14 @@ public class TrainComposition extends OwnedEntity {
     public boolean removeWagonById(int wagonInTrainId) {
         WagonInTrain entity = getWagonById(wagonInTrainId);
         if (entity != null) {
-            removeWagon(entity);
-            return true;
-        } else {
-            return false;
+            return removeWagon(entity);
         }
+        throw new EntityNotFoundException(String.format("Wagon not found with id %d", wagonInTrainId));
     }
 
-    public void removeWagon(WagonInTrain wagonInTrain) {
+    public boolean removeWagon(WagonInTrain wagonInTrain) {
         wagonInTrain.setTrainComposition(null);
-        wagons.remove(wagonInTrain);
+        boolean removed = wagons.remove(wagonInTrain);
         int pos = 1;
         for (WagonInTrain wit : wagons) {
             if (wit.getPosition() != pos) {
@@ -86,6 +84,7 @@ public class TrainComposition extends OwnedEntity {
             }
             pos++;
         }
+        return removed;
     }
 
     public void addWagon(WagonInTrain wagonInTrain) {
