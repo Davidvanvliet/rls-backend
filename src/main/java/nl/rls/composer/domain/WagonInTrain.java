@@ -3,6 +3,7 @@ package nl.rls.composer.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import nl.rls.composer.domain.code.BrakeType;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class WagonInTrain extends OwnedEntity {
     /**
      * Identifies the position of a wagon within a train.
