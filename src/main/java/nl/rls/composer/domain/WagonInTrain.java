@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 public class WagonInTrain extends OwnedEntity {
     /**
      * Identifies the position of a wagon within a train.
