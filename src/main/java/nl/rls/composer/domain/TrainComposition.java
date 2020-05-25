@@ -6,7 +6,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 // TODO rounding of numbers by divinding
@@ -185,15 +187,12 @@ public class TrainComposition extends OwnedEntity {
     public Integer getTrainWeight() {
         int trainWeight = 0;
         for (WagonInTrain wagon : getWagons()) {
-            if (wagon.getWagon() != null) {
-                trainWeight += wagon.getWagon().getWagonWeightEmpty();
-                trainWeight += wagon.getTotalLoadWeight();
-            }
+            trainWeight += wagon.getWeight();
         }
         for (TractionInTrain traction : getTractions()) {
-            trainWeight += traction.getTraction().getWeight();
+            trainWeight += traction.getWeight();
         }
-        return trainWeight / 1000;
+        return trainWeight;
     }
 
     /**
@@ -218,34 +217,32 @@ public class TrainComposition extends OwnedEntity {
     }
 
     public Integer getNumberOfAxles() {
-        Integer numberOfAxles = 0;
+        int numberOfAxles = 0;
         for (WagonInTrain wagon : getWagons()) {
-            numberOfAxles += wagon.getWagon().getWagonNumberOfAxles();
+            numberOfAxles += wagon.getNumberOfAxles();
         }
         for (TractionInTrain traction : getTractions()) {
-            numberOfAxles += traction.getTraction().getNumberOfAxles();
+            numberOfAxles += traction.getNumberOfAxles();
         }
         return numberOfAxles;
     }
-    
-    public Integer getTrainMaxSpeed( ) {
-        Integer maxSpeed = 1000;
-        for (WagonInTrain wagon : getWagons()) {
-        	if (maxSpeed > wagon.getWagon().getMaxSpeed()) {
-        		maxSpeed = wagon.getWagon().getMaxSpeed();
-        	}
+
+    public Integer getTrainMaxSpeed() {
+        List<WagonInTrain> wagonInTrains = wagons.stream().sorted(Comparator.comparingInt(WagonInTrain::getMaxSpeed)).collect(Collectors.toList());
+        if (wagonInTrains.size() == 0) {
+            return 0;
         }
-    	return maxSpeed;
+        return wagonInTrains.get(0).getMaxSpeed();
     }
 
     public Integer getBrakeWeight() {
-    	//TODO: verder uitwerken
-    	return 100;
+        //TODO: verder uitwerken
+        return 100;
     }
-    
+
     public Integer getMaxAxleWeight() {
-    	//TODO: verder uitwerken
-    	return 10;
+        //TODO: verder uitwerken
+        return 10;
     }
     
 
