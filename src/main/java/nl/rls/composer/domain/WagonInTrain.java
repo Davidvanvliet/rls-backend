@@ -3,7 +3,6 @@ package nl.rls.composer.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import nl.rls.composer.domain.code.BrakeType;
 
 import javax.persistence.*;
