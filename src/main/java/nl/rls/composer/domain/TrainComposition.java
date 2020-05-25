@@ -58,9 +58,9 @@ public class TrainComposition extends OwnedEntity {
     }
 
     public WagonInTrain getWagonById(Integer wagonId) {
-        for (WagonInTrain wit : wagons) {
-            if (wit.getId() == wagonId) {
-                return wit;
+        for (WagonInTrain wagonInTrain : wagons) {
+            if (wagonInTrain.getId().equals(wagonId)) {
+                return wagonInTrain;
             }
         }
         return null;
