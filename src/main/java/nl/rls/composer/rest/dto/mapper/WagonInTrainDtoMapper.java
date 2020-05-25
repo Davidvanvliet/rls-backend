@@ -1,6 +1,5 @@
 package nl.rls.composer.rest.dto.mapper;
 
-import nl.rls.composer.controller.WagonInTrainController;
 import nl.rls.composer.domain.DangerGoodsInWagon;
 import nl.rls.composer.domain.WagonInTrain;
 import nl.rls.composer.rest.dto.DangerGoodsInWagonDto;
@@ -11,9 +10,6 @@ import org.dozer.loader.api.FieldsMappingOptions;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class WagonInTrainDtoMapper {
 
@@ -38,8 +34,23 @@ public class WagonInTrainDtoMapper {
         }
         dto.setDangerGoods(dtoList);
 
-        dto.add(linkTo(methodOn(WagonInTrainController.class).getWagonInTrain(entity.getTrainComposition().getId(), entity.getId())).withSelfRel());
+//        dto.add(linkTo(methodOn(WagonInTrainController.class).getWagonInTrain(entity.getTrainComposition().getId(), entity.getId())).withSelfRel());
         return dto;
+    }
+
+    public static WagonInTrain map(WagonInTrainDto dto) {
+        DozerBeanMapper mapper = new DozerBeanMapper();
+        BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
+            protected void configure() {
+                mapping(WagonInTrainDto.class, WagonInTrain.class)
+                        .fields("wagon", "wagon",
+                                FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.WagonConverter"))
+                ;
+            }
+        };
+        mapper.addMapping(mappingBuilder);
+
+        return mapper.map(dto, WagonInTrain.class);
     }
 
 }

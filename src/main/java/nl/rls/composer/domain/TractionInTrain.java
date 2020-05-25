@@ -4,39 +4,68 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.domain.code.TractionMode;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
+@DiscriminatorValue("traction")
 @EqualsAndHashCode
-public class TractionInTrain {
+public class TractionInTrain extends RollingStock {
+
+    @ManyToOne(optional = false)
+    private Traction traction;
     /**
      * 0 - no driver present in Loco, 1 - driver(s) is /are) present in Loco
      */
     protected Integer driverIndication;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    /**
-     * Identifies position of intermediate traction unit(s) in the train indicating
-     * after which wagon (specified by order number) the unit is placed.
-     */
-    private Integer position;
-    /**
-     * Identifies the mode of deployment of a traction within a train First digit –
-     * traction role Second digit – position in group of traction units with the
-     * same role
-     */
-    @ManyToOne
-    protected TractionMode tractionMode;
 
-    @ManyToOne
-    private Traction traction;
-    @ManyToOne
-    private TrainComposition trainComposition;
+    @Override
+    public Long getStockIdentifier() {
+        return traction.getLocoTypeNumber();
+    }
 
+    @Override
+    public boolean isGaugedExceptional() {
+        return false;
+    }
+
+    @Override
+    public boolean containsDangerousGoods() {
+        return false;
+    }
+
+    @Override
+    public int getTotalWeight() {
+        return traction.getWeight();
+    }
+
+    @Override
+    public int getLoadWeight() {
+        return 0;
+    }
+
+    @Override
+    public int getLength() {
+        return traction.getLengthOverBuffers();
+    }
+
+    @Override
+    public int getNumberOfAxles() {
+        return traction.getNumberOfAxles();
+    }
+
+    @Override
+    public int getMaxAxleWeight() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxSpeed() {
+        return 0;
+    }
 }

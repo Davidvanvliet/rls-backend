@@ -6,7 +6,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 // TODO rounding of numbers by divinding
@@ -20,9 +22,7 @@ import java.util.List;
 @Getter
 @Setter
 public class TrainComposition extends OwnedEntity {
-    // @ManyToMany
-    // private List<TrainCC_System> trainCCSystem;
-    // private TrainRadioSystem trainRadioSystem;
+
     private String brakeType;
     /**
      * Indicates that livestock and people (other than train crew) will be carried.
@@ -32,14 +32,11 @@ public class TrainComposition extends OwnedEntity {
      * Load or Damage has to include code '09.'
      */
     private int livestockOrPeopleIndicator;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "train_composition_id")
     @OrderBy("position")
-    private List<WagonInTrain> wagons = new ArrayList<WagonInTrain>();
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "train_composition_id")
-    @OrderBy("position")
-    private List<TractionInTrain> tractions = new ArrayList<TractionInTrain>();
+    private List<RollingStock> rollingStock = new ArrayList<>();
+
     @OneToOne(mappedBy = "trainComposition")
     private JourneySection journeySection;
 
@@ -47,205 +44,70 @@ public class TrainComposition extends OwnedEntity {
         super(ownerId);
     }
 
-    public Boolean getExceptionalGaugingIndicator() {
+    public boolean isGaugedExceptional() {
         return false;
     }
 
-    public Boolean getDangerousGoodsIndicator() {
+    public boolean containsDangerousGoods() {
+        for (RollingStock stock : rollingStock) {
+            if (stock.containsDangerousGoods()) {
+                return true;
+            }
+        }
         return false;
-    }
-
-    public WagonInTrain getWagonById(Integer wagonId) {
-        for (WagonInTrain wit : wagons) {
-            if (wit.getId() == wagonId) {
-                return wit;
-            }
-        }
-        return null;
-    }
-
-    public boolean removeWagonById(int wagonInTrainId) {
-        WagonInTrain entity = getWagonById(wagonInTrainId);
-        if (entity != null) {
-            removeWagon(entity);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void removeWagon(WagonInTrain wagonInTrain) {
-        wagonInTrain.setTrainComposition(null);
-        wagons.remove(wagonInTrain);
-        int pos = 1;
-        for (WagonInTrain wit : wagons) {
-            if (wit.getPosition() != pos) {
-                wit.setPosition(pos);
-            }
-            pos++;
-        }
-    }
-
-    public void addWagon(WagonInTrain wagonInTrain) {
-        wagonInTrain.setPosition(wagons.size() + 1);
-        wagons.add(wagonInTrain);
-    }
-
-    public void moveWagonById(int wagonInTrainId, int position) {
-        WagonInTrain wagonInTrain = getWagonById(wagonInTrainId);
-        if (wagonInTrain != null) {
-            moveWagon(wagonInTrain, position);
-        } else {
-            System.out.println("WagonInTrain does not extist " + wagonInTrainId);
-        }
-    }
-
-    public void moveWagon(WagonInTrain wagonInTrain, int newPosition) {
-        int oldPosition = wagonInTrain.getPosition();
-        System.out.println("moveWagon old " + oldPosition + ", new " + newPosition);
-        if (newPosition <= 0 || newPosition > wagons.size() || oldPosition == newPosition) {
-            return;
-        }
-        if (oldPosition < newPosition) {
-            for (WagonInTrain wit : wagons) {
-                int currentPosition = wit.getPosition();
-                if (currentPosition <= newPosition && currentPosition > oldPosition) {
-                    currentPosition = currentPosition - 1;
-                    wit.setPosition(currentPosition);
-                }
-            }
-        } else {
-            for (WagonInTrain wit : wagons) {
-                int currentPosition = wit.getPosition();
-                if (currentPosition >= newPosition && currentPosition < oldPosition) {
-                    currentPosition = currentPosition + 1;
-                    wit.setPosition(currentPosition);
-                }
-            }
-        }
-        wagonInTrain.setPosition(newPosition);
-    }
-
-    public TractionInTrain getTractionById(Integer id) {
-        for (TractionInTrain tit : tractions) {
-            if (tit.getId() == id) {
-                return tit;
-            }
-        }
-        return null;
-    }
-
-    public void addTraction(TractionInTrain entity) {
-        if (entity.getPosition() <= 0 || entity.getPosition() > tractions.size()) {
-            entity.setPosition(1);
-        }
-        tractions.add(entity.getPosition() - 1, entity);
-        entity.setTrainComposition(this);
-        int pos = 1;
-        for (TractionInTrain tit : tractions) {
-            if (tit.getPosition() != pos) {
-                tit.setPosition(pos);
-            }
-            pos++;
-        }
-    }
-
-    public void moveTractionById(int id, int position) {
-        moveTraction(getTractionById(id), position);
-    }
-
-    public void moveTraction(TractionInTrain entity, int position) {
-        removeTraction(entity);
-        entity.setPosition(position);
-        addTraction(entity);
-    }
-
-    public void removeTractionById(int id) {
-        TractionInTrain entity = getTractionById(id);
-        if (entity != null) {
-            removeTraction(entity);
-        }
-    }
-
-    public void removeTraction(TractionInTrain entity) {
-        entity.setTrainComposition(null);
-        tractions.remove(entity);
-        int pos = 1;
-        for (TractionInTrain tit : tractions) {
-            if (tit.getPosition() != pos) {
-                tit.setPosition(pos);
-            }
-            pos++;
-        }
     }
 
     /**
-     * The sum of all weights of wagons and traction units in tons
+     * The sum of the weight of the train, including load in kilos
      */
-    public Integer getTrainWeight() {
+    public int getTotalWeight() {
         int trainWeight = 0;
-        for (WagonInTrain wagon : getWagons()) {
-            if (wagon.getWagon() != null) {
-                trainWeight += wagon.getWagon().getWagonWeightEmpty();
-                trainWeight += wagon.getTotalLoadWeight();
-            }
+        for (RollingStock stock : rollingStock) {
+            trainWeight += stock.getTotalWeight();
         }
-        for (TractionInTrain traction : getTractions()) {
-            trainWeight += traction.getTraction().getWeight();
-        }
-        return trainWeight / 1000;
+        return trainWeight;
     }
 
     /**
      * The calculated Length of a train (sum of all length over buffer of the wagons
      * and traction units). Expressed in Meters
      */
-    public Integer getTrainLength() {
+    public int getTrainLength() {
         double trainLength = 0;
-        for (WagonInTrain wagon : getWagons()) {
-            trainLength += wagon.getWagon().getLengthOverBuffers();
-        }
-        for (TractionInTrain traction : getTractions()) {
-            trainLength += traction.getTraction().getLengthOverBuffers();
+        for (RollingStock stock : rollingStock) {
+            trainLength += stock.getLength();
         }
         return Math.toIntExact(Math.round(trainLength / 100));
     }
 
-    public Integer getNumberOfVehicles() {
-        int numberOfVehicles = getWagons().size();
-        numberOfVehicles += getTractions().size();
-        return numberOfVehicles;
+    public int getRollingStockCount() {
+        return rollingStock.size();
     }
 
-    public Integer getNumberOfAxles() {
-        Integer numberOfAxles = 0;
-        for (WagonInTrain wagon : getWagons()) {
-            numberOfAxles += wagon.getWagon().getWagonNumberOfAxles();
-        }
-        for (TractionInTrain traction : getTractions()) {
-            numberOfAxles += traction.getTraction().getNumberOfAxles();
+    public int getNumberOfAxles() {
+        int numberOfAxles = 0;
+        for (RollingStock stock : rollingStock) {
+            numberOfAxles += stock.getNumberOfAxles();
         }
         return numberOfAxles;
     }
-    
-    public Integer getTrainMaxSpeed( ) {
-        Integer maxSpeed = 1000;
-        for (WagonInTrain wagon : getWagons()) {
-        	if (maxSpeed > wagon.getWagon().getMaxSpeed()) {
-        		maxSpeed = wagon.getWagon().getMaxSpeed();
-        	}
+
+    public int getTrainMaxSpeed() {
+        List<RollingStock> stock = rollingStock.stream().sorted(Comparator.comparingInt(RollingStock::getMaxSpeed)).collect(Collectors.toList());
+        if (stock.size() == 0) {
+            return 0;
         }
-    	return maxSpeed;
+        return stock.get(0).getMaxSpeed();
     }
 
     public Integer getBrakeWeight() {
-    	//TODO: verder uitwerken
-    	return 100;
+        //TODO: verder uitwerken
+        return 100;
     }
-    
+
     public Integer getMaxAxleWeight() {
-    	//TODO: verder uitwerken
-    	return 10;
+        //TODO: verder uitwerken
+        return 10;
     }
     
 
