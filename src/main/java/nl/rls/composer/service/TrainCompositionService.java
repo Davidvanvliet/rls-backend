@@ -77,7 +77,15 @@ public class TrainCompositionService {
         newRollingStock.setId(rollingStock.getId());
         rollingStock = rollingStockRepository.save(newRollingStock);
         return RollingStockDtoMapper.map(rollingStock);
+    }
 
+    public void deleteRollingStock(int trainCompositionId, int rollingStockId) {
+        int ownerId = securityContext.getOwnerId();
+        RollingStock rollingStock = rollingStockRepository.findByIdAndTrainCompositionIdAndTrainCompositionOwnerId(rollingStockId, trainCompositionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find rolling stock with id %d", rollingStockId)));
+        TrainComposition trainComposition = rollingStock.getTrainComposition();
+        trainComposition.removeRollingStock(rollingStockId);
+        trainCompositionRepository.save(trainComposition);
     }
 
 //    public void addWagonToTrain(TrainComposition trainComposition, WagonInTrain wit) {

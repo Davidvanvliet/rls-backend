@@ -48,4 +48,12 @@ public class RollingStockController {
                 .data(rollingStockDto)
                 .build();
     }
+
+    @DeleteMapping(value = "/{trainCompositionId}/stock/{rollingStockId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> deleteRollingStock(@PathVariable int trainCompositionId, @PathVariable int rollingStockId) {
+        trainCompositionService.deleteRollingStock(trainCompositionId, rollingStockId);
+        return ResponseBuilder.ok()
+                .build();
+    }
 }

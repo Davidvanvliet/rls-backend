@@ -124,5 +124,7 @@ public class TrainComposition extends OwnedEntity {
         return false;
     }
 
-
+    public void removeRollingStock(int rollingStockId) {
+        this.rollingStock.removeIf(stock -> stock.getId().equals(rollingStockId));
+    }
 }
