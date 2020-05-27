@@ -7,9 +7,7 @@ import nl.rls.composer.exceptions.NewRollingStockPositionOutOfBoundsException;
 import nl.rls.composer.exceptions.RollingStockAlreadyInCompositionException;
 import nl.rls.composer.exceptions.RollingStockNotInCompositionException;
 import nl.rls.composer.repository.RollingStockRepository;
-import nl.rls.composer.repository.TractionInTrainRepository;
 import nl.rls.composer.repository.TrainCompositionRepository;
-import nl.rls.composer.repository.WagonInTrainRepository;
 import nl.rls.composer.rest.dto.RollingStockDto;
 import nl.rls.composer.rest.dto.RollingStockPostDto;
 import nl.rls.composer.rest.dto.mapper.RollingStockDtoMapper;
@@ -23,8 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TrainCompositionService {
-    private final WagonInTrainRepository wagonInTrainRepository;
-    private final TractionInTrainRepository tractionInTrainRepository;
+
     private final TrainCompositionRepository trainCompositionRepository;
 
     private final RollingStockRepository rollingStockRepository;
@@ -33,9 +30,7 @@ public class TrainCompositionService {
 
     private final RollingStockFactory rollingStockFactory;
 
-    public TrainCompositionService(WagonInTrainRepository wagonInTrainRepository, TractionInTrainRepository tractionInTrainRepository, TrainCompositionRepository trainCompositionRepository, RollingStockRepository rollingStockRepository, SecurityContext securityContext, RollingStockFactory rollingStockFactory) {
-        this.wagonInTrainRepository = wagonInTrainRepository;
-        this.tractionInTrainRepository = tractionInTrainRepository;
+    public TrainCompositionService(TrainCompositionRepository trainCompositionRepository, RollingStockRepository rollingStockRepository, SecurityContext securityContext, RollingStockFactory rollingStockFactory) {
         this.trainCompositionRepository = trainCompositionRepository;
         this.rollingStockRepository = rollingStockRepository;
         this.securityContext = securityContext;
