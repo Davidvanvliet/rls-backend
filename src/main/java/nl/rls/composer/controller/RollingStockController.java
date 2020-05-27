@@ -39,4 +39,13 @@ public class RollingStockController {
                 .data(rollingStockDto)
                 .build();
     }
+
+    @PutMapping(value = "/{trainCompositionId}/stock/{rollingStockId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Response<RollingStockDto> updateRollingStock(@PathVariable int trainCompositionId, @PathVariable int rollingStockId, @RequestBody RollingStockPostDto rollingStockPostDto) {
+        RollingStockDto rollingStockDto = trainCompositionService.updateRollingStock(trainCompositionId, rollingStockId, rollingStockPostDto);
+        return ResponseBuilder.created()
+                .data(rollingStockDto)
+                .build();
+    }
 }

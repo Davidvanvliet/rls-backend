@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,6 +60,24 @@ public class TrainCompositionService {
         rollingStock = rollingStockRepository.save(rollingStock);
         trainCompositionRepository.save(trainComposition);
         return RollingStockDtoMapper.map(rollingStockRepository.findById(rollingStock.getId()).orElse(null));
+    }
+
+    public RollingStockDto updateRollingStock(int trainCompositionId, int rollingStockId, RollingStockPostDto rollingStockDto) {
+        int ownerId = securityContext.getOwnerId();
+        RollingStock rollingStock = rollingStockRepository.findByIdAndTrainCompositionIdAndTrainCompositionOwnerId(rollingStockId, trainCompositionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find rolling stock with id %d", rollingStockId)));
+        if (!Objects.equals(rollingStock.getStockIdentifier(), rollingStockDto.getStockIdentifier())) {
+            if (rollingStock.getTrainComposition().hasRollingStock(rollingStockDto.getStockIdentifier())) {
+                throw new RollingStockAlreadyInCompositionException(rollingStockDto.getStockIdentifier());
+            }
+        }
+        RollingStock newRollingStock = rollingStockFactory.createRollingStock(rollingStockDto);
+        newRollingStock.setPosition(rollingStock.getPosition());
+        newRollingStock.setTrainComposition(rollingStock.getTrainComposition());
+        newRollingStock.setId(rollingStock.getId());
+        rollingStock = rollingStockRepository.save(newRollingStock);
+        return RollingStockDtoMapper.map(rollingStock);
+
     }
 
 //    public void addWagonToTrain(TrainComposition trainComposition, WagonInTrain wit) {
