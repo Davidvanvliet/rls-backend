@@ -113,34 +113,6 @@ public class TrainCompositionService {
         trainCompositionRepository.save(trainComposition);
     }
 
-//    public void addWagonToTrain(TrainComposition trainComposition, WagonInTrain wit) {
-//        wagonInTrainRepository.save(wit);
-//        wit.setTrainComposition(trainComposition);
-//        trainComposition.addWagon(wit);
-//        wagonInTrainRepository.saveAll(trainComposition.getWagons());
-//        trainCompositionRepository.save(trainComposition);
-//    }
-//
-//    public void moveWagonById(TrainComposition trainComposition, int wagonInTrainId, int position) {
-//        trainComposition.moveWagonById(wagonInTrainId, position);
-//        wagonInTrainRepository.saveAll(trainComposition.getWagons());
-//        trainCompositionRepository.save(trainComposition);
-//    }
-//
-//    public void addTractionToTrain(TrainComposition trainComposition, TractionInTrain tit) {
-//        tractionInTrainRepository.save(tit);
-//        tit.setTrainComposition(trainComposition);
-//        trainComposition.addTraction(tit);
-//        tractionInTrainRepository.saveAll(trainComposition.getTractions());
-//        trainCompositionRepository.save(trainComposition);
-//    }
-//
-//    public void moveTractionById(TrainComposition trainComposition, int tractionInTrainId, int position) {
-//        trainComposition.moveWagonById(tractionInTrainId, position);
-//        tractionInTrainRepository.saveAll(trainComposition.getTractions());
-//        trainCompositionRepository.save(trainComposition);
-//    }
-
     public TrainComposition copyTrainComposition(TrainComposition trainComposition) {
         TrainComposition newTrainComposition = new TrainComposition();
         newTrainComposition.setLivestockOrPeopleIndicator(trainComposition.getLivestockOrPeopleIndicator());
