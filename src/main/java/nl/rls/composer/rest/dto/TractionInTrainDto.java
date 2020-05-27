@@ -7,7 +7,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TractionInTrainDto extends RollingStockDTO {
+public class TractionInTrainDto extends RollingStockDto {
     private boolean driverIndication;
     private TractionDto traction;
 }

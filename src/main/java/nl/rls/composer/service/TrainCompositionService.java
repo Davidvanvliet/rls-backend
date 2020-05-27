@@ -3,14 +3,17 @@ package nl.rls.composer.service;
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.composer.domain.RollingStock;
 import nl.rls.composer.domain.TrainComposition;
+import nl.rls.composer.exceptions.RollingStockAlreadyInCompositionException;
 import nl.rls.composer.repository.RollingStockRepository;
 import nl.rls.composer.repository.TractionInTrainRepository;
 import nl.rls.composer.repository.TrainCompositionRepository;
 import nl.rls.composer.repository.WagonInTrainRepository;
-import nl.rls.composer.rest.dto.RollingStockDTO;
+import nl.rls.composer.rest.dto.RollingStockDto;
+import nl.rls.composer.rest.dto.RollingStockPostDto;
 import nl.rls.composer.rest.dto.mapper.RollingStockDtoMapper;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,20 +27,38 @@ public class TrainCompositionService {
 
     private final SecurityContext securityContext;
 
-    public TrainCompositionService(WagonInTrainRepository wagonInTrainRepository, TractionInTrainRepository tractionInTrainRepository, TrainCompositionRepository trainCompositionRepository, RollingStockRepository rollingStockRepository, SecurityContext securityContext) {
+    private final RollingStockFactory rollingStockFactory;
+
+    public TrainCompositionService(WagonInTrainRepository wagonInTrainRepository, TractionInTrainRepository tractionInTrainRepository, TrainCompositionRepository trainCompositionRepository, RollingStockRepository rollingStockRepository, SecurityContext securityContext, RollingStockFactory rollingStockFactory) {
         this.wagonInTrainRepository = wagonInTrainRepository;
         this.tractionInTrainRepository = tractionInTrainRepository;
         this.trainCompositionRepository = trainCompositionRepository;
         this.rollingStockRepository = rollingStockRepository;
         this.securityContext = securityContext;
+        this.rollingStockFactory = rollingStockFactory;
     }
 
-    public List<RollingStockDTO> getRollingStockByTrainCompositionId(Integer trainCompositionId) {
-        Integer ownerId = securityContext.getOwnerId();
+    public List<RollingStockDto> getRollingStockByTrainCompositionId(int trainCompositionId) {
+        int ownerId = securityContext.getOwnerId();
         List<RollingStock> rollingStock = rollingStockRepository.findAllByTrainCompositionIdAndTrainCompositionOwnerId(trainCompositionId, ownerId);
         return rollingStock.stream()
                 .map(RollingStockDtoMapper::map)
                 .collect(Collectors.toList());
+    }
+
+    public RollingStockDto addRollingStockToTrainComposition(int trainCompositionId, RollingStockPostDto rollingStockDTO) {
+        int ownerId = securityContext.getOwnerId();
+        TrainComposition trainComposition = trainCompositionRepository.findByIdAndOwnerId(trainCompositionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find train composition with id %d", trainCompositionId)));
+        if (trainComposition.hasRollingStock(rollingStockDTO.getStockIdentifier())) {
+            throw new RollingStockAlreadyInCompositionException(rollingStockDTO.getStockIdentifier());
+        }
+        RollingStock rollingStock = rollingStockFactory.createRollingStock(rollingStockDTO);
+        rollingStock.setTrainComposition(trainComposition);
+        trainComposition.addRollingStock(rollingStock);
+        rollingStock = rollingStockRepository.save(rollingStock);
+        trainCompositionRepository.save(trainComposition);
+        return RollingStockDtoMapper.map(rollingStockRepository.findById(rollingStock.getId()).orElse(null));
     }
 
 //    public void addWagonToTrain(TrainComposition trainComposition, WagonInTrain wit) {

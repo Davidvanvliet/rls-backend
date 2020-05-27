@@ -5,17 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
 @Getter
 @Setter
 public class TrainCompositionDto extends IdentifiableRepresentationModel<TrainCompositionDto> {
-    private List<TractionInTrainDto> tractions = new ArrayList<TractionInTrainDto>();
-    private List<WagonInTrainDto> wagons = new ArrayList<WagonInTrainDto>();
+    private List<RollingStockDto> rollingStock;
     private Integer exceptionalGaugingIndicator;
     private Integer livestockOrPeopleIndicator;
     private Integer dangerousGoodsIndicator;

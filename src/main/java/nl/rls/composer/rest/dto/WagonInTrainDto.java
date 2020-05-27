@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class WagonInTrainDto extends RollingStockDTO {
+public class WagonInTrainDto extends RollingStockDto {
     private String brakeType;
     @Min(0)
     @Max(999999)

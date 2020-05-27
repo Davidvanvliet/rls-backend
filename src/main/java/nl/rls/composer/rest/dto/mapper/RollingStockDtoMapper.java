@@ -4,13 +4,13 @@ import nl.rls.composer.domain.RollingStock;
 import nl.rls.composer.domain.TractionInTrain;
 import nl.rls.composer.domain.WagonInTrain;
 import nl.rls.composer.domain.code.StockType;
-import nl.rls.composer.rest.dto.RollingStockDTO;
+import nl.rls.composer.rest.dto.RollingStockDto;
 import nl.rls.composer.rest.dto.TractionInTrainDto;
 import nl.rls.composer.rest.dto.WagonInTrainDto;
 
 public class RollingStockDtoMapper {
-    public static RollingStockDTO map(RollingStock rollingStock) {
-        switch (StockType.valueOf(rollingStock.getStockType())) {
+    public static RollingStockDto map(RollingStock rollingStock) {
+        switch (StockType.valueOf(rollingStock.getStockType().toUpperCase())) {
             case TRACTION:
                 return TractionInTrainDtoMapper.map((TractionInTrain) rollingStock);
             case WAGON:
@@ -20,7 +20,7 @@ public class RollingStockDtoMapper {
         }
     }
 
-    public static RollingStock map(RollingStockDTO rollingStockDTO) {
+    public static RollingStock map(RollingStockDto rollingStockDTO) {
         switch (StockType.valueOf(rollingStockDTO.getStockType().toUpperCase())) {
             case TRACTION:
                 return TractionInTrainDtoMapper.map((TractionInTrainDto) rollingStockDTO);

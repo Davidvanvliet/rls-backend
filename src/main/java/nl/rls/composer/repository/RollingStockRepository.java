@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface RollingStockRepository extends JpaRepository<RollingStock, Integer> {
-    List<RollingStock> findAllByTrainCompositionIdAndTrainCompositionOwnerId(Integer trainCompositionId, Integer ownerId);
+    List<RollingStock> findAllByTrainCompositionIdAndTrainCompositionOwnerId(int trainCompositionId, int ownerId);
 }

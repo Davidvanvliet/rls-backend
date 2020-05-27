@@ -15,12 +15,14 @@ public abstract class RollingStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer position;
+    @Column(name = "position")
+    private int position;
 
     @Column(name = "stock_type", insertable = false, updatable = false)
     private String stockType;
 
     @ManyToOne
+    @JoinColumn(name = "train_composition_id")
     private TrainComposition trainComposition;
 
     /**

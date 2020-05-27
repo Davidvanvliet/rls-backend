@@ -66,6 +66,7 @@ public class WagonInTrain extends RollingStock {
     }
 
     @Override
+    // TODO: wagon weight + lading weight / aantal assen
     public int getMaxAxleWeight() {
         return 0;
     }
@@ -73,5 +74,9 @@ public class WagonInTrain extends RollingStock {
     @Override
     public int getMaxSpeed() {
         return wagon.getMaxSpeed();
+    }
+
+    public void addDangerGoodsInWagon(DangerGoodsInWagon dangerGoodsInWagon) {
+        this.dangerGoodsInWagons.add(dangerGoodsInWagon);
     }
 }

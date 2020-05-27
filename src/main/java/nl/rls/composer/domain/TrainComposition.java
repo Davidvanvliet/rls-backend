@@ -33,8 +33,9 @@ public class TrainComposition extends OwnedEntity {
      */
     private int livestockOrPeopleIndicator;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "trainComposition")
     @OrderBy("position")
+    @OrderColumn(name = "position")
     private List<RollingStock> rollingStock = new ArrayList<>();
 
     @OneToOne(mappedBy = "trainComposition")
@@ -109,7 +110,19 @@ public class TrainComposition extends OwnedEntity {
         //TODO: verder uitwerken
         return 10;
     }
-    
+
+    public void addRollingStock(RollingStock rollingStock) {
+        this.rollingStock.add(rollingStock);
+    }
+
+    public boolean hasRollingStock(Long stockIdentifier) {
+        for (RollingStock stock : this.rollingStock) {
+            if (stock.getStockIdentifier().equals(stockIdentifier)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 }
