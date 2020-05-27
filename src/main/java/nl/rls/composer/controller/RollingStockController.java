@@ -2,6 +2,7 @@ package nl.rls.composer.controller;
 
 import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.rest.dto.RollingStockDto;
+import nl.rls.composer.rest.dto.RollingStockMoveDto;
 import nl.rls.composer.rest.dto.RollingStockPostDto;
 import nl.rls.composer.service.TrainCompositionService;
 import nl.rls.util.Response;
@@ -53,6 +54,14 @@ public class RollingStockController {
     @ResponseStatus(HttpStatus.OK)
     public Response<?> deleteRollingStock(@PathVariable int trainCompositionId, @PathVariable int rollingStockId) {
         trainCompositionService.deleteRollingStock(trainCompositionId, rollingStockId);
+        return ResponseBuilder.ok()
+                .build();
+    }
+
+    @PutMapping(value = "/{trainCompositionId}/stock/{rollingStockId}/move", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> moveRollingStock(@PathVariable int trainCompositionId, @PathVariable int rollingStockId, @RequestBody RollingStockMoveDto rollingStockMoveDto) {
+        trainCompositionService.moveRollingStock(trainCompositionId, rollingStockId, rollingStockMoveDto.getPosition());
         return ResponseBuilder.ok()
                 .build();
     }

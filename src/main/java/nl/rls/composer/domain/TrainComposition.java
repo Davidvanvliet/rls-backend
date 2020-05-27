@@ -124,7 +124,25 @@ public class TrainComposition extends OwnedEntity {
         return false;
     }
 
+    public boolean hasRollingStock(int rollingStockId) {
+        for (RollingStock stock : this.rollingStock) {
+            if (stock.getId().equals(rollingStockId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void removeRollingStock(int rollingStockId) {
         this.rollingStock.removeIf(stock -> stock.getId().equals(rollingStockId));
+    }
+
+    public RollingStock getRollingStock(int rollingStockId) {
+        for (RollingStock stock : this.rollingStock) {
+            if (stock.getId().equals(rollingStockId)) {
+                return stock;
+            }
+        }
+        return null;
     }
 }
