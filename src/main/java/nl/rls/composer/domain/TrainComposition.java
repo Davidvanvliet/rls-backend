@@ -1,5 +1,6 @@
 package nl.rls.composer.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,6 +44,15 @@ public class TrainComposition extends OwnedEntity {
 
     public TrainComposition(Integer ownerId) {
         super(ownerId);
+    }
+
+    public TrainComposition(@NotNull TrainComposition trainComposition) {
+        this.brakeType = trainComposition.brakeType;
+        this.livestockOrPeopleIndicator = trainComposition.livestockOrPeopleIndicator;
+        for (RollingStock stock : trainComposition.rollingStock) {
+            addRollingStock(stock.clone());
+        }
+        this.journeySection = trainComposition.journeySection;
     }
 
     public boolean isGaugedExceptional() {
@@ -144,5 +154,9 @@ public class TrainComposition extends OwnedEntity {
             }
         }
         return null;
+    }
+
+    public TrainComposition clone() {
+        return new TrainComposition(this);
     }
 }

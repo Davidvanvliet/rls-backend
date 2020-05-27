@@ -69,4 +69,10 @@ public abstract class RollingStock {
      * @return max speed in km/h
      */
     public abstract int getMaxSpeed();
+
+
+    /**
+     * @return cloned version of rolling stock
+     */
+    public abstract RollingStock clone();
 }

@@ -1,5 +1,6 @@
 package nl.rls.composer.domain;
 
+import com.sun.istack.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,11 @@ public class TractionInTrain extends RollingStock {
      * 0 - no driver present in Loco, 1 - driver(s) is /are) present in Loco
      */
     protected Integer driverIndication;
+
+    public TractionInTrain(@NotNull TractionInTrain tractionInTrain) {
+        this.traction = tractionInTrain.traction;
+        this.driverIndication = tractionInTrain.driverIndication;
+    }
 
     @Override
     public Long getStockIdentifier() {
@@ -68,5 +74,10 @@ public class TractionInTrain extends RollingStock {
     @Override
     public int getMaxSpeed() {
         return 0;
+    }
+
+    @Override
+    public RollingStock clone() {
+        return new TractionInTrain(this);
     }
 }

@@ -1,6 +1,9 @@
 package nl.rls.composer.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -21,6 +24,7 @@ public class DangerGoodsInWagon {
     private DangerGoodsType dangerGoodsType;
     @ManyToOne
     private WagonInTrain wagonInTrain;
+
     /**
      * The weight of the dangerous goods in Kilograms
      */
@@ -29,5 +33,16 @@ public class DangerGoodsInWagon {
      * The volume of the dangerous goods in cubic meters
      */
     private Float dangerousGoodsVolume;
+
+    public DangerGoodsInWagon(DangerGoodsInWagon dangerGoodsInWagon) {
+        this.dangerGoodsType = dangerGoodsInWagon.dangerGoodsType;
+        this.wagonInTrain = dangerGoodsInWagon.wagonInTrain;
+        this.dangerousGoodsWeight = dangerGoodsInWagon.dangerousGoodsWeight;
+        this.dangerousGoodsVolume = dangerGoodsInWagon.dangerousGoodsVolume;
+    }
+
+    public DangerGoodsInWagon clone() {
+        return new DangerGoodsInWagon(this);
+    }
 
 }

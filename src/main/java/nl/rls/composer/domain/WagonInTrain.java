@@ -1,5 +1,6 @@
 package nl.rls.composer.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,14 @@ public class WagonInTrain extends RollingStock {
     @ManyToOne(optional = false)
     private Wagon wagon;
 
+    public WagonInTrain(@NotNull WagonInTrain wagonInTrain) {
+        this.brakeType = wagonInTrain.brakeType;
+        this.totalLoadWeight = wagonInTrain.totalLoadWeight;
+        this.wagon = wagonInTrain.wagon;
+        for (DangerGoodsInWagon dangerGoodsInWagon : wagonInTrain.dangerGoodsInWagons) {
+            this.addDangerGoodsInWagon(dangerGoodsInWagon.clone());
+        }
+    }
 
     @Override
     public Long getStockIdentifier() {
@@ -74,6 +83,11 @@ public class WagonInTrain extends RollingStock {
     @Override
     public int getMaxSpeed() {
         return wagon.getMaxSpeed();
+    }
+
+    @Override
+    public RollingStock clone() {
+        return new WagonInTrain(this);
     }
 
     public void addDangerGoodsInWagon(DangerGoodsInWagon dangerGoodsInWagon) {
