@@ -25,8 +25,9 @@ public class RollingStockController {
     @GetMapping(value = "/{trainCompositionId}/stock", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Response<List<RollingStockDto>> getRollingStockByTrainCompositionId(@PathVariable Integer trainCompositionId) {
+        List<RollingStockDto> rollingStocks = trainCompositionService.getRollingStockByTrainCompositionId(trainCompositionId);
         return ResponseBuilder.ok()
-                .data(trainCompositionService.getRollingStockByTrainCompositionId(trainCompositionId))
+                .data(rollingStocks)
                 .build();
     }
 
