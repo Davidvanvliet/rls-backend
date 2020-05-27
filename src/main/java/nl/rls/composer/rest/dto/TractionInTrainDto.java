@@ -11,6 +11,6 @@ import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 public class TractionInTrainDto extends IdentifiableRepresentationModel<TractionInTrainDto> {
     private int driverIndication;
     private int position;
-    private String tractionMode;
+    private TractionModeDto tractionMode;
     private TractionDto traction;
 }
