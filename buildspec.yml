@@ -7,7 +7,8 @@ phases:
   build:
     commands:
       - mvn package
+      - zip -r rls_ci-0.0.1-SNAPSHOT.zip rls_ci-0.0.1-SNAPSHOT.jar .ebextensions .platform Procfile
 artifacts:
   files:
-    - target/*.jar
+    - rls_ci-0.0.1-SNAPSHOT.zip
   discard-paths: yes
