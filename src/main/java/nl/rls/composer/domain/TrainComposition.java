@@ -50,7 +50,9 @@ public class TrainComposition extends OwnedEntity {
         this.brakeType = trainComposition.brakeType;
         this.livestockOrPeopleIndicator = trainComposition.livestockOrPeopleIndicator;
         for (RollingStock stock : trainComposition.rollingStock) {
-            addRollingStock(stock.clone());
+            RollingStock rollingStock = stock.clone();
+            rollingStock.setTrainComposition(this);
+            addRollingStock(rollingStock);
         }
         this.journeySection = trainComposition.journeySection;
     }

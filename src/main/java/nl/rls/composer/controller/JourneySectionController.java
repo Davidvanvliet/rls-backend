@@ -105,6 +105,8 @@ public class JourneySectionController {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find journey section with id %d", journeySectionId)));
         TrainComposition newTrainComposition = fromJourneySection.getTrainComposition().clone();
         newTrainComposition.setJourneySection(toJourneySection);
+        newTrainComposition.setId(toJourneySection.getTrainComposition().getId());
+        newTrainComposition.setOwnerId(toJourneySection.getTrainComposition().getOwnerId());
         toJourneySection.setTrainComposition(newTrainComposition);
         journeySectionRepository.save(toJourneySection);
         Train train = trainRepository.findByIdAndOwnerId(toJourneySection.getTrain().getId(), ownerId)
