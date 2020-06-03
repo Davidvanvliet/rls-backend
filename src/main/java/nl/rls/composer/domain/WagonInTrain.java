@@ -63,7 +63,6 @@ public class WagonInTrain extends RollingStock {
     public int getLoadWeight() {
         return totalLoadWeight;
     }
-
     @Override
     public int getLength() {
         return wagon.getLengthOverBuffers();

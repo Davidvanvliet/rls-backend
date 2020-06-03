@@ -49,7 +49,7 @@ public class TractionInTrain extends RollingStock {
     public int getTotalWeight() {
         return traction.getWeight();
     }
-
+  
     @Override
     public int getLoadWeight() {
         return 0;

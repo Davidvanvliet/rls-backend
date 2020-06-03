@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-
 /**
  * @author berend.wilkens
  * <p>
@@ -147,6 +146,7 @@ public class TrainComposition extends OwnedEntity {
             }
         }
         return false;
+
     }
 
     public void removeRollingStock(int rollingStockId) {
