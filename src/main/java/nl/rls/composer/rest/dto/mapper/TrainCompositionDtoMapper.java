@@ -2,13 +2,17 @@ package nl.rls.composer.rest.dto.mapper;
 
 import nl.rls.composer.controller.TrainCompositionController;
 import nl.rls.composer.domain.JourneySection;
+import nl.rls.composer.domain.RollingStock;
 import nl.rls.composer.domain.TrainComposition;
 import nl.rls.composer.rest.dto.JourneySectionPostDto;
+import nl.rls.composer.rest.dto.RollingStockDto;
 import nl.rls.composer.rest.dto.TrainCompositionDto;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
-import org.dozer.loader.api.FieldsMappingOptions;
 import org.dozer.loader.api.TypeMappingOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -22,13 +26,18 @@ public class TrainCompositionDtoMapper {
         DozerBeanMapper mapper = new DozerBeanMapper();
         BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
             protected void configure() {
-                mapping(TrainComposition.class, TrainCompositionDto.class, TypeMappingOptions.oneWay(), TypeMappingOptions.mapNull(false))
-                        .fields("rollingStock", "rollingStock", FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.RollingStockConverter"));
-
+                mapping(TrainComposition.class, TrainCompositionDto.class, TypeMappingOptions.oneWay(), TypeMappingOptions.mapNull(false));
             }
         };
         mapper.addMapping(mappingBuilder);
         TrainCompositionDto dto = mapper.map(entity, TrainCompositionDto.class);
+
+        List<RollingStockDto> rollingStockDtos = new ArrayList<RollingStockDto>();
+        for (RollingStock rollingStock : entity.getRollingStock()) {
+            RollingStockDto rollingStockDto = RollingStockDtoMapper.map(rollingStock);
+            rollingStockDtos.add(rollingStockDto);
+        }
+        dto.setRollingStock(rollingStockDtos);
 
 //        dto.add(linkTo(methodOn(WagonInTrainController.class).getAllWagonInTrain(entity.getId())).withRel("wagons"));
 //        dto.add(linkTo(methodOn(TractionInTrainController.class).getAllTractionInTrain(entity.getId())).withRel("tractions"));
