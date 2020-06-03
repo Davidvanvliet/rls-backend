@@ -1,11 +1,15 @@
 package nl.rls.composer.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
+import nl.rls.composer.domain.*;
+import nl.rls.composer.repository.DangerGoodsTypeRepository;
+import nl.rls.composer.rest.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,15 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
-import nl.rls.composer.domain.TrainComposition;
-import nl.rls.composer.domain.Wagon;
-import nl.rls.composer.domain.WagonInTrain;
 import nl.rls.composer.domain.code.BrakeType;
 import nl.rls.composer.repository.TrainCompositionRepository;
 import nl.rls.composer.repository.WagonRepository;
-import nl.rls.composer.rest.dto.TrainCompositionDto;
-import nl.rls.composer.rest.dto.WagonInTrainAddDto;
-import nl.rls.composer.rest.dto.WagonInTrainDto;
 import nl.rls.composer.rest.dto.mapper.TrainCompositionDtoMapper;
 import nl.rls.composer.rest.dto.mapper.WagonInTrainDtoMapper;
 import nl.rls.composer.service.TrainCompositionService;
@@ -45,12 +43,14 @@ public class WagonInTrainController {
     private final WagonRepository wagonRepository;
     private final TrainCompositionService trainCompositionService;
     private final TrainCompositionRepository trainCompositionRepository;
+    private final DangerGoodsTypeRepository dangerGoodsTypeRepository;
 
-    public WagonInTrainController(SecurityContext securityContext, WagonRepository wagonRepository, TrainCompositionService trainCompositionService, TrainCompositionRepository trainCompositionRepository) {
+    public WagonInTrainController(SecurityContext securityContext, WagonRepository wagonRepository, TrainCompositionService trainCompositionService, TrainCompositionRepository trainCompositionRepository, DangerGoodsTypeRepository dangerGoodsTypeRepository) {
         this.securityContext = securityContext;
         this.wagonRepository = wagonRepository;
         this.trainCompositionService = trainCompositionService;
         this.trainCompositionRepository = trainCompositionRepository;
+        this.dangerGoodsTypeRepository = dangerGoodsTypeRepository;
     }
 
     @GetMapping(value = "/{trainCompositionId}/wagons", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -94,6 +94,19 @@ public class WagonInTrainController {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find wagon with id %d", wagonId)));
 
         WagonInTrain wagonInTrain = new WagonInTrain();
+        if (dto.getDangerGoodsInWagonPostDtos() != null) {
+            for (DangerGoodsInWagonPostDto dangerGoodsInWagonPostDto : dto.getDangerGoodsInWagonPostDtos()) {
+                int dangerGoodsTypeId = DecodePath.decodeInteger(dangerGoodsInWagonPostDto.getDangerGoodsTypeUrl(), "dangergoodstypes");
+                DangerGoodsType dangerGoodsType = dangerGoodsTypeRepository.findById(dangerGoodsTypeId).orElseThrow(() -> new EntityNotFoundException(String.format("Could not find dangerous goods type with id %d", dangerGoodsTypeId)));
+                wagonInTrain.addDangerGoodsInWagon(new DangerGoodsInWagon(
+                        dangerGoodsInWagonPostDto.getId(),
+                        dangerGoodsType,
+                        wagonInTrain,
+                        dangerGoodsInWagonPostDto.getDangerousGoodsWeight(),
+                        dangerGoodsInWagonPostDto.getDangerousGoodsVolume())
+                );
+            }
+        }
         wagonInTrain.setOwnerId(ownerId);
         wagonInTrain.setWagon(wagon);
         wagonInTrain.setPosition(dto.getPosition());
