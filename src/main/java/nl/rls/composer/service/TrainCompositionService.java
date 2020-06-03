@@ -96,7 +96,7 @@ public class TrainCompositionService {
         if (!trainComposition.hasRollingStock(rollingStockId)) {
             throw new RollingStockNotInCompositionException(rollingStockId);
         }
-        if (newPosition >= trainComposition.getRollingStockCount()) {
+        if (newPosition >= trainComposition.getNumberOfVehicles()) {
             throw new NewRollingStockPositionOutOfBoundsException();
         }
         RollingStock rollingStock = trainComposition.getRollingStock(rollingStockId);

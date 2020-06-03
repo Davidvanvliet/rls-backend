@@ -66,12 +66,6 @@ public class TractionInTrain extends RollingStock {
     }
 
     @Override
-    // Traction weight / aantal assen
-    public int getMaxAxleWeight() {
-        return 0;
-    }
-
-    @Override
     public int getMaxSpeed() {
         return 0;
     }

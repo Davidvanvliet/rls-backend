@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-// TODO rounding of numbers by divinding
+
 /**
  * @author berend.wilkens
  * <p>
@@ -61,7 +61,7 @@ public class TrainComposition extends OwnedEntity {
         return false;
     }
 
-    public boolean containsDangerousGoods() {
+    public boolean getContainsDangerousGoods() {
         for (RollingStock stock : rollingStock) {
             if (stock.containsDangerousGoods()) {
                 return true;
@@ -73,7 +73,7 @@ public class TrainComposition extends OwnedEntity {
     /**
      * The sum of the weight of the train, including load in kilos
      */
-    public int getTotalWeight() {
+    public int getWeight() {
         int trainWeight = 0;
         for (RollingStock stock : rollingStock) {
             trainWeight += stock.getTotalWeight();
@@ -85,7 +85,7 @@ public class TrainComposition extends OwnedEntity {
      * The calculated Length of a train (sum of all length over buffer of the wagons
      * and traction units). Expressed in Meters
      */
-    public int getTrainLength() {
+    public int getLength() {
         double trainLength = 0;
         for (RollingStock stock : rollingStock) {
             trainLength += stock.getLength();
@@ -93,7 +93,7 @@ public class TrainComposition extends OwnedEntity {
         return Math.toIntExact(Math.round(trainLength / 100));
     }
 
-    public int getRollingStockCount() {
+    public int getNumberOfVehicles() {
         return rollingStock.size();
     }
 
@@ -105,8 +105,12 @@ public class TrainComposition extends OwnedEntity {
         return numberOfAxles;
     }
 
-    public int getTrainMaxSpeed() {
-        List<RollingStock> stock = rollingStock.stream().sorted(Comparator.comparingInt(RollingStock::getMaxSpeed)).collect(Collectors.toList());
+    public int getMaxSpeed() {
+        List<RollingStock> stock = rollingStock
+                .stream()
+                .sorted(Comparator.comparingInt(RollingStock::getMaxSpeed))
+                .filter((rollingStock1 -> rollingStock1.getMaxSpeed() != 0))
+                .collect(Collectors.toList());
         if (stock.size() == 0) {
             return 0;
         }

@@ -63,7 +63,9 @@ public abstract class RollingStock {
     /**
      * @return max weight the axle can have
      */
-    public abstract int getMaxAxleWeight();
+    public int getMaxAxleWeight() {
+        return Math.floorDiv(getTotalWeight(), getNumberOfAxles());
+    }
 
     /**
      * @return max speed in km/h
