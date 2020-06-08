@@ -33,6 +33,13 @@ public class DangerGoodsInWagon {
      */
     private Float dangerousGoodsVolume;
 
+    public DangerGoodsInWagon(DangerGoodsInWagon dangerGoodsInWagon) {
+        this.dangerGoodsType = dangerGoodsInWagon.dangerGoodsType;
+        this.wagonInTrain = dangerGoodsInWagon.wagonInTrain;
+        this.dangerousGoodsWeight = dangerGoodsInWagon.dangerousGoodsWeight;
+        this.dangerousGoodsVolume = dangerGoodsInWagon.dangerousGoodsVolume;
+    }
+
 
     public DangerGoodsInWagon(DangerGoodsType dangerGoodsType, WagonInTrain wagonInTrain, int dangerousGoodsWeight, Float dangerousGoodsVolume) {
         this.dangerGoodsType = dangerGoodsType;
