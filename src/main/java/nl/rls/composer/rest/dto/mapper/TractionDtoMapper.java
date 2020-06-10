@@ -6,7 +6,6 @@ import nl.rls.composer.rest.dto.TractionCreateDto;
 import nl.rls.composer.rest.dto.TractionDto;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
-import org.dozer.loader.api.FieldsMappingOptions;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -29,7 +28,20 @@ public class TractionDtoMapper {
 
     public static Traction map(TractionCreateDto dto) {
         DozerBeanMapper mapper = new DozerBeanMapper();
-        BeanMappingBuilder mappingBuilder = new BeanMappingBuilder(){
+        BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
+            @Override
+            protected void configure() {
+
+            }
+        };
+        mapper.addMapping(mappingBuilder);
+        Traction entity = mapper.map(dto, Traction.class);
+        return entity;
+    }
+
+    public static Traction map(TractionDto dto) {
+        DozerBeanMapper mapper = new DozerBeanMapper();
+        BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
             @Override
             protected void configure() {
 

@@ -1,6 +1,6 @@
 package nl.rls.composer.rest.dto.mapper;
 
-import nl.rls.composer.controller.WagonInTrainController;
+import nl.rls.composer.controller.RollingStockController;
 import nl.rls.composer.domain.DangerGoodsInWagon;
 import nl.rls.composer.domain.WagonInTrain;
 import nl.rls.composer.rest.dto.DangerGoodsInWagonDto;
@@ -37,9 +37,22 @@ public class WagonInTrainDtoMapper {
             dtoList.add(dangerGoodsInWagonDto);
         }
         dto.setDangerGoods(dtoList);
-
-        dto.add(linkTo(methodOn(WagonInTrainController.class).getWagonInTrain(entity.getTrainComposition().getId(), entity.getId())).withSelfRel());
         return dto;
+    }
+
+    public static WagonInTrain map(WagonInTrainDto dto) {
+        DozerBeanMapper mapper = new DozerBeanMapper();
+        BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
+            protected void configure() {
+                mapping(WagonInTrainDto.class, WagonInTrain.class)
+                        .fields("wagon", "wagon",
+                                FieldsMappingOptions.customConverter("nl.rls.composer.rest.dto.converter.WagonConverter"))
+                ;
+            }
+        };
+        mapper.addMapping(mappingBuilder);
+
+        return mapper.map(dto, WagonInTrain.class);
     }
 
 }
