@@ -3,17 +3,13 @@ package nl.rls.composer.rest.dto.mapper;
 import nl.rls.composer.controller.RollingStockController;
 import nl.rls.composer.controller.TrainCompositionController;
 import nl.rls.composer.domain.JourneySection;
-import nl.rls.composer.domain.RollingStock;
 import nl.rls.composer.domain.TrainComposition;
 import nl.rls.composer.rest.dto.JourneySectionPostDto;
-import nl.rls.composer.rest.dto.RollingStockDto;
 import nl.rls.composer.rest.dto.TrainCompositionDto;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
+import org.dozer.loader.api.FieldsMappingOptions;
 import org.dozer.loader.api.TypeMappingOptions;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
