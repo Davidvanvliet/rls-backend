@@ -13,13 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class WagonInTrainAddDto {
-    private int position;
+public class WagonInTrainPostDto extends RollingStockPostDto {
     private String brakeType;
     @Min(0)
     @Max(999999)
     private int totalLoadWeight;
-    private String wagonUrl;
     private String breakTypeUrl;
     private List<DangerGoodsInWagonPostDto> dangerGoodsInWagonPostDtos;
 }

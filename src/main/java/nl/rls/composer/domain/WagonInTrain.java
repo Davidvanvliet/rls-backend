@@ -1,5 +1,6 @@
 package nl.rls.composer.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,80 +11,85 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("wagon")
 @NoArgsConstructor
 @Getter
 @Setter
-public class WagonInTrain extends OwnedEntity {
-    /**
-     * Identifies the position of a wagon within a train.
-     * Sequential number starting with the first wagon at the front of train as N°1.
-     */
-    private int position;
+public class WagonInTrain extends RollingStock {
     /**
      * Actual wagon parameters, dependent on load or damage. This group and its elements are optional (contract defines what IM requires). But if there is dangerous goods in the train, then this group is mandatory.
      */
     private BrakeType brakeType;
+
     private int totalLoadWeight;
-    //	@ManyToOne
-//	private ExceptionalGaugingProfile exceptionalGaugingProfile;
-//	@ManyToOne
-//	private ExceptionalGaugingIdent exceptionalGaugingIdent;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "wagon_in_train_id")
-    private List<DangerGoodsInWagon> dangerGoodsInWagons = new ArrayList<DangerGoodsInWagon>();
-    //	@OneToMany
-//	private List<InfoOnGoodsShapeTypeDanger> infoOnGoodsShapeTypeDanger;
-//	@ManyToMany
-//	private List<RestrictionCode> restrictions;
-    @ManyToOne
-    private Wagon wagon;
-    @ManyToOne
-    private TrainComposition trainComposition;
+    private List<DangerGoodsInWagon> dangerGoodsInWagons = new ArrayList<>();
 
-    public DangerGoodsInWagon getDangerGoodsInWagonById(Integer dangerGoodsInWagonId) {
-        for (DangerGoodsInWagon diw : dangerGoodsInWagons) {
-            if (diw.getId() == dangerGoodsInWagonId) {
-                return diw;
-            }
+    @ManyToOne(optional = false)
+    private Wagon wagon;
+
+    public WagonInTrain(@NotNull WagonInTrain wagonInTrain) {
+        this.brakeType = wagonInTrain.brakeType;
+        this.totalLoadWeight = wagonInTrain.totalLoadWeight;
+        this.wagon = wagonInTrain.wagon;
+    }
+
+    @Override
+    public Long getStockIdentifier() {
+        return Long.parseLong(wagon.getNumberFreight());
+    }
+
+    @Override
+    public boolean isGaugedExceptional() {
+        return false;
+    }
+
+    @Override
+    public boolean containsDangerousGoods() {
+        return !dangerGoodsInWagons.isEmpty();
+    }
+
+    @Override
+    public int getTotalWeight() {
+        return wagon.getWagonWeightEmpty() + totalLoadWeight;
+    }
+
+    @Override
+    public int getLoadWeight() {
+        return totalLoadWeight;
+    }
+    @Override
+    public int getLength() {
+        return wagon.getLengthOverBuffers();
+    }
+
+    @Override
+    public int getNumberOfAxles() {
+        return wagon.getWagonNumberOfAxles();
+    }
+
+    @Override
+    public int getMaxSpeed() {
+        return wagon.getMaxSpeed();
+    }
+
+    @Override
+    public RollingStock clone() {
+        WagonInTrain wagonInTrain;
+        try {
+            wagonInTrain = (WagonInTrain) super.clone();
+        } catch (CloneNotSupportedException e) {
+            wagonInTrain = new WagonInTrain(this);
         }
-        return null;
+        for (DangerGoodsInWagon dangerGoodsInWagon : this.dangerGoodsInWagons) {
+            wagonInTrain.addDangerGoodsInWagon(dangerGoodsInWagon.clone());
+        }
+        return wagonInTrain;
     }
 
     public void addDangerGoodsInWagon(DangerGoodsInWagon dangerGoodsInWagon) {
-        dangerGoodsInWagons.add(dangerGoodsInWagon);
-
+        this.dangerGoodsInWagons.add(dangerGoodsInWagon);
     }
-
-    public void removeDangerGoodsById(int dangerGoodsInWagonId) {
-        DangerGoodsInWagon dangerGoodsInWagon = getDangerGoodsInWagonById(dangerGoodsInWagonId);
-        if (dangerGoodsInWagon != null) {
-            dangerGoodsInWagons.remove(dangerGoodsInWagon);
-        }
-
-    }
-
-    public Integer getWeight() {
-        int weight = 0;
-        weight += totalLoadWeight;
-        if (wagon != null) {
-            weight += wagon.getWagonWeightEmpty();
-        }
-        return weight;
-    }
-
-    public Integer getNumberOfAxles() {
-        if (wagon != null) {
-            return wagon.getWagonNumberOfAxles();
-        }
-        return 0;
-    }
-
-    public Integer getMaxSpeed() {
-        if (wagon != null) {
-            return wagon.getMaxSpeed();
-        }
-        return Integer.MAX_VALUE;
-    }
-
-
 }
