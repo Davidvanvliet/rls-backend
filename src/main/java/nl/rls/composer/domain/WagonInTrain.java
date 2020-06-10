@@ -34,9 +34,6 @@ public class WagonInTrain extends RollingStock {
         this.brakeType = wagonInTrain.brakeType;
         this.totalLoadWeight = wagonInTrain.totalLoadWeight;
         this.wagon = wagonInTrain.wagon;
-        for (DangerGoodsInWagon dangerGoodsInWagon : wagonInTrain.dangerGoodsInWagons) {
-            this.addDangerGoodsInWagon(dangerGoodsInWagon.clone());
-        }
     }
 
     @Override
@@ -80,7 +77,16 @@ public class WagonInTrain extends RollingStock {
 
     @Override
     public RollingStock clone() {
-        return new WagonInTrain(this);
+        WagonInTrain wagonInTrain;
+        try {
+            wagonInTrain = (WagonInTrain) super.clone();
+        } catch (CloneNotSupportedException e) {
+            wagonInTrain = new WagonInTrain(this);
+        }
+        for (DangerGoodsInWagon dangerGoodsInWagon : this.dangerGoodsInWagons) {
+            wagonInTrain.addDangerGoodsInWagon(dangerGoodsInWagon.clone());
+        }
+        return wagonInTrain;
     }
 
     public void addDangerGoodsInWagon(DangerGoodsInWagon dangerGoodsInWagon) {

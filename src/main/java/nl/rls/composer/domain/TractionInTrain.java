@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 @Setter
 @DiscriminatorValue("traction")
 @EqualsAndHashCode
-public class TractionInTrain extends RollingStock {
+public class TractionInTrain extends RollingStock implements Cloneable {
 
     @ManyToOne(optional = false)
     private Traction traction;
@@ -72,6 +72,10 @@ public class TractionInTrain extends RollingStock {
 
     @Override
     public RollingStock clone() {
-        return new TractionInTrain(this);
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return new TractionInTrain(this);
+        }
     }
 }

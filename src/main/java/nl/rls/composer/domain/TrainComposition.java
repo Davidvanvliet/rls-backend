@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TrainComposition extends OwnedEntity {
+public class TrainComposition extends OwnedEntity implements Cloneable {
 
     private String brakeType;
     /**
@@ -48,11 +48,6 @@ public class TrainComposition extends OwnedEntity {
     public TrainComposition(@NotNull TrainComposition trainComposition) {
         this.brakeType = trainComposition.brakeType;
         this.livestockOrPeopleIndicator = trainComposition.livestockOrPeopleIndicator;
-        for (RollingStock stock : trainComposition.rollingStock) {
-            RollingStock rollingStock = stock.clone();
-            rollingStock.setTrainComposition(this);
-            addRollingStock(rollingStock);
-        }
         this.journeySection = trainComposition.journeySection;
     }
 
@@ -162,7 +157,21 @@ public class TrainComposition extends OwnedEntity {
         return null;
     }
 
+    @Override
     public TrainComposition clone() {
-        return new TrainComposition(this);
+        TrainComposition trainComposition;
+        try {
+            trainComposition = (TrainComposition) super.clone();
+        } catch (CloneNotSupportedException e) {
+            trainComposition = new TrainComposition(this);
+        }
+        for (RollingStock stock : this.rollingStock) {
+            try {
+                trainComposition.addRollingStock(stock.clone());
+            } catch (CloneNotSupportedException e) {
+                throw new IllegalStateException("Cloning failed!");
+            }
+        }
+        return trainComposition;
     }
 }

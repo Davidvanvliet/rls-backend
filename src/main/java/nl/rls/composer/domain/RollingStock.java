@@ -10,7 +10,7 @@ import javax.persistence.*;
 @DiscriminatorColumn(name = "stock_type")
 @Getter
 @Setter
-public abstract class RollingStock {
+public abstract class RollingStock implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -76,5 +76,7 @@ public abstract class RollingStock {
     /**
      * @return cloned version of rolling stock
      */
-    public abstract RollingStock clone();
+    public RollingStock clone() throws CloneNotSupportedException {
+        return (RollingStock) super.clone();
+    }
 }

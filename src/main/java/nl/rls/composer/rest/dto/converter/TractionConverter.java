@@ -9,7 +9,7 @@ public class TractionConverter implements CustomConverter {
     @Override
     public Object convert(Object dto, Object entity, Class<?> destinationClass,
                           Class<?> sourceClass) {
-        if (sourceClass == TractionDto.class) {
+        if (entity instanceof TractionDto) {
             return TractionDtoMapper.map((TractionDto) entity);
         }
         return TractionDtoMapper.map((Traction) entity);

@@ -15,7 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DangerGoodsInWagon {
+public class DangerGoodsInWagon implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -49,7 +49,11 @@ public class DangerGoodsInWagon {
     }
 
     public DangerGoodsInWagon clone() {
-        return new DangerGoodsInWagon(this);
+        try {
+            return (DangerGoodsInWagon) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return new DangerGoodsInWagon(this);
+        }
     }
 
 }
