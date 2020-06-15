@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 
+import nl.rls.config.GetS3Bucket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,7 @@ public class Main {
 
     public static void main(String[] args) {
         String sqlURL = System.getenv("JDBC_DATABASE_URL");
+        System.out.println("THE DATABASE URL IS " + GetS3Bucket.getConnectionStringFromS3Bucket());
         log.info("=== database url === " + sqlURL);
         SpringApplication.run(Main.class, args);
     }
