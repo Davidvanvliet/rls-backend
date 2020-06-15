@@ -1,5 +1,6 @@
 package nl.rls.config;
 
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
@@ -15,11 +16,13 @@ public class GetS3Bucket {
 
     public static String getConnectionStringFromS3Bucket() {
         String bucketName = System.getenv("S3_BUCKET_NAME");
-        String key = "S3_BUCKET_KEY";
+        String key = System.getenv("S3_BUCKET_KEY");
+        System.out.println("S3_BUCKET_NAME " + bucketName);
+        System.out.println("S3_BUCKET_KEY " + key);
         S3Object fullObject;
         try {
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                    .withCredentials(new ProfileCredentialsProvider())
+                    .withCredentials(InstanceProfileCredentialsProvider.getInstance())
                     .withRegion(Regions.EU_WEST_1)
                     .build();
             fullObject = s3Client.getObject(new GetObjectRequest(bucketName, key));
