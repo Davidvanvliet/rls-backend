@@ -19,8 +19,8 @@ public class GetS3Bucket {
         S3Object fullObject;
         try {
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                    .withRegion(Regions.EU_WEST_1)
                     .withCredentials(new ProfileCredentialsProvider())
+                    .withRegion(Regions.EU_WEST_1)
                     .build();
             fullObject = s3Client.getObject(new GetObjectRequest(bucketName, key));
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fullObject.getObjectContent()));
