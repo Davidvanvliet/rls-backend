@@ -6,6 +6,9 @@ phases:
       docker: 18
       java: corretto8
 
+
+
+
   build:
     commands:
       - echo Build started on `date`
