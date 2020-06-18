@@ -5,9 +5,7 @@ phases:
     runtime-versions:
       docker: 18
       java: corretto8
-
   build:
-
     commands:
       - echo Build started on `date`
       - docker-compose up -d
