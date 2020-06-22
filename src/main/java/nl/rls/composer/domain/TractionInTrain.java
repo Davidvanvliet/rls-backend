@@ -71,6 +71,11 @@ public class TractionInTrain extends RollingStock implements Cloneable {
     }
 
     @Override
+    public int getBrakeWeight() {
+        return traction.getBrakeWeightG();
+    }
+
+    @Override
     public RollingStock clone() {
         try {
             return super.clone();

@@ -76,6 +76,19 @@ public class WagonInTrain extends RollingStock {
     }
 
     @Override
+    public int getBrakeWeight() {
+        switch (brakeType) {
+            case G:
+                return wagon.getBrakeWeightG();
+            case P:
+                return wagon.getBrakeWeightP();
+            case X:
+            default:
+                return 0;
+        }
+    }
+
+    @Override
     public RollingStock clone() {
         WagonInTrain wagonInTrain;
         try {

@@ -72,6 +72,11 @@ public abstract class RollingStock implements Cloneable {
      */
     public abstract int getMaxSpeed();
 
+    /**
+     * @return The correct brake weight
+     */
+    public abstract int getBrakeWeight();
+
 
     /**
      * @return cloned version of rolling stock

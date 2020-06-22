@@ -112,8 +112,11 @@ public class TrainComposition extends OwnedEntity implements Cloneable {
     }
 
     public Integer getBrakeWeight() {
-        //TODO: verder uitwerken
-        return 100;
+        int brakeWeight = 0;
+        for (RollingStock stock : rollingStock) {
+            brakeWeight += stock.getBrakeWeight();
+        }
+        return brakeWeight;
     }
 
     public Integer getMaxAxleWeight() {
