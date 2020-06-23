@@ -15,11 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Setter
 public class TractionCreateDto {
     private String tractionType;
-    @Size(min = 5, max = 12, message
-            = "locoNumber must be between 5 and 12 characters")
     private Long locoTypeNumber;
-    @Size(min = 4, max = 12, message
-            = "locoNumber must be between 4 and 12 characters")
     private String locoNumber;
     private String typeName;
     private String code;
