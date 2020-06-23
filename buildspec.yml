@@ -22,4 +22,3 @@ artifacts:
     - rls_ci-0.0.1-SNAPSHOT.jar
     - .ebextensions/*
     - .platform/**/*
-  name: myname-$(date +%Y-%m-%d)
