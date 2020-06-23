@@ -16,7 +16,9 @@ phases:
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
       - echo Build completed on `date`
       - mvn package
+      - cp target/*.jar rls_ci-0.0.1-SNAPSHOT.jar
 artifacts:
   files:
-    - target/*.jar
-  discard-paths: yes
+    - rls_ci-0.0.1-SNAPSHOT.jar
+    - .ebextensions/*
+    - .platform/**/*

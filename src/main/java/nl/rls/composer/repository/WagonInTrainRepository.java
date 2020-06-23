@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface WagonInTrainRepository extends CrudRepository<WagonInTrain, Integer> {
 
-    Optional<WagonInTrain> findByIdAndOwnerId(Integer id, Integer ownerId);
+    Optional<WagonInTrain> findById(Integer id);
 }
