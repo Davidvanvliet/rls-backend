@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface TrainCompositionRepository extends CrudRepository<TrainComposition, Integer> {
 
-    Optional<TrainComposition> findByIdAndOwnerId(Integer id, int ownerId);
+    Optional<TrainComposition> findByIdAndOwnerId(int id, int ownerId);
 
 }
