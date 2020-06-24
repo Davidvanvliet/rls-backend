@@ -17,6 +17,10 @@ phases:
       - echo Build completed on `date`
       - mvn package
       - cp target/*.jar rls_ci-0.0.1-SNAPSHOT.jar
+
+  cache:
+    paths:
+      - '/root/.m2/**/*'
 artifacts:
   files:
     - rls_ci-0.0.1-SNAPSHOT.jar
