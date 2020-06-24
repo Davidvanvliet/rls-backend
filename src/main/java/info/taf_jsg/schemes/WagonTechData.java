@@ -8,23 +8,19 @@
 
 package info.taf_jsg.schemes;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -59,21 +55,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "lengthOverBuffers",
-    "wagonNumberOfAxles",
-    "airBrakeType",
-    "brakingPowerVariationDevice",
-    "airBrakeSpecialCharacteristic",
-    "handBrakeType",
-    "handBrakeBrakedWeight",
-    "normalLoadingGauge",
-    "wagonWeightEmpty",
-    "technicalRestrictions"
+        "lengthOverBuffers",
+        "wagonNumberOfAxles",
+        "airBrakeType",
+        "brakingPowerVariationDevice",
+        "airBrakeSpecialCharacteristic",
+        "handBrakeType",
+        "handBrakeBrakedWeight",
+        "normalLoadingGauge",
+        "wagonWeightEmpty",
+        "technicalRestrictions"
 })
 @XmlRootElement(name = "WagonTechData")
 public class WagonTechData {
@@ -104,223 +98,160 @@ public class WagonTechData {
 
     /**
      * Gets the value of the lengthOverBuffers property.
-     * 
      */
     public int getLengthOverBuffers() {
         return lengthOverBuffers;
     }
 
-    /**
-     * Sets the value of the lengthOverBuffers property.
-     * 
-     */
-    public void setLengthOverBuffers(int value) {
-        this.lengthOverBuffers = value;
+    public WagonTechData setLengthOverBuffers(int lengthOverBuffers) {
+        this.lengthOverBuffers = lengthOverBuffers;
+        return this;
     }
 
     /**
      * Gets the value of the wagonNumberOfAxles property.
-     * 
      */
     public int getWagonNumberOfAxles() {
         return wagonNumberOfAxles;
     }
 
-    /**
-     * Sets the value of the wagonNumberOfAxles property.
-     * 
-     */
-    public void setWagonNumberOfAxles(int value) {
-        this.wagonNumberOfAxles = value;
+    public WagonTechData setWagonNumberOfAxles(int wagonNumberOfAxles) {
+        this.wagonNumberOfAxles = wagonNumberOfAxles;
+        return this;
     }
 
     /**
      * Gets the value of the airBrakeType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getAirBrakeType() {
         return airBrakeType;
     }
 
-    /**
-     * Sets the value of the airBrakeType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAirBrakeType(String value) {
-        this.airBrakeType = value;
+    public WagonTechData setAirBrakeType(String airBrakeType) {
+        this.airBrakeType = airBrakeType;
+        return this;
     }
 
     /**
      * Gets the value of the brakingPowerVariationDevice property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
+     *
+     * @return possible object is
+     * {@link BigInteger }
      */
     public BigInteger getBrakingPowerVariationDevice() {
         return brakingPowerVariationDevice;
     }
 
-    /**
-     * Sets the value of the brakingPowerVariationDevice property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setBrakingPowerVariationDevice(BigInteger value) {
-        this.brakingPowerVariationDevice = value;
+    public WagonTechData setBrakingPowerVariationDevice(BigInteger brakingPowerVariationDevice) {
+        this.brakingPowerVariationDevice = brakingPowerVariationDevice;
+        return this;
     }
 
     /**
      * Gets the value of the airBrakeSpecialCharacteristic property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     * {@link Integer }
      */
     public Integer getAirBrakeSpecialCharacteristic() {
         return airBrakeSpecialCharacteristic;
     }
 
-    /**
-     * Sets the value of the airBrakeSpecialCharacteristic property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setAirBrakeSpecialCharacteristic(Integer value) {
-        this.airBrakeSpecialCharacteristic = value;
+    public WagonTechData setAirBrakeSpecialCharacteristic(Integer airBrakeSpecialCharacteristic) {
+        this.airBrakeSpecialCharacteristic = airBrakeSpecialCharacteristic;
+        return this;
     }
 
     /**
      * Gets the value of the handBrakeType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getHandBrakeType() {
         return handBrakeType;
     }
 
-    /**
-     * Sets the value of the handBrakeType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHandBrakeType(String value) {
-        this.handBrakeType = value;
+    public WagonTechData setHandBrakeType(String handBrakeType) {
+        this.handBrakeType = handBrakeType;
+        return this;
     }
 
     /**
      * Gets the value of the handBrakeBrakedWeight property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     * {@link Integer }
      */
     public Integer getHandBrakeBrakedWeight() {
         return handBrakeBrakedWeight;
     }
 
-    /**
-     * Sets the value of the handBrakeBrakedWeight property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setHandBrakeBrakedWeight(Integer value) {
-        this.handBrakeBrakedWeight = value;
+    public WagonTechData setHandBrakeBrakedWeight(Integer handBrakeBrakedWeight) {
+        this.handBrakeBrakedWeight = handBrakeBrakedWeight;
+        return this;
     }
 
     /**
      * Gets the value of the normalLoadingGauge property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getNormalLoadingGauge() {
         return normalLoadingGauge;
     }
 
-    /**
-     * Sets the value of the normalLoadingGauge property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNormalLoadingGauge(String value) {
-        this.normalLoadingGauge = value;
+    public WagonTechData setNormalLoadingGauge(String normalLoadingGauge) {
+        this.normalLoadingGauge = normalLoadingGauge;
+        return this;
     }
 
     /**
      * Gets the value of the wagonWeightEmpty property.
-     * 
      */
     public int getWagonWeightEmpty() {
         return wagonWeightEmpty;
     }
 
-    /**
-     * Sets the value of the wagonWeightEmpty property.
-     * 
-     */
-    public void setWagonWeightEmpty(int value) {
-        this.wagonWeightEmpty = value;
+    public WagonTechData setWagonWeightEmpty(int wagonWeightEmpty) {
+        this.wagonWeightEmpty = wagonWeightEmpty;
+        return this;
     }
 
     /**
      * Gets the value of the technicalRestrictions property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the technicalRestrictions property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getTechnicalRestrictions().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Integer }
-     * 
-     * 
      */
     public List<Integer> getTechnicalRestrictions() {
         if (technicalRestrictions == null) {
             technicalRestrictions = new ArrayList<Integer>();
         }
         return this.technicalRestrictions;
+    }
+
+    public WagonTechData setTechnicalRestrictions(List<Integer> technicalRestrictions) {
+        this.technicalRestrictions = technicalRestrictions;
+        return this;
     }
 
 }
