@@ -8,13 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
@@ -64,24 +58,41 @@ public class WagonController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<WagonDto> createWagon(@RequestBody @Valid WagonPostDto dto) {
+    public Response<WagonDto> createWagon(@RequestBody @Valid WagonPostDto wagonPostDto) {
         int ownerId = securityContext.getOwnerId();
-        Wagon entity = new Wagon();
-        entity.setOwnerId(ownerId);
-        entity.setNumberFreight(dto.getNumberFreight());
-        entity.setCode(dto.getCode());
-        entity.setBrakeWeightG(dto.getBrakeWeightG());
-        entity.setBrakeWeightP(dto.getBrakeWeightP());
-        entity.setLengthOverBuffers(dto.getLengthOverBuffers());
-        entity.setTypeName(dto.getTypeName());
-        entity.setWagonNumberOfAxles(dto.getNumberOfAxles());
-        entity.setWagonWeightEmpty(dto.getWeightEmpty());
-        entity.setMaxSpeed(dto.getMaxSpeed());
-        wagonRepository.save(entity);
-        WagonDto wagonDto = WagonDtoMapper.map(entity);
+        Wagon wagon = new Wagon();
+        wagon.setOwnerId(ownerId);
+        WagonDto processedWagon = processWagon(wagon, wagonPostDto);
+
         return ResponseBuilder.created()
-                .data(wagonDto)
+                .data(processedWagon)
                 .build();
+    }
+
+    @PutMapping(value = "/{wagonId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<WagonDto> editWagon(@PathVariable Integer wagonId, @RequestBody @Valid WagonPostDto wagonPostDto) {
+        int ownerId = securityContext.getOwnerId();
+        Wagon wagon = wagonRepository.findByIdAndOwnerId(wagonId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find wagon with id %d", wagonId)));
+        WagonDto processedWagon = processWagon(wagon, wagonPostDto);
+
+        return ResponseBuilder.created()
+                .data(processedWagon)
+                .build();
+    }
+
+    private WagonDto processWagon(Wagon wagon, WagonPostDto wagonPostDto) {
+        wagon.setNumberFreight(wagonPostDto.getNumberFreight());
+        wagon.setCode(wagonPostDto.getCode());
+        wagon.setBrakeWeightG(wagonPostDto.getBrakeWeightG());
+        wagon.setBrakeWeightP(wagonPostDto.getBrakeWeightP());
+        wagon.setLengthOverBuffers(wagonPostDto.getLengthOverBuffers());
+        wagon.setTypeName(wagonPostDto.getTypeName());
+        wagon.setWagonNumberOfAxles(wagonPostDto.getNumberOfAxles());
+        wagon.setWagonWeightEmpty(wagonPostDto.getWeightEmpty());
+        wagon.setMaxSpeed(wagonPostDto.getMaxSpeed());
+        Wagon updatedWagon = wagonRepository.save(wagon);
+        return WagonDtoMapper.map(updatedWagon);
     }
 
 }
