@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import nl.rls.ci.aa.security.SecurityContext;
@@ -38,6 +39,7 @@ public class TractionController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('view:trains')")
     public Response<List<TractionDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
         List<Traction> tractionList = tractionRepository.findByOwnerId(ownerId);
