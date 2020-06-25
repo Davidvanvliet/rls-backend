@@ -39,7 +39,7 @@ public class TractionController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasPermission('view:trains')")
+    @PreAuthorize("hasPermission('read:traction')")
     public Response<List<TractionDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
         List<Traction> tractionList = tractionRepository.findByOwnerId(ownerId);
@@ -53,6 +53,7 @@ public class TractionController {
 
     @GetMapping(value = "/{tractionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('read:traction')")
     public Response<TractionDto> getById(@PathVariable int tractionId) {
         int ownerId = securityContext.getOwnerId();
         Traction traction = tractionRepository.findByIdAndOwnerId(tractionId, ownerId)
@@ -65,6 +66,7 @@ public class TractionController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasPermission('write:traction')")
     public Response<TractionDto> createTraction(@RequestBody @Valid TractionCreateDto tractionCreateDto) {
         int ownerId = securityContext.getOwnerId();
         Traction traction = new Traction();
@@ -77,6 +79,7 @@ public class TractionController {
     }
 
     @PutMapping(value = "/{tractionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasPermission('read:traction')")
     public Response<TractionDto> updateTraction(@PathVariable Integer tractionId, @RequestBody @Valid TractionCreateDto tractionCreateDto) {
         int ownerId = securityContext.getOwnerId();
         Traction traction = tractionRepository.findByIdAndOwnerId(tractionId, ownerId)

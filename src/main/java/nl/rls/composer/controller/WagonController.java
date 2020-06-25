@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import nl.rls.ci.aa.security.SecurityContext;
@@ -33,6 +34,7 @@ public class WagonController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('read:wagon')")
     public Response<List<WagonDto>> getAll() {
         int ownerId = securityContext.getOwnerId();
         List<Wagon> wagons = wagonRepository.findByOwnerId(ownerId);
@@ -46,6 +48,7 @@ public class WagonController {
 
     @GetMapping(value = "/{wagonId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('read:wagon')")
     public Response<WagonDto> getById(@PathVariable int wagonId) {
         int ownerId = securityContext.getOwnerId();
         Wagon wagon = wagonRepository.findByIdAndOwnerId(wagonId, ownerId)
@@ -58,6 +61,7 @@ public class WagonController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasPermission('write:wagon')")
     public Response<WagonDto> createWagon(@RequestBody @Valid WagonPostDto wagonPostDto) {
         int ownerId = securityContext.getOwnerId();
         Wagon wagon = new Wagon();
@@ -70,6 +74,7 @@ public class WagonController {
     }
 
     @PutMapping(value = "/{wagonId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasPermission('write:wagon')")
     public Response<WagonDto> editWagon(@PathVariable Integer wagonId, @RequestBody @Valid WagonPostDto wagonPostDto) {
         int ownerId = securityContext.getOwnerId();
         Wagon wagon = wagonRepository.findByIdAndOwnerId(wagonId, ownerId)

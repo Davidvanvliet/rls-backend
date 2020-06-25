@@ -5,6 +5,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,6 +38,7 @@ public class TrainCompositionController {
 
     @GetMapping(value = "/{trainCompositionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('read:traincomposition')")
     public Response<TrainCompositionDto> getById(@PathVariable int trainCompositionId) {
         int ownerId = securityContext.getOwnerId();
         TrainComposition trainComposition = trainCompositionRepository.findByIdAndOwnerId(trainCompositionId, ownerId)
@@ -49,6 +51,7 @@ public class TrainCompositionController {
 
     @PutMapping(value = "/{trainCompositionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasPermission('write:traincomposition')")
     public Response<TrainCompositionDto> update(@PathVariable int trainCompositionId,
                                                 @RequestBody @Valid TrainCompositionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
