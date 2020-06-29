@@ -1,7 +1,7 @@
 package nl.rls.composer.controller;
 
 import io.swagger.annotations.ApiOperation;
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.*;
@@ -15,6 +15,7 @@ import nl.rls.util.ResponseBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -49,6 +50,7 @@ public class TrainController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasPermission('read:train')")
     public Response<List<TrainDto>> getAll() {
+        org.springframework.security.core.context.SecurityContext sc = SecurityContextHolder.getContext();
         int ownerId = securityContext.getOwnerId();
         List<Train> trainList = trainRepository.findByOwnerId(ownerId);
         List<TrainDto> trainDtoList = trainList.stream()

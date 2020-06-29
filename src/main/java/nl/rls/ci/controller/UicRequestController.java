@@ -1,7 +1,7 @@
 package nl.rls.ci.controller;
 
 import io.swagger.annotations.ApiOperation;
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.domain.UicRequest;
 import nl.rls.ci.repository.UicRequestResource;
 import nl.rls.ci.rest.dto.UicRequestDto;

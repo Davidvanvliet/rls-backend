@@ -1,6 +1,6 @@
 package nl.rls.ci.controller;
 
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.domain.XmlMessage;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.repository.XmlMessageRepository;

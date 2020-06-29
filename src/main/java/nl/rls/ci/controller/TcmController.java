@@ -1,7 +1,7 @@
 package nl.rls.ci.controller;
 
 import io.swagger.annotations.ApiOperation;
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.domain.CiMessage;
 import nl.rls.ci.service.CiService;
 import nl.rls.ci.url.BaseURL;
