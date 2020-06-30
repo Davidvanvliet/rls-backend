@@ -1,5 +1,15 @@
 package nl.rls.composer.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.Wagon;
@@ -9,24 +19,11 @@ import nl.rls.composer.rest.dto.WagonPostDto;
 import nl.rls.composer.rest.dto.mapper.WagonDtoMapper;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.Optional;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + "/wagons")
 public class WagonController {
     private final WagonRepository wagonRepository;
-
     private final SecurityContext securityContext;
 
     public WagonController(WagonRepository wagonRepository, SecurityContext securityContext) {
@@ -61,22 +58,41 @@ public class WagonController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<WagonDto> create(@RequestBody @Valid WagonPostDto dto) {
+    public Response<WagonDto> createWagon(@RequestBody @Valid WagonPostDto wagonPostDto) {
         int ownerId = securityContext.getOwnerId();
-        Wagon entity = new Wagon();
-        entity.setOwnerId(ownerId);
-        entity.setNumberFreight(dto.getNumberFreight());
-        entity.setCode(dto.getCode());
-        entity.setHandBrakeBrakedWeight(dto.getHandBrakeBrakedWeight());
-        entity.setLengthOverBuffers(dto.getLengthOverBuffers());
-        entity.setTypeName(dto.getName());
-        entity.setWagonNumberOfAxles(dto.getWagonNumberOfAxles());
-        entity.setWagonWeightEmpty(dto.getWagonWeightEmpty());
-        wagonRepository.save(entity);
-        WagonDto wagonDto = WagonDtoMapper.map(entity);
+        Wagon wagon = new Wagon();
+        wagon.setOwnerId(ownerId);
+        WagonDto processedWagon = processWagon(wagon, wagonPostDto);
+
         return ResponseBuilder.created()
-                .data(wagonDto)
+                .data(processedWagon)
                 .build();
+    }
+
+    @PutMapping(value = "/{wagonId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<WagonDto> editWagon(@PathVariable Integer wagonId, @RequestBody @Valid WagonPostDto wagonPostDto) {
+        int ownerId = securityContext.getOwnerId();
+        Wagon wagon = wagonRepository.findByIdAndOwnerId(wagonId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find wagon with id %d", wagonId)));
+        WagonDto processedWagon = processWagon(wagon, wagonPostDto);
+
+        return ResponseBuilder.created()
+                .data(processedWagon)
+                .build();
+    }
+
+    private WagonDto processWagon(Wagon wagon, WagonPostDto wagonPostDto) {
+        wagon.setNumberFreight(wagonPostDto.getNumberFreight());
+        wagon.setCode(wagonPostDto.getCode());
+        wagon.setBrakeWeightG(wagonPostDto.getBrakeWeightG());
+        wagon.setBrakeWeightP(wagonPostDto.getBrakeWeightP());
+        wagon.setLengthOverBuffers(wagonPostDto.getLengthOverBuffers());
+        wagon.setTypeName(wagonPostDto.getTypeName());
+        wagon.setWagonNumberOfAxles(wagonPostDto.getNumberOfAxles());
+        wagon.setWagonWeightEmpty(wagonPostDto.getWeightEmpty());
+        wagon.setMaxSpeed(wagonPostDto.getMaxSpeed());
+        Wagon updatedWagon = wagonRepository.save(wagon);
+        return WagonDtoMapper.map(updatedWagon);
     }
 
 }

@@ -3,7 +3,7 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
+import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
@@ -11,7 +11,7 @@ import javax.validation.constraints.DecimalMin;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DangerGoodsInWagonDto extends RepresentationModel {
+public class DangerGoodsInWagonDto extends IdentifiableRepresentationModel<DangerGoodsInWagonDto> {
     /**
      * The weight of the dangerous goods in Kilograms
      */

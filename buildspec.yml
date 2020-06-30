@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+      java: corretto8
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - docker-compose up -d
+      - mvn clean verify
+  post_build:
+    commands:
+      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
+      - echo Build completed on `date`
+      - mvn package
+      - cp target/*.jar rls_ci-0.0.1-SNAPSHOT.jar
+
+cache:
+  paths:
+    - '/root/.m2/**/*'
+
+artifacts:
+  files:
+    - rls_ci-0.0.1-SNAPSHOT.jar
+    - .ebextensions/*
+    - .platform/**/*

@@ -3,7 +3,6 @@ package nl.rls.composer.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nl.rls.composer.domain.code.TractionMode;
 import nl.rls.composer.domain.code.TractionType;
 
 import javax.persistence.Entity;
@@ -25,7 +24,7 @@ public class Traction extends OwnedEntity {
      * elements identify the series of the loco, rest can identify the exact
      * individual locomotive.
      */
-    protected String locoTypeNumber;
+    protected Long locoTypeNumber;
     /**
      * Identifies the number of the locomotive, usually the European Vehicle Number
      * on 12N. It is currently not restricted only to numeric values.
@@ -35,7 +34,8 @@ public class Traction extends OwnedEntity {
     private int lengthOverBuffers;
     private int numberOfAxles;
     private int weight;
-    private int brakeWeight;
+    private int brakeWeightG;
+    private int brakeWeightP;
     public Traction(Integer ownerId) {
         super(ownerId);
     }

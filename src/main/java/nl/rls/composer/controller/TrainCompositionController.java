@@ -1,5 +1,18 @@
 package nl.rls.composer.controller;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.composer.domain.TrainComposition;
@@ -9,13 +22,6 @@ import nl.rls.composer.rest.dto.TrainCompositionPostDto;
 import nl.rls.composer.rest.dto.mapper.TrainCompositionDtoMapper;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(BaseURL.BASE_PATH + TrainCompositionController.PATH)

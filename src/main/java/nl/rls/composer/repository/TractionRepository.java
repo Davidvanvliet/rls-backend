@@ -10,4 +10,6 @@ public interface TractionRepository extends CrudRepository<Traction, Integer> {
     Optional<Traction> findByIdAndOwnerId(int id, int ownerId);
 
     List<Traction> findByOwnerId(int ownerId);
+
+    Optional<Traction> findByLocoTypeNumberAndOwnerId(Long locoNumber, int ownerId);
 }

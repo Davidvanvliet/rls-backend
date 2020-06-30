@@ -35,6 +35,8 @@ import javax.xml.validation.Validator;
 import java.io.*;
 import java.util.Date;
 
+
+// TODO clean up this class
 /**
  * @author berend.wilkens Localhost: 145.89.169.134
  */
@@ -84,7 +86,7 @@ public class CiService {
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
             // output pretty printed
-            // jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
             jaxbMarshaller.marshal(trainCompositionXmlMessage, file);
             jaxbMarshaller.marshal(trainCompositionXmlMessage, System.out);
 
