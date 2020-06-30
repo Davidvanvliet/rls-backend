@@ -55,4 +55,22 @@ public class  OwnerService {
                 .map(UserDtoMapper::map)
                 .collect(Collectors.toList());
     }
+
+    public OwnerDto updateOwner(Integer ownerId, String companyCode, List<String> auth0Ids) {
+        Owner owner = ownerRepository.findById(ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find user with id %d.", ownerId)));
+        Company company = getCompany(companyCode);
+        owner.setCompany(company);
+        for (String auth0Id : auth0Ids) {
+            User user = new User(auth0Id);
+            owner.addUser(user);
+        }
+        owner = ownerRepository.save(owner);
+        return OwnerDtoMapper.map(owner);
+    }
+
+    private Company getCompany(String companyCode) {
+        return companyRepository.findByCode(companyCode)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find company with code %s", companyCode)));
+    }
 }

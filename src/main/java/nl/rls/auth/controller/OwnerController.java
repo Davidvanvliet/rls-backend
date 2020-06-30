@@ -38,4 +38,13 @@ public class OwnerController {
                 .data(ownerDto)
                 .build();
     }
+
+    @PutMapping("/{ownerId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Response<OwnerDto> updateOwner(@RequestBody OwnerCreateDto ownerCreateDto, @PathVariable Integer ownerId) {
+        OwnerDto ownerDto = ownerService.updateOwner(ownerId, ownerCreateDto.getCompanyCode(), ownerCreateDto.getAuth0Ids());
+        return ResponseBuilder.accepted()
+                .data(ownerDto)
+                .build();
+    }
 }
