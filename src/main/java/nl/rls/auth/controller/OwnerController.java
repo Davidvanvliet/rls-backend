@@ -33,7 +33,7 @@ public class OwnerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Response<OwnerDto> createOwner(@RequestBody OwnerCreateDto ownerCreateDto) {
-        OwnerDto ownerDto = ownerService.createOwner(ownerCreateDto.getCompanyCode());
+        OwnerDto ownerDto = ownerService.createOwner(ownerCreateDto.getCompanyCode(), ownerCreateDto.getAuth0Ids());
         return ResponseBuilder.created()
                 .data(ownerDto)
                 .build();
