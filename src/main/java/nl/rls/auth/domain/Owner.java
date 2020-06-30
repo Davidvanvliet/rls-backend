@@ -60,4 +60,8 @@ public class Owner {
         }
         this.users.add(user);
     }
+
+    public String getCompanyCode() {
+        return this.getCompany().getCode();
+    }
 }

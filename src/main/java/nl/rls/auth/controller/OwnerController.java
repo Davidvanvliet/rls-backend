@@ -47,4 +47,13 @@ public class OwnerController {
                 .data(ownerDto)
                 .build();
     }
+
+    @GetMapping("/{ownerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<OwnerDto> getOwnerById(@PathVariable Integer ownerId) {
+        OwnerDto ownerDto = ownerService.getOwnerById(ownerId);
+        return ResponseBuilder.accepted()
+                .data(ownerDto)
+                .build();
+    }
 }

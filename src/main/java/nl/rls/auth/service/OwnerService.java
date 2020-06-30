@@ -74,8 +74,19 @@ public class OwnerService {
         return OwnerDtoMapper.map(owner);
     }
 
+    @PreAuthorize("hasPermission('read:user')")
+    public OwnerDto getOwnerById(Integer ownerId) {
+        Owner owner = getOwner(ownerId);
+        return OwnerDtoMapper.map(owner);
+    }
+
     private Company getCompany(String companyCode) {
         return companyRepository.findByCode(companyCode)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find company with code %s", companyCode)));
+    }
+
+    private Owner getOwner(Integer ownerId) {
+       return ownerRepository.findById(ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find user with id %d.", ownerId)));
     }
 }
