@@ -27,3 +27,11 @@ artifacts:
     - rls_ci-0.0.1-SNAPSHOT.jar
     - .ebextensions/*
     - .platform/**/*
+  name: devartifact
+  secondary-artifacts:
+    production:
+      files:
+        - rls_ci-0.0.1-SNAPSHOT.jar
+        - Prod/.ebextensions/*
+        - Prod/.platform/**/*
+      name: prodartifact
