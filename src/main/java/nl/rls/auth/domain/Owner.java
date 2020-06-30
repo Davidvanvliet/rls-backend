@@ -3,6 +3,7 @@ package nl.rls.auth.domain;
 import nl.rls.composer.domain.Company;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,5 +41,23 @@ public class Owner {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Integer getUserCount() {
+        if (this.users == null) {
+            return 0;
+        }
+        return this.users.size();
+    }
+
+    public String getName() {
+        return this.company.getName();
+    }
+
+    public void addUser(User user) {
+        if (this.users == null) {
+            this.users = new ArrayList<>();
+        }
+        this.users.add(user);
     }
 }
