@@ -8,18 +8,14 @@
 
 package info.taf_jsg.schemes;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -34,15 +30,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "wagonNumberFreight",
-    "wagonTrainPosition",
-    "wagonOperationalData",
-    "wagonTechData"
+        "wagonNumberFreight",
+        "wagonTrainPosition",
+        "wagonOperationalData",
+        "wagonTechData"
 })
 @XmlRootElement(name = "WagonData")
 public class WagonData {
@@ -58,90 +52,58 @@ public class WagonData {
 
     /**
      * Gets the value of the wagonNumberFreight property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getWagonNumberFreight() {
         return wagonNumberFreight;
     }
 
-    /**
-     * Sets the value of the wagonNumberFreight property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setWagonNumberFreight(String value) {
-        this.wagonNumberFreight = value;
+    public WagonData setWagonNumberFreight(String wagonNumberFreight) {
+        this.wagonNumberFreight = wagonNumberFreight;
+        return this;
     }
 
     /**
      * Gets the value of the wagonTrainPosition property.
-     * 
      */
     public int getWagonTrainPosition() {
         return wagonTrainPosition;
     }
 
-    /**
-     * Sets the value of the wagonTrainPosition property.
-     * 
-     */
-    public void setWagonTrainPosition(int value) {
-        this.wagonTrainPosition = value;
+    public WagonData setWagonTrainPosition(int wagonTrainPosition) {
+        this.wagonTrainPosition = wagonTrainPosition;
+        return this;
     }
 
     /**
      * Gets the value of the wagonOperationalData property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link WagonOperationalData }
-     *     
+     *
+     * @return possible object is
+     * {@link WagonOperationalData }
      */
     public WagonOperationalData getWagonOperationalData() {
         return wagonOperationalData;
     }
 
-    /**
-     * Sets the value of the wagonOperationalData property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link WagonOperationalData }
-     *     
-     */
-    public void setWagonOperationalData(WagonOperationalData value) {
-        this.wagonOperationalData = value;
+    public WagonData setWagonOperationalData(WagonOperationalData wagonOperationalData) {
+        this.wagonOperationalData = wagonOperationalData;
+        return this;
     }
 
     /**
      * Gets the value of the wagonTechData property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link WagonTechData }
-     *     
+     *
+     * @return possible object is
+     * {@link WagonTechData }
      */
     public WagonTechData getWagonTechData() {
         return wagonTechData;
     }
 
-    /**
-     * Sets the value of the wagonTechData property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link WagonTechData }
-     *     
-     */
-    public void setWagonTechData(WagonTechData value) {
-        this.wagonTechData = value;
+    public WagonData setWagonTechData(WagonTechData wagonTechData) {
+        this.wagonTechData = wagonTechData;
+        return this;
     }
-
 }

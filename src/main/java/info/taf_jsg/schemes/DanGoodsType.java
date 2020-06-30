@@ -8,24 +8,24 @@
 
 package info.taf_jsg.schemes;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * This element indicates the type of a dangerous load
- * 			
- * 
+ *
+ *
  * <p>Java class for DanGoodsType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="DanGoodsType">
  *   &lt;complexContent>
@@ -65,19 +65,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DanGoodsType", propOrder = {
-    "hazardIdentificationNumber",
-    "unNumber",
-    "dangerLabel",
-    "ridClass",
-    "packingGroup",
-    "dangerousGoodsWeight",
-    "dangerousGoodsVolume",
-    "limitedQuantityIndicator"
+        "hazardIdentificationNumber",
+        "unNumber",
+        "dangerLabel",
+        "ridClass",
+        "packingGroup",
+        "dangerousGoodsWeight",
+        "dangerousGoodsVolume",
+        "limitedQuantityIndicator"
 })
 public class DanGoodsType {
 
@@ -102,73 +100,48 @@ public class DanGoodsType {
 
     /**
      * Gets the value of the hazardIdentificationNumber property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getHazardIdentificationNumber() {
         return hazardIdentificationNumber;
     }
 
-    /**
-     * Sets the value of the hazardIdentificationNumber property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHazardIdentificationNumber(String value) {
-        this.hazardIdentificationNumber = value;
+    public DanGoodsType setHazardIdentificationNumber(String hazardIdentificationNumber) {
+        this.hazardIdentificationNumber = hazardIdentificationNumber;
+        return this;
     }
 
     /**
      * Gets the value of the unNumber property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getUNNumber() {
         return unNumber;
     }
 
     /**
-     * Sets the value of the unNumber property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setUNNumber(String value) {
-        this.unNumber = value;
-    }
-
-    /**
      * Gets the value of the dangerLabel property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the dangerLabel property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getDangerLabel().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link String }
-     * 
-     * 
      */
     public List<String> getDangerLabel() {
         if (dangerLabel == null) {
@@ -177,117 +150,85 @@ public class DanGoodsType {
         return this.dangerLabel;
     }
 
+    public DanGoodsType setDangerLabel(List<String> dangerLabel) {
+        this.dangerLabel = dangerLabel;
+        return this;
+    }
+
     /**
      * Gets the value of the ridClass property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getRIDClass() {
         return ridClass;
     }
 
     /**
-     * Sets the value of the ridClass property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRIDClass(String value) {
-        this.ridClass = value;
-    }
-
-    /**
      * Gets the value of the packingGroup property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getPackingGroup() {
         return packingGroup;
     }
 
-    /**
-     * Sets the value of the packingGroup property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPackingGroup(String value) {
-        this.packingGroup = value;
+    public DanGoodsType setPackingGroup(String packingGroup) {
+        this.packingGroup = packingGroup;
+        return this;
     }
 
     /**
      * The weight of the dangerous goods in Kilograms
-     * 					
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     * {@link Integer }
      */
     public Integer getDangerousGoodsWeight() {
         return dangerousGoodsWeight;
     }
 
-    /**
-     * Sets the value of the dangerousGoodsWeight property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setDangerousGoodsWeight(Integer value) {
-        this.dangerousGoodsWeight = value;
+    public DanGoodsType setDangerousGoodsWeight(Integer dangerousGoodsWeight) {
+        this.dangerousGoodsWeight = dangerousGoodsWeight;
+        return this;
     }
 
     /**
      * Gets the value of the dangerousGoodsVolume property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Float }
-     *     
+     *
+     * @return possible object is
+     * {@link Float }
      */
     public Float getDangerousGoodsVolume() {
         return dangerousGoodsVolume;
     }
 
-    /**
-     * Sets the value of the dangerousGoodsVolume property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Float }
-     *     
-     */
-    public void setDangerousGoodsVolume(Float value) {
-        this.dangerousGoodsVolume = value;
+    public DanGoodsType setDangerousGoodsVolume(Float dangerousGoodsVolume) {
+        this.dangerousGoodsVolume = dangerousGoodsVolume;
+        return this;
     }
 
     /**
      * Gets the value of the limitedQuantityIndicator property.
-     * 
      */
     public boolean isLimitedQuantityIndicator() {
         return limitedQuantityIndicator;
     }
 
-    /**
-     * Sets the value of the limitedQuantityIndicator property.
-     * 
-     */
-    public void setLimitedQuantityIndicator(boolean value) {
-        this.limitedQuantityIndicator = value;
+    public DanGoodsType setLimitedQuantityIndicator(boolean limitedQuantityIndicator) {
+        this.limitedQuantityIndicator = limitedQuantityIndicator;
+        return this;
     }
 
+    public DanGoodsType setUnNumber(String unNumber) {
+        this.unNumber = unNumber;
+        return this;
+    }
+
+    public DanGoodsType setRidClass(String ridClass) {
+        this.ridClass = ridClass;
+        return this;
+    }
 }
