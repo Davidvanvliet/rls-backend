@@ -13,7 +13,6 @@ public class RootController {
     ResponseEntity<RepresentationModel> root() {
         RepresentationModel resourceSupport = new RepresentationModel();
         resourceSupport.add(linkTo(methodOn(RootController.class).root()).withSelfRel());
-        resourceSupport.add(linkTo(methodOn(CiController.class).getAll()).withRel("ci"));
         return ResponseEntity.ok(resourceSupport);
     }
 

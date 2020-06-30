@@ -96,6 +96,7 @@ public class WagonInTrain extends RollingStock {
         } catch (CloneNotSupportedException e) {
             wagonInTrain = new WagonInTrain(this);
         }
+        wagonInTrain.setDangerGoodsInWagons(new ArrayList<>());
         for (DangerGoodsInWagon dangerGoodsInWagon : this.dangerGoodsInWagons) {
             wagonInTrain.addDangerGoodsInWagon(dangerGoodsInWagon.clone());
         }

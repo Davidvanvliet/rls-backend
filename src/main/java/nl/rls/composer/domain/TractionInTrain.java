@@ -67,7 +67,8 @@ public class TractionInTrain extends RollingStock implements Cloneable {
 
     @Override
     public int getMaxSpeed() {
-        return 0;
+        // TODO make this not hardcoded
+        return 1;
     }
 
     @Override

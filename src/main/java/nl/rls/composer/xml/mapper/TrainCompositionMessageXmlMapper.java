@@ -122,6 +122,7 @@ public class TrainCompositionMessageXmlMapper {
                             .setTractionType(tractionInTrain.getTraction().getTractionType().getCode())
                             .setTractionPositionInTrain(i);
                     trainCompositionJourneySection.getLocoIdent().add(locoIdent);
+
                 } else {
                     WagonInTrain wagonInTrain = (WagonInTrain) rollingStock;
                     WagonOperationalData wagonOperationalData = new WagonOperationalData()
