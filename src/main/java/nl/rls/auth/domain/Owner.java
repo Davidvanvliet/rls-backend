@@ -59,6 +59,7 @@ public class Owner {
             this.users = new ArrayList<>();
         }
         this.users.add(user);
+        user.setOwner(this);
     }
 
     public String getCompanyCode() {
