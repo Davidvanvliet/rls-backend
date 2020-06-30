@@ -10,6 +10,7 @@ import nl.rls.auth.rest.dto.OwnerDto;
 import nl.rls.auth.rest.dto.UserDto;
 import nl.rls.composer.domain.Company;
 import nl.rls.composer.repository.CompanyRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class  OwnerService {
+public class OwnerService {
     private final OwnerRepository ownerRepository;
 
     private final CompanyRepository companyRepository;
@@ -29,6 +30,7 @@ public class  OwnerService {
         this.userRepository = userRepository;
     }
 
+    @PreAuthorize("hasPermission('write:users')")
     public OwnerDto createOwner(String companyCode, List<String> auth0Ids) {
         Company company = companyRepository.findByCode(companyCode)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find company with code %s", companyCode)));
@@ -42,6 +44,7 @@ public class  OwnerService {
         return OwnerDtoMapper.map(owner);
     }
 
+    @PreAuthorize("hasPermission('read:users')")
     public List<OwnerDto> getOwners() {
         return ownerRepository.findAll()
                 .stream()
@@ -49,6 +52,7 @@ public class  OwnerService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasPermission('read:users')")
     public List<UserDto> getUsersByOwnerId(Integer ownerId) {
         return userRepository.findAllByOwnerId(ownerId)
                 .stream()
@@ -56,6 +60,7 @@ public class  OwnerService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasPermission('write:users')")
     public OwnerDto updateOwner(Integer ownerId, String companyCode, List<String> auth0Ids) {
         Owner owner = ownerRepository.findById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find user with id %d.", ownerId)));
