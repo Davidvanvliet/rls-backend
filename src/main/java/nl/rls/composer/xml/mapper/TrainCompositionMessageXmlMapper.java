@@ -1,8 +1,13 @@
 package nl.rls.composer.xml.mapper;
 
-import info.taf_jsg.schemes.TrainCompositionMessage;
+import info.taf_jsg.schemes.*;
+import nl.rls.composer.domain.JourneySection;
+import nl.rls.composer.domain.*;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class TrainCompositionMessageXmlMapper {
     public static TrainCompositionMessage map(nl.rls.composer.domain.message.TrainCompositionMessage tcm) {
@@ -34,27 +39,25 @@ public class TrainCompositionMessageXmlMapper {
                 mapping(nl.rls.composer.domain.JourneySection.class,
                         info.taf_jsg.schemes.TrainCompositionJourneySection.class)
                         .fields("trainComposition.livestockOrPeopleIndicator", "livestockOrPeopleIndicator")
-                        .fields("trainComposition.exceptionalGaugingIndicator",
+                        .fields("trainComposition.gaugedExceptional",
                                 field("trainRunningData.exceptionalGaugingInd").accessible(true))
-                        .fields("trainComposition.dangerousGoodsIndicator",
+                        .fields("trainComposition.containsDangerousGoods",
                                 field("trainRunningData.dangerousGoodsIndicator").accessible(true))
-                        .fields("trainComposition.trainMaxSpeed",
+                        .fields("trainComposition.maxSpeed",
                                 "trainRunningData.trainRunningTechData.trainMaxSpeed")
                         .fields("trainComposition.numberOfAxles",
                                 "trainRunningData.trainRunningTechData.numberOfAxles")
                         .fields("trainComposition.numberOfVehicles",
                                 "trainRunningData.trainRunningTechData.numberOfVehicles")
-                        .fields("trainComposition.trainLength",
+                        .fields("trainComposition.length",
                                 "trainRunningData.trainRunningTechData.trainLength")
-                        .fields("trainComposition.trainWeight",
-                                "trainRunningData.trainRunningTechData.trainWeight")
-                        .fields("trainComposition.trainWeight",
+                        .fields("trainComposition.weight",
                                 "trainRunningData.trainRunningTechData.trainWeight")
                         .fields("trainComposition.maxAxleWeight",
                                 "trainRunningData.trainRunningTechData.maxAxleWeight")
                         .fields("trainComposition.brakeWeight",
                                 "trainRunningData.trainRunningTechData.brakeWeight")
-                        .fields("trainComposition.journeySection.train.trainType",
+                        .fields("train.trainType",
                                 "trainRunningData.trainRunningTechData.trainType")
 
                         .fields("journeySectionOrigin",
@@ -64,10 +67,7 @@ public class TrainCompositionMessageXmlMapper {
                         .fields("responsibilityActualSection",
                                 field("journeySection.responsibilityActualSection").accessible(true))
                         .fields("responsibilityNextSection",
-                                field("journeySection.responsibilityNextSection").accessible(true))
-//								.fields("activities", field("trainRunningData.activities").accessible(true))
-                        .fields("trainComposition.tractions", field("locoIdent").accessible(true))
-                        .fields("trainComposition.wagons", field("wagonData").accessible(true));
+                                field("journeySection.responsibilityNextSection").accessible(true));
 
                 mapping(nl.rls.composer.domain.Location.class, info.taf_jsg.schemes.LocationIdent.class)
                         .fields("countryCodeIso", "countryCodeISO");
@@ -103,18 +103,59 @@ public class TrainCompositionMessageXmlMapper {
                 // mapping(nl.rls.composer.domain.code.TrainActivityType.class,
                 // info.taf_jsg.schemes.TrainRunningData.Activities.class)
                 // .fields("code", "trainActivityType");
-                mapping(nl.rls.composer.domain.TractionInTrain.class,
-                        info.taf_jsg.schemes.TrainCompositionJourneySection.LocoIdent.class)
-                        .fields("driverIndication", "driverIndication")
-                        .fields("position", "tractionPositionInTrain")
-                        .fields("traction.tractionType.code", "tractionType")
-                        .fields("tractionMode.code", "tractionMode")
-                        .fields("traction.locoTypeNumber", "locoTypeNumber")
-                        .fields("traction.locoNumber", "locoNumber");
             }
         };
         mapper.addMapping(mappingBuilder);
         TrainCompositionMessage xmlTcm = mapper.map(tcm, TrainCompositionMessage.class);
+        for (JourneySection journeySection : tcm.getTrain().getJourneySections()) {
+            TrainCompositionJourneySection trainCompositionJourneySection = mapper.map(journeySection, TrainCompositionJourneySection.class);
+            TrainComposition trainComposition = journeySection.getTrainComposition();
+            int i = 1;
+            for (RollingStock rollingStock : trainComposition.getRollingStock()) {
+                if (rollingStock.getStockType().equals("traction")) {
+                    TractionInTrain tractionInTrain = (TractionInTrain) rollingStock;
+                    TrainCompositionJourneySection.LocoIdent locoIdent = new TrainCompositionJourneySection.LocoIdent()
+                            .setDriverIndication(BigInteger.valueOf(tractionInTrain.getDriverIndication()))
+                            .setLocoNumber(String.valueOf(tractionInTrain.getStockIdentifier()))
+                            .setLocoTypeNumber(String.valueOf(tractionInTrain.getTraction().getLocoTypeNumber()))
+                            .setTractionMode(11)
+                            .setTractionType(tractionInTrain.getTraction().getTractionType().getCode())
+                            .setTractionPositionInTrain(i);
+                    trainCompositionJourneySection.getLocoIdent().add(locoIdent);
+                } else {
+                    WagonInTrain wagonInTrain = (WagonInTrain) rollingStock;
+                    WagonOperationalData wagonOperationalData = new WagonOperationalData()
+                            .setBrakeType(wagonInTrain.getBrakeType().code())
+                            .setBrakeWeight(wagonInTrain.getBrakeWeight())
+                            .setTotalLoadWeight(wagonInTrain.getTotalLoadWeight())
+                            .setWagonMaxSpeed(wagonInTrain.getMaxSpeed());
+                    for (DangerGoodsInWagon dangerGoodsInWagon : wagonInTrain.getDangerGoodsInWagons()) {
+                        wagonOperationalData.addDangerGoodsDetails(
+                                new WagonOperationalData.DangerousGoodsDetails()
+                                        .setWeightOfDangerousGoods(BigDecimal.valueOf(dangerGoodsInWagon.getDangerousGoodsWeight()))
+                                        .setDangerousGoodsIndication(
+                                                new DanGoodsType()
+                                                        .setUnNumber(dangerGoodsInWagon.getDangerGoodsType().getUnNumber())
+                                                        .setRidClass(dangerGoodsInWagon.getDangerGoodsType().getRidClass())
+                                        )
+                        );
+                    }
+                    WagonData wagonData = new WagonData()
+                            .setWagonTrainPosition(i)
+                            .setWagonNumberFreight(String.valueOf(wagonInTrain.getStockIdentifier()))
+                            .setWagonOperationalData(wagonOperationalData)
+                            .setWagonTechData(
+                                    new WagonTechData()
+                                            .setWagonWeightEmpty(wagonInTrain.getWagon().getWagonWeightEmpty())
+                                            .setWagonNumberOfAxles(wagonInTrain.getNumberOfAxles())
+                                            .setLengthOverBuffers(wagonInTrain.getLength())
+                            );
+                    trainCompositionJourneySection.getWagonData().add(wagonData);
+                    i++;
+                }
+            }
+            xmlTcm.getTrainCompositionJourneySection().add(trainCompositionJourneySection);
+        }
         return xmlTcm;
     }
 }
