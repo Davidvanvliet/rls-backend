@@ -30,7 +30,7 @@ public class OwnerService {
         this.userRepository = userRepository;
     }
 
-    @PreAuthorize("hasPermission('write:users')")
+    @PreAuthorize("hasPermission('write:user')")
     public OwnerDto createOwner(String companyCode, List<String> auth0Ids) {
         Company company = companyRepository.findByCode(companyCode)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find company with code %s", companyCode)));
@@ -44,7 +44,7 @@ public class OwnerService {
         return OwnerDtoMapper.map(owner);
     }
 
-    @PreAuthorize("hasPermission('read:users')")
+    @PreAuthorize("hasPermission('read:user')")
     public List<OwnerDto> getOwners() {
         return ownerRepository.findAll()
                 .stream()
@@ -52,7 +52,7 @@ public class OwnerService {
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasPermission('read:users')")
+    @PreAuthorize("hasPermission('read:user')")
     public List<UserDto> getUsersByOwnerId(Integer ownerId) {
         return userRepository.findAllByOwnerId(ownerId)
                 .stream()
@@ -60,7 +60,7 @@ public class OwnerService {
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasPermission('write:users')")
+    @PreAuthorize("hasPermission('write:user')")
     public OwnerDto updateOwner(Integer ownerId, String companyCode, List<String> auth0Ids) {
         Owner owner = ownerRepository.findById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find user with id %d.", ownerId)));
