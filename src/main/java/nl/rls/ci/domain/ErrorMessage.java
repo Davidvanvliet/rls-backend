@@ -6,7 +6,7 @@
 //
 
 
-package nl.rls.composer.domain;
+package nl.rls.ci.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

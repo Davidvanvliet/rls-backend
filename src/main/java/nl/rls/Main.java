@@ -16,8 +16,6 @@ public class Main {
     public static void main(String[] args) {
         String sqlURL = System.getenv("JDBC_DATABASE_URL");
         log.info("=== database url === " + sqlURL);
-        System.getProperties().put("http.proxyHost", "127.0.0.1");
-        System.getProperties().put("http.proxyPort", "8083");
         SpringApplication.run(Main.class, args);
     }
 

@@ -34,7 +34,8 @@ public class TrainCompositionMessageXmlMapper {
                         .fields("train.operationalTrainNumber", "operationalTrainNumber");
 
                 mapping(nl.rls.composer.domain.Train.class, info.taf_jsg.schemes.OperationalTrainNumberIdentifier.class)
-                        .fields("operationalTrainNumber", "operationalTrainNumber");
+                        .fields("operationalTrainNumber", "operationalTrainNumber")
+                        .exclude("customMessageStatuses");
 
                 mapping(nl.rls.composer.domain.JourneySection.class,
                         info.taf_jsg.schemes.TrainCompositionJourneySection.class)

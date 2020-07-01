@@ -1,12 +1,12 @@
 package nl.rls.ci.domain.mapper;
 
+import nl.rls.ci.domain.CustomMessageStatus;
 import nl.rls.ci.domain.LiTechnicalAck;
-import nl.rls.composer.domain.CustomMessageStatus;
 
 public class CustomMessageStatusMapper {
     public static CustomMessageStatus map(LiTechnicalAck liTechnicalAck) {
         boolean acknowledged = false;
-        if (liTechnicalAck.getAckIndentifier().equals("ACK")) {
+        if (liTechnicalAck.getResponseStatus().equals("ACK")) {
             acknowledged = true;
         }
         return new CustomMessageStatus(
