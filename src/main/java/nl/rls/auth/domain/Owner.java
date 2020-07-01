@@ -12,7 +12,7 @@ public class Owner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(mappedBy = "owner", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "owner", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<User> users;
 
     @OneToOne

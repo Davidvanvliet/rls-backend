@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +65,7 @@ public class OwnerService {
     public OwnerDto updateOwner(Integer ownerId, String companyCode, List<String> auth0Ids) {
         Owner owner = ownerRepository.findById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find user with id %d.", ownerId)));
+        owner.setUsers(new ArrayList<>());
         Company company = getCompany(companyCode);
         owner.setCompany(company);
         for (String auth0Id : auth0Ids) {
