@@ -8,23 +8,19 @@
 
 package info.taf_jsg.schemes;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -63,20 +59,18 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "brakeType",
-    "brakeWeight",
-    "wagonMaxSpeed",
-    "exceptionalGaugingProfile",
-    "exceptionalGaugingIdent",
-    "dangerousGoodsDetails",
-    "infoOnGoodsShapeTypeDanger",
-    "restrictionsDueToLoadOrDamage",
-    "totalLoadWeight"
+        "brakeType",
+        "brakeWeight",
+        "wagonMaxSpeed",
+        "exceptionalGaugingProfile",
+        "exceptionalGaugingIdent",
+        "dangerousGoodsDetails",
+        "infoOnGoodsShapeTypeDanger",
+        "restrictionsDueToLoadOrDamage",
+        "totalLoadWeight"
 })
 @XmlRootElement(name = "WagonOperationalData")
 public class WagonOperationalData {
@@ -105,145 +99,98 @@ public class WagonOperationalData {
 
     /**
      * Gets the value of the brakeType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getBrakeType() {
         return brakeType;
     }
 
-    /**
-     * Sets the value of the brakeType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setBrakeType(String value) {
-        this.brakeType = value;
+    public WagonOperationalData setBrakeType(String brakeType) {
+        this.brakeType = brakeType;
+        return this;
     }
 
     /**
      * Gets the value of the brakeWeight property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     * {@link Integer }
      */
     public Integer getBrakeWeight() {
         return brakeWeight;
     }
 
-    /**
-     * Sets the value of the brakeWeight property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setBrakeWeight(Integer value) {
-        this.brakeWeight = value;
+    public WagonOperationalData setBrakeWeight(Integer brakeWeight) {
+        this.brakeWeight = brakeWeight;
+        return this;
     }
 
     /**
      * Gets the value of the wagonMaxSpeed property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     * {@link Integer }
      */
     public Integer getWagonMaxSpeed() {
         return wagonMaxSpeed;
     }
 
-    /**
-     * Sets the value of the wagonMaxSpeed property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setWagonMaxSpeed(Integer value) {
-        this.wagonMaxSpeed = value;
+    public WagonOperationalData setWagonMaxSpeed(Integer wagonMaxSpeed) {
+        this.wagonMaxSpeed = wagonMaxSpeed;
+        return this;
     }
 
     /**
      * Gets the value of the exceptionalGaugingProfile property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getExceptionalGaugingProfile() {
         return exceptionalGaugingProfile;
     }
 
-    /**
-     * Sets the value of the exceptionalGaugingProfile property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExceptionalGaugingProfile(String value) {
-        this.exceptionalGaugingProfile = value;
+    public WagonOperationalData setExceptionalGaugingProfile(String exceptionalGaugingProfile) {
+        this.exceptionalGaugingProfile = exceptionalGaugingProfile;
+        return this;
     }
 
     /**
      * Gets the value of the exceptionalGaugingIdent property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ExceptionalGaugingIdent }
-     *     
+     *
+     * @return possible object is
+     * {@link ExceptionalGaugingIdent }
      */
     public ExceptionalGaugingIdent getExceptionalGaugingIdent() {
         return exceptionalGaugingIdent;
     }
 
-    /**
-     * Sets the value of the exceptionalGaugingIdent property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ExceptionalGaugingIdent }
-     *     
-     */
-    public void setExceptionalGaugingIdent(ExceptionalGaugingIdent value) {
-        this.exceptionalGaugingIdent = value;
+    public WagonOperationalData setExceptionalGaugingIdent(ExceptionalGaugingIdent exceptionalGaugingIdent) {
+        this.exceptionalGaugingIdent = exceptionalGaugingIdent;
+        return this;
     }
 
     /**
      * Gets the value of the dangerousGoodsDetails property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the dangerousGoodsDetails property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getDangerousGoodsDetails().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link WagonOperationalData.DangerousGoodsDetails }
-     * 
-     * 
      */
     public List<WagonOperationalData.DangerousGoodsDetails> getDangerousGoodsDetails() {
         if (dangerousGoodsDetails == null) {
@@ -252,27 +199,38 @@ public class WagonOperationalData {
         return this.dangerousGoodsDetails;
     }
 
+    public WagonOperationalData setDangerousGoodsDetails(List<DangerousGoodsDetails> dangerousGoodsDetails) {
+        this.dangerousGoodsDetails = dangerousGoodsDetails;
+        return this;
+    }
+
+    public WagonOperationalData addDangerGoodsDetails(DangerousGoodsDetails dangerousGoodsDetails) {
+        if (this.dangerousGoodsDetails == null) {
+            this.dangerousGoodsDetails = new ArrayList<>();
+        }
+        this.dangerousGoodsDetails.add(dangerousGoodsDetails);
+        return this;
+    }
+
     /**
      * Gets the value of the infoOnGoodsShapeTypeDanger property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the infoOnGoodsShapeTypeDanger property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getInfoOnGoodsShapeTypeDanger().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link String }
-     * 
-     * 
      */
     public List<String> getInfoOnGoodsShapeTypeDanger() {
         if (infoOnGoodsShapeTypeDanger == null) {
@@ -281,27 +239,30 @@ public class WagonOperationalData {
         return this.infoOnGoodsShapeTypeDanger;
     }
 
+    public WagonOperationalData setInfoOnGoodsShapeTypeDanger(List<String> infoOnGoodsShapeTypeDanger) {
+        this.infoOnGoodsShapeTypeDanger = infoOnGoodsShapeTypeDanger;
+        return this;
+    }
+
     /**
      * Gets the value of the restrictionsDueToLoadOrDamage property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the restrictionsDueToLoadOrDamage property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getRestrictionsDueToLoadOrDamage().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link String }
-     * 
-     * 
      */
     public List<String> getRestrictionsDueToLoadOrDamage() {
         if (restrictionsDueToLoadOrDamage == null) {
@@ -310,36 +271,31 @@ public class WagonOperationalData {
         return this.restrictionsDueToLoadOrDamage;
     }
 
+    public WagonOperationalData setRestrictionsDueToLoadOrDamage(List<String> restrictionsDueToLoadOrDamage) {
+        this.restrictionsDueToLoadOrDamage = restrictionsDueToLoadOrDamage;
+        return this;
+    }
+
     /**
      * Gets the value of the totalLoadWeight property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     * {@link Integer }
      */
     public Integer getTotalLoadWeight() {
         return totalLoadWeight;
     }
 
-    /**
-     * Sets the value of the totalLoadWeight property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setTotalLoadWeight(Integer value) {
-        this.totalLoadWeight = value;
+    public WagonOperationalData setTotalLoadWeight(Integer totalLoadWeight) {
+        this.totalLoadWeight = totalLoadWeight;
+        return this;
     }
-
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     *
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -360,13 +316,11 @@ public class WagonOperationalData {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "dangerousGoodsIndication",
-        "weightOfDangerousGoods"
+            "dangerousGoodsIndication",
+            "weightOfDangerousGoods"
     })
     public static class DangerousGoodsDetails {
 
@@ -377,52 +331,33 @@ public class WagonOperationalData {
 
         /**
          * Gets the value of the dangerousGoodsIndication property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link DanGoodsType }
-         *     
+         *
+         * @return possible object is
+         * {@link DanGoodsType }
          */
         public DanGoodsType getDangerousGoodsIndication() {
             return dangerousGoodsIndication;
         }
 
-        /**
-         * Sets the value of the dangerousGoodsIndication property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link DanGoodsType }
-         *     
-         */
-        public void setDangerousGoodsIndication(DanGoodsType value) {
-            this.dangerousGoodsIndication = value;
+        public DangerousGoodsDetails setDangerousGoodsIndication(DanGoodsType dangerousGoodsIndication) {
+            this.dangerousGoodsIndication = dangerousGoodsIndication;
+            return this;
         }
 
         /**
          * Gets the value of the weightOfDangerousGoods property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link BigDecimal }
-         *     
+         *
+         * @return possible object is
+         * {@link BigDecimal }
          */
         public BigDecimal getWeightOfDangerousGoods() {
             return weightOfDangerousGoods;
         }
 
-        /**
-         * Sets the value of the weightOfDangerousGoods property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link BigDecimal }
-         *     
-         */
-        public void setWeightOfDangerousGoods(BigDecimal value) {
-            this.weightOfDangerousGoods = value;
+        public DangerousGoodsDetails setWeightOfDangerousGoods(BigDecimal weightOfDangerousGoods) {
+            this.weightOfDangerousGoods = weightOfDangerousGoods;
+            return this;
         }
-
     }
 
 }
