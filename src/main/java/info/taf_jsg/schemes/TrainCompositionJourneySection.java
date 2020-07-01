@@ -8,23 +8,19 @@
 
 package info.taf_jsg.schemes;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -62,16 +58,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "journeySection",
-    "trainRunningData",
-    "locoIdent",
-    "livestockOrPeopleIndicator",
-    "wagonData"
+        "journeySection",
+        "trainRunningData",
+        "locoIdent",
+        "livestockOrPeopleIndicator",
+        "wagonData"
 })
 @XmlRootElement(name = "TrainCompositionJourneySection")
 public class TrainCompositionJourneySection {
@@ -89,11 +83,9 @@ public class TrainCompositionJourneySection {
 
     /**
      * Gets the value of the journeySection property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link JourneySection }
-     *     
+     *
+     * @return possible object is
+     * {@link JourneySection }
      */
     public JourneySection getJourneySection() {
         return journeySection;
@@ -101,11 +93,9 @@ public class TrainCompositionJourneySection {
 
     /**
      * Sets the value of the journeySection property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link JourneySection }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link JourneySection }
      */
     public void setJourneySection(JourneySection value) {
         this.journeySection = value;
@@ -113,11 +103,9 @@ public class TrainCompositionJourneySection {
 
     /**
      * Gets the value of the trainRunningData property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TrainRunningData }
-     *     
+     *
+     * @return possible object is
+     * {@link TrainRunningData }
      */
     public TrainRunningData getTrainRunningData() {
         return trainRunningData;
@@ -125,11 +113,9 @@ public class TrainCompositionJourneySection {
 
     /**
      * Sets the value of the trainRunningData property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TrainRunningData }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link TrainRunningData }
      */
     public void setTrainRunningData(TrainRunningData value) {
         this.trainRunningData = value;
@@ -137,25 +123,23 @@ public class TrainCompositionJourneySection {
 
     /**
      * Gets the value of the locoIdent property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the locoIdent property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getLocoIdent().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link TrainCompositionJourneySection.LocoIdent }
-     * 
-     * 
      */
     public List<TrainCompositionJourneySection.LocoIdent> getLocoIdent() {
         if (locoIdent == null) {
@@ -166,11 +150,9 @@ public class TrainCompositionJourneySection {
 
     /**
      * Gets the value of the livestockOrPeopleIndicator property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
+     *
+     * @return possible object is
+     * {@link BigInteger }
      */
     public BigInteger getLivestockOrPeopleIndicator() {
         return livestockOrPeopleIndicator;
@@ -178,11 +160,9 @@ public class TrainCompositionJourneySection {
 
     /**
      * Sets the value of the livestockOrPeopleIndicator property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link BigInteger }
      */
     public void setLivestockOrPeopleIndicator(BigInteger value) {
         this.livestockOrPeopleIndicator = value;
@@ -190,25 +170,23 @@ public class TrainCompositionJourneySection {
 
     /**
      * Gets the value of the wagonData property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the wagonData property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getWagonData().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link WagonData }
-     * 
-     * 
      */
     public List<WagonData> getWagonData() {
         if (wagonData == null) {
@@ -220,9 +198,9 @@ public class TrainCompositionJourneySection {
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     *
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -246,17 +224,15 @@ public class TrainCompositionJourneySection {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "tractionType",
-        "locoTypeNumber",
-        "locoNumber",
-        "tractionMode",
-        "driverIndication",
-        "tractionPositionInTrain"
+            "tractionType",
+            "locoTypeNumber",
+            "locoNumber",
+            "tractionMode",
+            "driverIndication",
+            "tractionPositionInTrain"
     })
     public static class LocoIdent {
 
@@ -276,148 +252,93 @@ public class TrainCompositionJourneySection {
 
         /**
          * Gets the value of the tractionType property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getTractionType() {
             return tractionType;
         }
 
-        /**
-         * Sets the value of the tractionType property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setTractionType(String value) {
-            this.tractionType = value;
+        public LocoIdent setTractionType(String tractionType) {
+            this.tractionType = tractionType;
+            return this;
         }
 
         /**
          * Gets the value of the locoTypeNumber property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getLocoTypeNumber() {
             return locoTypeNumber;
         }
 
-        /**
-         * Sets the value of the locoTypeNumber property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setLocoTypeNumber(String value) {
-            this.locoTypeNumber = value;
+        public LocoIdent setLocoTypeNumber(String locoTypeNumber) {
+            this.locoTypeNumber = locoTypeNumber;
+            return this;
         }
 
         /**
          * Gets the value of the locoNumber property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getLocoNumber() {
             return locoNumber;
         }
 
-        /**
-         * Sets the value of the locoNumber property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setLocoNumber(String value) {
-            this.locoNumber = value;
+        public LocoIdent setLocoNumber(String locoNumber) {
+            this.locoNumber = locoNumber;
+            return this;
         }
 
         /**
          * Gets the value of the tractionMode property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link Integer }
-         *     
+         *
+         * @return possible object is
+         * {@link Integer }
          */
         public Integer getTractionMode() {
             return tractionMode;
         }
 
-        /**
-         * Sets the value of the tractionMode property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Integer }
-         *     
-         */
-        public void setTractionMode(Integer value) {
-            this.tractionMode = value;
+        public LocoIdent setTractionMode(Integer tractionMode) {
+            this.tractionMode = tractionMode;
+            return this;
         }
 
         /**
          * Gets the value of the driverIndication property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
+         *
+         * @return possible object is
+         * {@link BigInteger }
          */
         public BigInteger getDriverIndication() {
             return driverIndication;
         }
 
-        /**
-         * Sets the value of the driverIndication property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
-         */
-        public void setDriverIndication(BigInteger value) {
-            this.driverIndication = value;
+        public LocoIdent setDriverIndication(BigInteger driverIndication) {
+            this.driverIndication = driverIndication;
+            return this;
         }
 
         /**
          * Gets the value of the tractionPositionInTrain property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link Integer }
-         *     
+         *
+         * @return possible object is
+         * {@link Integer }
          */
         public Integer getTractionPositionInTrain() {
             return tractionPositionInTrain;
         }
 
-        /**
-         * Sets the value of the tractionPositionInTrain property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Integer }
-         *     
-         */
-        public void setTractionPositionInTrain(Integer value) {
-            this.tractionPositionInTrain = value;
+        public LocoIdent setTractionPositionInTrain(Integer tractionPositionInTrain) {
+            this.tractionPositionInTrain = tractionPositionInTrain;
+            return this;
         }
-
     }
 
 }

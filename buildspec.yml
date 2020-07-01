@@ -5,6 +5,7 @@ phases:
     runtime-versions:
       docker: 18
       java: corretto8
+
   build:
     commands:
       - echo Build started on `date`
@@ -16,8 +17,29 @@ phases:
       - echo Build completed on `date`
       - mvn package
       - cp target/*.jar rls_ci-0.0.1-SNAPSHOT.jar
+      - cp rls_ci-0.0.1-SNAPSHOT.jar Prod/rls_ci-0.0.1-SNAPSHOT.jar
+
+cache:
+  paths:
+    - '/root/.m2/**/*'
+
 artifacts:
   files:
-    - rls_ci-0.0.1-SNAPSHOT.jar
+    -  rls_ci-0.0.1-SNAPSHOT.jar
     - .ebextensions/*
     - .platform/**/*
+  secondary-artifacts:
+    devartifact:
+      files:
+        - rls_ci-0.0.1-SNAPSHOT.jar
+        - .ebextensions/*
+        - .platform/**/*
+      name: devartifact
+    prodartifact:
+      files:
+        - rls_ci-0.0.1-SNAPSHOT.jar
+        - .ebextensions/*
+        - .platform/**/*
+      name: prodartifact
+      base-directory: Prod
+
