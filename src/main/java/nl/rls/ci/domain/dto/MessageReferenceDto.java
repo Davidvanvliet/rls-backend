@@ -1,4 +1,4 @@
-package nl.rls.ci.domain;
+package nl.rls.ci.domain.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -55,8 +55,10 @@ public class Train extends OwnedEntity {
     @JoinColumn(name = "train_id")
     private List<JourneySection> journeySections = new ArrayList<JourneySection>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "train_id")
+    @OneToMany(mappedBy = "train")
+    private List<CustomMessageStatus> customMessageStatuses;
+
+    @Transient
     private List<TrainCompositionMessage> trainCompositionMessages = new ArrayList<TrainCompositionMessage>();
 
     @Transient

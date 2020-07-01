@@ -1,0 +1,10 @@
+drop table composit_identifier_operational_type cascade;
+drop table message_header cascade;
+drop table message_reference cascade;
+drop table train_composition_message cascade;
+drop table ci_message cascade;
+drop table uic_request cascade;
+drop table uic_header cascade;
+drop table uic_response cascade;
+drop table xml_message cascade;
+drop table message_reference_ci;

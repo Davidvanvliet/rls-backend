@@ -5,10 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Date;
 
 /**
@@ -16,13 +12,10 @@ import java.util.Date;
  * This element identifies the message
  */
 @ToString
-@Entity
 @NoArgsConstructor
 @Getter
 @Setter
 public class MessageReference {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     /**
      * To indicate the message type transmitted or referred to.

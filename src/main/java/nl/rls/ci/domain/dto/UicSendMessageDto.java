@@ -1,4 +1,6 @@
-package nl.rls.ci.domain;
+package nl.rls.ci.domain.dto;
+
+import nl.rls.ci.domain.UICMessageDto;
 
 public class UicSendMessageDto {
     private UICMessageDto uicMessageDto;

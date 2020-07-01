@@ -2,18 +2,17 @@ package nl.rls.ci.service;
 
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.domain.LiTechnicalAck;
-import nl.rls.ci.domain.LiTechnicalAckDto;
 import nl.rls.ci.domain.UICMessageDto;
-import nl.rls.ci.domain.UicSendMessageDto;
+import nl.rls.ci.domain.dto.UicSendMessageDto;
+import nl.rls.ci.domain.mapper.CustomMessageStatusMapper;
 import nl.rls.composer.domain.Company;
+import nl.rls.composer.domain.CustomMessageStatus;
 import nl.rls.composer.domain.Train;
 import nl.rls.composer.domain.code.MessageType;
-import nl.rls.composer.domain.message.MessageStatus;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.repository.TrainRepository;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
-import org.dozer.DozerBeanMapper;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -35,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @Component
@@ -42,16 +42,14 @@ public class CiService {
     private final SecurityContext securityContext;
     private final TrainRepository trainRepository;
     private final CompanyRepository companyRepository;
-    private final DozerBeanMapper dozerBeanMapper;
 
-    public CiService(SecurityContext securityContext, TrainRepository trainRepository, CompanyRepository companyRepository, DozerBeanMapper dozerBeanMapper) {
+    public CiService(SecurityContext securityContext, TrainRepository trainRepository, CompanyRepository companyRepository) {
         this.securityContext = securityContext;
         this.trainRepository = trainRepository;
         this.companyRepository = companyRepository;
-        this.dozerBeanMapper = dozerBeanMapper;
     }
 
-    public LiTechnicalAckDto sendMessageToCi(Integer trainId) {
+    public Train sendMessageToCi(Integer trainId) {
         String tempRandomUUID = UUID.randomUUID().toString();
         Date now = new Date();
         int ownerId = securityContext.getOwnerId();
@@ -62,7 +60,6 @@ public class CiService {
         trainCompositionMessage.setOwnerId(ownerId);
         trainCompositionMessage.setMessageType(MessageType.TRAIN_COMPOSITION_MESSAGE.code());
         trainCompositionMessage.setMessageTypeVersion(MessageType.TRAIN_COMPOSITION_MESSAGE.version());
-        trainCompositionMessage.setMessageStatus(MessageStatus.creation.getValue());
         Company recipient = companyRepository.findByCode("0084").orElseThrow(EntityNotFoundException::new);
         trainCompositionMessage.setRecipient(recipient);
         Company sender = companyRepository.findByCode("9001").orElseThrow(EntityNotFoundException::new);
@@ -101,7 +98,10 @@ public class CiService {
             RestTemplate restTemplate = new RestTemplate();
 
             ResponseEntity<LiTechnicalAck> liTechnicalAckResponseEntity = restTemplate.postForEntity(System.getenv("CI_URL") + "/messages", uicSendMessageDto, LiTechnicalAck.class);
-            return dozerBeanMapper.map(liTechnicalAckResponseEntity.getBody(), LiTechnicalAckDto.class);
+            CustomMessageStatus customMessageStatus = CustomMessageStatusMapper.map(Objects.requireNonNull(liTechnicalAckResponseEntity.getBody()));
+            train.getCustomMessageStatuses().add(customMessageStatus);
+
+            return trainRepository.save(train);
         } catch (JAXBException | IOException | SAXException | HttpServerErrorException e) {
             throw new RuntimeException(e.getMessage());
         }
