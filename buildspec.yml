@@ -33,8 +33,9 @@ artifacts:
       prodartifact:
         files:
           - rls_ci-0.0.1-SNAPSHOT.jar
-          - Prod/.ebextensions/*
-          - Prod/.platform/**/*
+          - .ebextensions/*
+          - .platform/**/*
         discard-paths: yes
         name: prodartifact
+        base-directory: Prod
 
