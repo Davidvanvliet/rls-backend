@@ -24,18 +24,22 @@ cache:
     - '/root/.m2/**/*'
 
 artifacts:
-    secondary-artifacts:
-      devartifact:
-        files:
-          - rls_ci-0.0.1-SNAPSHOT.jar
-          - .ebextensions/*
-          - .platform/**/*
-        name: devartifact
-      prodartifact:
-        files:
-          - rls_ci-0.0.1-SNAPSHOT.jar
-          - .ebextensions/*
-          - .platform/**/*
-        name: prodartifact
-        base-directory: Prod
+  files:
+    -  rls_ci-0.0.1-SNAPSHOT.jar
+    - .ebextensions/*
+    - .platform/**/*
+  secondary-artifacts:
+    devartifact:
+      files:
+        - rls_ci-0.0.1-SNAPSHOT.jar
+        - .ebextensions/*
+        - .platform/**/*
+      name: devartifact
+    prodartifact:
+      files:
+        - rls_ci-0.0.1-SNAPSHOT.jar
+        - .ebextensions/*
+        - .platform/**/*
+      name: prodartifact
+      base-directory: Prod
 
