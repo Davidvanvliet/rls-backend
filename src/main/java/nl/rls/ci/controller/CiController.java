@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.xml.sax.SAXException;
 
 import io.swagger.annotations.ApiOperation;
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.domain.CiMessage;
 import nl.rls.ci.repository.CiRepository;
 import nl.rls.ci.rest.dto.CiDto;

@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.domain.CiMessage;
 import nl.rls.ci.domain.UicHeader;
 import nl.rls.ci.domain.UicRequest;

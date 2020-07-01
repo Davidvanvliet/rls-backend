@@ -1,7 +1,7 @@
 package nl.rls.composer.controller;
 
 import io.swagger.annotations.ApiOperation;
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.JourneySection;
@@ -21,6 +21,7 @@ import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -49,6 +50,7 @@ public class JourneySectionController {
 
     @GetMapping(value = "/{journeySectionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('read:journeysection')")
     public Response<JourneySectionDto> getById(@PathVariable int journeySectionId) {
         int ownerId = securityContext.getOwnerId();
         JourneySection journeySection = journeySectionRepository.findByIdAndOwnerId(journeySectionId, ownerId)
@@ -61,6 +63,7 @@ public class JourneySectionController {
 
     @PutMapping(value = "/{journeySectionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasPermission('write:journeysection')")
     public Response<JourneySectionDto> update(@PathVariable int journeySectionId, @RequestBody @Valid JourneySectionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         JourneySection journeySection = journeySectionRepository.findByIdAndOwnerId(journeySectionId, ownerId)
@@ -95,6 +98,7 @@ public class JourneySectionController {
     @ApiOperation(value = "Copies or clones a complete TrainComposition including tractions and wagons.")
     @PutMapping(value = "/{journeySectionId}/clone")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('write:journeysection')")
     public Response<TrainDto> copyComposition(@PathVariable int journeySectionId,
                                               @RequestBody @Valid TrainCompositionCloneDto dto) {
         int ownerId = securityContext.getOwnerId();

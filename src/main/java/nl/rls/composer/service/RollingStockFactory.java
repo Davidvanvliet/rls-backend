@@ -1,6 +1,6 @@
 package nl.rls.composer.service;
 
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.*;
 import nl.rls.composer.domain.code.BrakeType;

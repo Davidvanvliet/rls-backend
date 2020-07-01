@@ -12,7 +12,6 @@ import javax.validation.Valid;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.crypto.Data;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.Company;
