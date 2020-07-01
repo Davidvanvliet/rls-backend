@@ -15,7 +15,7 @@ public class OwnerDtoMapper {
         DozerBeanMapper mapper = new DozerBeanMapper();
         BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
             protected void configure() {
-                mapping(User.class, UserDto.class)
+                mapping(Owner.class, OwnerDto.class)
                         .fields("users", "users",
                                 FieldsMappingOptions.customConverter("nl.rls.auth.mapper.converter.UserConverter"))
                 ;
