@@ -9,13 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import nl.rls.ci.aa.security.SecurityContext;
 import nl.rls.ci.url.BaseURL;
@@ -69,26 +63,42 @@ public class TractionController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<TractionDto> createTraction(@RequestBody @Valid TractionCreateDto dto) {
+    public Response<TractionDto> createTraction(@RequestBody @Valid TractionCreateDto tractionCreateDto) {
         int ownerId = securityContext.getOwnerId();
         Traction traction = new Traction();
         traction.setOwnerId(ownerId);
-        traction.setBrakeWeightG(dto.getBrakeWeightG());
-        traction.setBrakeWeightP(dto.getBrakeWeightP());
-        traction.setLengthOverBuffers(dto.getLengthOverBuffers());
-        traction.setLocoNumber(dto.getLocoNumber());
-        traction.setLocoTypeNumber(dto.getLocoTypeNumber());
-        traction.setNumberOfAxles(dto.getNumberOfAxles());
-        Optional<TractionType> tractionType = tractionTypeRepository.findByCode(dto.getTractionType());
-        tractionType.ifPresent(traction::setTractionType);
-        traction.setTypeName(dto.getTypeName());
-        traction.setWeight(dto.getWeight());
-        tractionRepository.save(traction);
-        TractionDto resultDto = TractionDtoMapper.map(traction);
+        TractionDto processedTraction = processTraction(traction, tractionCreateDto);
+
         return ResponseBuilder.created()
-                .data(resultDto)
+                .data(processedTraction)
                 .build();
     }
 
+    @PutMapping(value = "/{tractionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<TractionDto> updateTraction(@PathVariable Integer tractionId, @RequestBody @Valid TractionCreateDto tractionCreateDto) {
+        int ownerId = securityContext.getOwnerId();
+        Traction traction = tractionRepository.findByIdAndOwnerId(tractionId, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find traction with id %d", tractionId)));
+
+        TractionDto processedTraction = processTraction(traction, tractionCreateDto);
+        return ResponseBuilder.created()
+                .data(processedTraction)
+                .build();
+    }
+
+    private TractionDto processTraction(Traction traction, TractionCreateDto tractionCreateDto) {
+        traction.setBrakeWeightG(tractionCreateDto.getBrakeWeightG());
+        traction.setBrakeWeightP(tractionCreateDto.getBrakeWeightP());
+        traction.setLengthOverBuffers(tractionCreateDto.getLengthOverBuffers());
+        traction.setLocoNumber(tractionCreateDto.getLocoNumber());
+        traction.setLocoTypeNumber(tractionCreateDto.getLocoTypeNumber());
+        traction.setNumberOfAxles(tractionCreateDto.getNumberOfAxles());
+        Optional<TractionType> tractionType = tractionTypeRepository.findByCode(tractionCreateDto.getTractionType());
+        tractionType.ifPresent(traction::setTractionType);
+        traction.setTypeName(tractionCreateDto.getTypeName());
+        traction.setWeight(tractionCreateDto.getWeight());
+        Traction updatedTraction = tractionRepository.save(traction);
+        return TractionDtoMapper.map(updatedTraction);
+    }
 
 }
