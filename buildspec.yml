@@ -33,6 +33,6 @@ artifacts:
       prodartifact:
         files:
           - rls_ci-0.0.1-SNAPSHOT.jar
-          - cp Prod/.ebextensions/* .ebextensions/*
-          - cp Prod/.platform/**/* .platform/**/*
+          - Prod/.ebextensions/*
+          - Prod/.platform/**/*
         name: prodartifact
