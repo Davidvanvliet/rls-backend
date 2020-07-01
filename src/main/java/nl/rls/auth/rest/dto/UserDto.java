@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDto {
-    private String auth0Id;
+    private String id;
 }
