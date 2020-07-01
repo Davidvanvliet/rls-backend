@@ -49,11 +49,15 @@ public class DangerGoodsInWagon implements Cloneable {
     }
 
     public DangerGoodsInWagon clone() {
+        DangerGoodsInWagon goodsInWagon;
         try {
-            return (DangerGoodsInWagon) super.clone();
+            goodsInWagon = (DangerGoodsInWagon) super.clone();
         } catch (CloneNotSupportedException e) {
-            return new DangerGoodsInWagon(this);
+            goodsInWagon = new DangerGoodsInWagon(this);
         }
+        goodsInWagon.setId(null);
+        goodsInWagon.setWagonInTrain(null);
+        return goodsInWagon;
     }
 
 }
