@@ -77,10 +77,13 @@ public class TractionInTrain extends RollingStock implements Cloneable {
 
     @Override
     public RollingStock clone() {
+        TractionInTrain tractionInTrain;
         try {
-            return super.clone();
+            tractionInTrain = (TractionInTrain) super.clone();
         } catch (CloneNotSupportedException e) {
-            return new TractionInTrain(this);
+            tractionInTrain = new TractionInTrain(this);
         }
+        tractionInTrain.setId(null);
+        return tractionInTrain;
     }
 }
