@@ -173,4 +173,10 @@ public class TrainCompositionMessageController {
                 .build();
     }
 
+    @GetMapping(value = "/test", produces = MediaType.APPLICATION_XML_VALUE)
+    public info.taf_jsg.schemes.TrainCompositionMessage test() {
+        TrainCompositionMessage trainCompositionMessage = trainCompositionMessageRepository.getOne(1);
+        return TrainCompositionMessageXmlMapper.map(trainCompositionMessage);
+    }
+
 }

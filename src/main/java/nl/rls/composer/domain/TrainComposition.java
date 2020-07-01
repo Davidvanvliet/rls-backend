@@ -168,6 +168,7 @@ public class TrainComposition extends OwnedEntity implements Cloneable {
         } catch (CloneNotSupportedException e) {
             trainComposition = new TrainComposition(this);
         }
+        trainComposition.setRollingStock(new ArrayList<>());
         for (RollingStock stock : this.rollingStock) {
             try {
                 trainComposition.addRollingStock(stock.clone());
