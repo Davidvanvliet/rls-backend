@@ -10,19 +10,19 @@ import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.dozer.loader.api.FieldsMappingOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OwnerDtoMapper {
     public static OwnerDto map(Owner owner) {
         DozerBeanMapper mapper = new DozerBeanMapper();
-        BeanMappingBuilder mappingBuilder = new BeanMappingBuilder() {
-            protected void configure() {
-                mapping(Owner.class, OwnerDto.class)
-                        .fields("users", "users",
-                                FieldsMappingOptions.customConverter("nl.rls.auth.mapper.converter.UserConverter"))
-                ;
-            }
-        };
-        mapper.addMapping(mappingBuilder);
-        return mapper.map(owner, OwnerDto.class);
+        OwnerDto ownerDto = mapper.map(owner, OwnerDto.class);
+        List<UserDto> userDtos = new ArrayList<>();
+        for (User user : owner.getUsers()) {
+            userDtos.add(UserDtoMapper.map(user));
+        }
+        ownerDto.setUsers(userDtos);
+        return ownerDto;
     }
 
 }
