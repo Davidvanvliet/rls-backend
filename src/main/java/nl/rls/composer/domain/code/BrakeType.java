@@ -10,7 +10,7 @@ public enum BrakeType {
     P("P"),
     X("X");
 
-    private String code;
+    private final String code;
 
     BrakeType(String code) {
         this.code = code;

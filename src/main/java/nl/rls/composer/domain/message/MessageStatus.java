@@ -9,7 +9,7 @@ public enum MessageStatus {
     modification(2),
     deletion(3);
 
-    private int value;
+    private final int value;
 
     MessageStatus(int value) {
         this.value = value;

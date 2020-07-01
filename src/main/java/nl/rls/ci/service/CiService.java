@@ -30,7 +30,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import javax.xml.ws.WebServiceException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -102,7 +101,6 @@ public class CiService {
             RestTemplate restTemplate = new RestTemplate();
 
             ResponseEntity<LiTechnicalAck> liTechnicalAckResponseEntity = restTemplate.postForEntity(System.getenv("CI_URL") + "/messages", uicSendMessageDto, LiTechnicalAck.class);
-            System.out.println(liTechnicalAckResponseEntity.getBody());
             return dozerBeanMapper.map(liTechnicalAckResponseEntity.getBody(), LiTechnicalAckDto.class);
         } catch (JAXBException | IOException | SAXException | HttpServerErrorException e) {
             throw new RuntimeException(e.getMessage());

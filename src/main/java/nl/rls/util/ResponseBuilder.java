@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 public class ResponseBuilder<T> {
     private T data;
     private Object error;
-    private int status;
+    private final int status;
 
     public ResponseBuilder(int status) {
         this.status = status;

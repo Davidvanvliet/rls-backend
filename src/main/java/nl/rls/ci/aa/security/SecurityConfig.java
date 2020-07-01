@@ -1,7 +1,6 @@
 package nl.rls.ci.aa.security;
 
 import nl.rls.ci.aa.repository.LicenseRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,17 +10,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private UserDetailsServiceImpl userDetailsService;
-    private LicenseRepository licenseRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final LicenseRepository licenseRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder, LicenseRepository licenseRepository) {
         this.userDetailsService = userDetailsService;

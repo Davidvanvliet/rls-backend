@@ -31,8 +31,8 @@ import static nl.rls.ci.aa.security.SecurityConstants.*;
  */
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private static final Logger log = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
-    private AuthenticationManager authenticationManager;
-    private LicenseRepository licenseRepository;
+    private final AuthenticationManager authenticationManager;
+    private final LicenseRepository licenseRepository;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager, LicenseRepository licenseRepository) {
         this.authenticationManager = authenticationManager;
@@ -57,14 +57,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 List<License> licenses = licenseRepository.validLicenseByUsername(userDtoLogin.getUsername(),
                         new Date());
                 if (licenses.size() > 0) {
-                    System.out.println(licenses.toString());
                     return authenticationManager.authenticate(authentication);
                 }
-                System.out.println("CredentialsExpiredException");
                 authentication.setAuthenticated(false);
                 return authentication;
             }
-            System.out.println("BadCredentialsException");
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -74,7 +71,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
-        System.out.println("auth.getAuthorities().toString(): " + auth.getAuthorities().toString());
         if (auth.isAuthenticated()) {
             String role = "USER";
             for (GrantedAuthority grantedAuthority : auth.getAuthorities()) {

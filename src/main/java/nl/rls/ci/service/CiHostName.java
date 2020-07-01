@@ -13,13 +13,8 @@ public class CiHostName {
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
             InputStream inputStream = url_name.openStream();
-            System.out.println("Stream: " + inputStream);
-            System.out.println("Stream: " + inputStream.toString());
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            System.out.println("BufferedReader: " + bufferedReader.toString());
             // reads system IPAddress
-            System.out.println("BufferedReader: " + bufferedReader.lines());
-            System.out.println("BufferedReader: " + bufferedReader.lines().toString());
             systemipaddress = bufferedReader.readLine().trim();
         } catch (Exception e) {
             e.printStackTrace();

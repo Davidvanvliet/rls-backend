@@ -3,10 +3,10 @@ package nl.rls.util;
 import java.util.Date;
 
 public class Response<T> {
-    private T data;
-    private Object error;
-    private int status;
-    private Date timestamp;
+    private final T data;
+    private final Object error;
+    private final int status;
+    private final Date timestamp;
 
     protected Response(int status, T data, Object error) {
         this.status = status;

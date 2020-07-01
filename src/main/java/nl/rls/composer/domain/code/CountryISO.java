@@ -12,7 +12,7 @@ public enum CountryISO {
     ITALY("IT"),
     NETHERLANDS("NL");
 
-    private String countryISO;
+    private final String countryISO;
 
     CountryISO(String countryISO) {
         this.countryISO = countryISO;

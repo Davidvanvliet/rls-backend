@@ -1,36 +1,11 @@
 package nl.rls.ci.aa.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import nl.rls.ci.aa.domain.AppUser;
 import nl.rls.ci.aa.domain.License;
 import nl.rls.ci.aa.domain.Owner;
 import nl.rls.ci.aa.domain.Role;
-import nl.rls.ci.aa.dto.OwnerDto;
-import nl.rls.ci.aa.dto.OwnerDtoMapper;
-import nl.rls.ci.aa.dto.OwnerDtoPost;
-import nl.rls.ci.aa.dto.UserDto;
-import nl.rls.ci.aa.dto.UserDtoMapper;
-import nl.rls.ci.aa.dto.UserPostDto;
+import nl.rls.ci.aa.dto.*;
 import nl.rls.ci.aa.repository.LicenseRepository;
 import nl.rls.ci.aa.repository.OwnerRepository;
 import nl.rls.ci.aa.repository.RoleRepository;
@@ -38,8 +13,20 @@ import nl.rls.ci.aa.repository.UserRepository;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @RestController
@@ -109,9 +96,6 @@ public class OwnerController {
         user.setUsername(dto.getEmail());
         user.setEnabled(true);
         Optional<Role> role = roleRepository.findByName(Role.ROLE_USER);
-        if (!role.isPresent()) {
-        	System.out.println("Role not found");
-        }
         user.setRole(role.get());
         userRepository.save(user);
         return ResponseEntity.created(linkTo(methodOn(UserController.class).getUser(user.getId())).toUri()).build();

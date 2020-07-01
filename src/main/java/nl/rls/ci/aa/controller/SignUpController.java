@@ -1,18 +1,5 @@
 package nl.rls.ci.aa.controller;
 
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import nl.rls.ci.aa.domain.AppUser;
 import nl.rls.ci.aa.domain.Owner;
 import nl.rls.ci.aa.domain.Role;
@@ -23,6 +10,14 @@ import nl.rls.ci.aa.repository.OwnerRepository;
 import nl.rls.ci.aa.repository.RoleRepository;
 import nl.rls.ci.aa.repository.UserRepository;
 import nl.rls.ci.aa.security.SecurityContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/signup")
@@ -31,7 +26,7 @@ public class SignUpController {
     private final UserRepository userRepository;
     private final OwnerRepository ownerRepository;
     private final RoleRepository roleRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SecurityContext securityContext;
 
     public SignUpController(BCryptPasswordEncoder bCryptPasswordEncoder, SecurityContext securityContext, UserRepository userRepository, OwnerRepository ownerRepository, RoleRepository roleRepository) {

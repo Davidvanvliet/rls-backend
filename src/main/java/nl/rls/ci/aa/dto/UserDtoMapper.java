@@ -7,7 +7,8 @@ import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.springframework.hateoas.Link;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class UserDtoMapper {
 
@@ -21,9 +22,7 @@ public class UserDtoMapper {
         };
         mapper.addMapping(mappingBuilder);
         UserDto userDto = mapper.map(user, UserDto.class);
-        System.out.println("AppUser: " + user);
         Link link = linkTo(methodOn(OwnerController.class).getOwner(user.getOwner().getId())).withRel("owner");
-        System.out.println("link: " + link.toString());
         userDto.add(link);
         userDto.add(linkTo(methodOn(UserController.class).getUser(user.getId())).withSelfRel());
         return userDto;

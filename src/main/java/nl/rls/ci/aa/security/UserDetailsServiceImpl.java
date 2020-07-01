@@ -31,15 +31,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("loadUserByUsername - username: " + username);
         AppUser user = userRepository.findByUsername(username);
         if (user != null) {
-            System.out.println("OwnerId: " + user.getOwner().getId());
-            UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+            return new org.springframework.security.core.userdetails.User(
                     user.getUsername(), user.getPassword(),
                     getAuthorities(user.getRole()));
-            // emptyList());
-            return userDetails;
         } else {
             throw new IllegalArgumentException();
         }
