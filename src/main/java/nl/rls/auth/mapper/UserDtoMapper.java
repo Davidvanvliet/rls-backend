@@ -1,8 +1,6 @@
 package nl.rls.auth.mapper;
 
-import nl.rls.auth.domain.Owner;
 import nl.rls.auth.domain.User;
-import nl.rls.auth.rest.dto.OwnerDto;
 import nl.rls.auth.rest.dto.UserDto;
 import org.dozer.DozerBeanMapper;
 

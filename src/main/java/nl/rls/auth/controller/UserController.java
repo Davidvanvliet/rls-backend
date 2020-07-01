@@ -5,7 +5,6 @@ import nl.rls.auth.service.OwnerService;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

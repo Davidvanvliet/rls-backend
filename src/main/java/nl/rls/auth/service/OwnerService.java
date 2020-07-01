@@ -86,7 +86,7 @@ public class OwnerService {
     }
 
     private Owner getOwner(Integer ownerId) {
-       return ownerRepository.findById(ownerId)
+        return ownerRepository.findById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Could not find user with id %d.", ownerId)));
     }
 }

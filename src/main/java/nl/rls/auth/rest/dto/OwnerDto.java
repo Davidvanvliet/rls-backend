@@ -14,5 +14,5 @@ public class OwnerDto {
     private String companyCode;
     private int id;
     private int userCount;
-    private List<UserDto> users;
+    private List<String> auth0Ids;
 }
