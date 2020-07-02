@@ -1,7 +1,7 @@
 package nl.rls.composer.controller;
 
 import io.swagger.annotations.ApiOperation;
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.url.BaseURL;
 import nl.rls.ci.url.DecodePath;
 import nl.rls.composer.domain.*;
@@ -14,6 +14,8 @@ import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -46,7 +48,9 @@ public class TrainController {
     @ApiOperation(value = "Gets a complete Train object")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('read:train')")
     public Response<List<TrainDto>> getAll() {
+        org.springframework.security.core.context.SecurityContext sc = SecurityContextHolder.getContext();
         int ownerId = securityContext.getOwnerId();
         List<Train> trainList = trainRepository.findByOwnerId(ownerId);
         List<TrainDto> trainDtoList = trainList.stream()
@@ -59,6 +63,7 @@ public class TrainController {
 
     @GetMapping(value = "/{trainId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('read:train')")
     public Response<TrainDto> getById(@PathVariable int trainId) {
         int ownerId = securityContext.getOwnerId();
         Train train = trainRepository.findByIdAndOwnerId(trainId, ownerId)
@@ -71,6 +76,7 @@ public class TrainController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasPermission('write:train')")
     public Response<TrainDto> create(@RequestBody @Valid TrainPostDto dto) {
         int ownerId = securityContext.getOwnerId();
         Train train = new Train();
@@ -98,6 +104,7 @@ public class TrainController {
 
     @PutMapping(value = "/{trainId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasPermission('write:train')")
     public Response<TrainDto> update(@PathVariable int trainId, @RequestBody @Valid TrainPostDto trainCreateDto) {
         int ownerId = securityContext.getOwnerId();
         if (!trainRepository.existsByIdAndOwnerId(trainId, ownerId)) {
@@ -124,6 +131,7 @@ public class TrainController {
 
     @GetMapping(value = "/{trainId}/journeysections", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('read:journeysection')")
     public Response<List<JourneySectionDto>> getAllJourneySections(@PathVariable int trainId) {
         int ownerId = securityContext.getOwnerId();
         if (!trainRepository.existsByIdAndOwnerId(trainId, ownerId)) {
@@ -140,6 +148,7 @@ public class TrainController {
 
     @PostMapping(value = "/{trainId}/journeysections", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasPermission('write:journeysection')")
     public Response<TrainDto> postJourneySection(@PathVariable int trainId,
                                                  @RequestBody @Valid JourneySectionPostDto dto) {
         int ownerId = securityContext.getOwnerId();
@@ -203,6 +212,7 @@ public class TrainController {
 
     @DeleteMapping(value = "/{trainId}/journeysections/{journeySectionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasPermission('delete:journeysection')")
     public Response<TrainDto> removeJourneySection(@PathVariable int trainId, @PathVariable int journeySectionId) {
         int ownerId = securityContext.getOwnerId();
         Train train = trainRepository.findByIdAndOwnerId(trainId, ownerId)

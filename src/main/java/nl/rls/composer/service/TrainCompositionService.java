@@ -1,6 +1,6 @@
 package nl.rls.composer.service;
 
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.composer.domain.RollingStock;
 import nl.rls.composer.domain.TrainComposition;
 import nl.rls.composer.exceptions.NewRollingStockPositionOutOfBoundsException;

@@ -98,8 +98,11 @@ public class WagonInTrain extends RollingStock {
         }
         wagonInTrain.setDangerGoodsInWagons(new ArrayList<>());
         for (DangerGoodsInWagon dangerGoodsInWagon : this.dangerGoodsInWagons) {
-            wagonInTrain.addDangerGoodsInWagon(dangerGoodsInWagon.clone());
+            DangerGoodsInWagon goodsInWagon = dangerGoodsInWagon.clone();
+            goodsInWagon.setWagonInTrain(wagonInTrain);
+            wagonInTrain.addDangerGoodsInWagon(goodsInWagon);
         }
+        wagonInTrain.setId(null);
         return wagonInTrain;
     }
 

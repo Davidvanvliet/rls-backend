@@ -1,6 +1,6 @@
 package nl.rls.ci.service;
 
-import nl.rls.ci.aa.security.SecurityContext;
+import nl.rls.auth.config.SecurityContext;
 import nl.rls.ci.domain.CustomMessageStatus;
 import nl.rls.ci.domain.LiTechnicalAck;
 import nl.rls.ci.domain.UICMessageDto;
