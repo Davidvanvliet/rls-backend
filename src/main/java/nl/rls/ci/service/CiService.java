@@ -14,6 +14,7 @@ import nl.rls.composer.domain.message.TrainCompositionMessage;
 import nl.rls.composer.repository.CompanyRepository;
 import nl.rls.composer.repository.TrainRepository;
 import nl.rls.composer.rest.dto.TrainDto;
+import nl.rls.composer.rest.dto.mapper.TrainDtoMapper;
 import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 import org.dozer.DozerBeanMapper;
 import org.springframework.core.io.ClassPathResource;
@@ -106,7 +107,7 @@ public class CiService {
             CustomMessageStatus customMessageStatus = CustomMessageStatusMapper.map(Objects.requireNonNull(liTechnicalAckResponseEntity.getBody()));
             customMessageStatus.setTrain(train);
             train.getCustomMessageStatuses().add(customMessageStatus);
-            return dozerBeanMapper.map(trainRepository.save(train), TrainDto.class);
+            return TrainDtoMapper.map(train);
 
         } catch (JAXBException | IOException | SAXException | HttpServerErrorException e) {
             throw new RuntimeException(e.getMessage());

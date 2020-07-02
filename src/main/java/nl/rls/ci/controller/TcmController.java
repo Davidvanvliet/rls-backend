@@ -3,7 +3,7 @@ package nl.rls.ci.controller;
 import io.swagger.annotations.ApiOperation;
 import nl.rls.ci.service.CiService;
 import nl.rls.ci.url.BaseURL;
-import nl.rls.composer.domain.Train;
+import nl.rls.composer.rest.dto.TrainDto;
 import nl.rls.util.Response;
 import nl.rls.util.ResponseBuilder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,7 @@ public class TcmController {
 
     @ApiOperation(value = "Constructs a tcm-message from data and puts it into de CI-buffer")
     @PostMapping(value = "{trainId}/send")
-    public Response<Train> sendTcm(@PathVariable Integer trainId) {
+    public Response<TrainDto> sendTcm(@PathVariable Integer trainId) {
         return ResponseBuilder.ok().data(ciService.sendMessageToCi(trainId)).build();
     }
 }
