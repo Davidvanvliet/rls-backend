@@ -18,6 +18,7 @@ import nl.rls.composer.xml.mapper.TrainCompositionMessageXmlMapper;
 import org.dozer.DozerBeanMapper;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -54,6 +55,7 @@ public class CiService {
         this.dozerBeanMapper = dozerBeanMapper;
     }
 
+    @PreAuthorize("hasPermission('send:traincompositionmessage')")
     public TrainDto sendMessageToCi(Integer trainId) {
         String tempRandomUUID = UUID.randomUUID().toString();
         Date now = new Date();
