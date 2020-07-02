@@ -7,7 +7,7 @@ public enum AirBrakeType {
     NO_GP("8"),
     NON_CODED("9");
 
-    private String code;
+    private final String code;
 
     AirBrakeType(String code) {
         this.code = code;

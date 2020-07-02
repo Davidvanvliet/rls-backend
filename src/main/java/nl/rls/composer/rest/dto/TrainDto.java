@@ -3,6 +3,7 @@ package nl.rls.composer.rest.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rls.ci.domain.dto.CustomMessageStatusDto;
 import nl.rls.composer.rest.dto.hateoas.IdentifiableRepresentationModel;
 
 import javax.validation.constraints.Size;
@@ -21,4 +22,5 @@ public class TrainDto extends IdentifiableRepresentationModel<TrainDto> {
     private Date scheduledDateTimeAtTransfer;
     private Integer trainType;
     private List<JourneySectionDto> journeySections = new ArrayList<>();
+    private List<CustomMessageStatusDto> customMessageStatuses;
 }

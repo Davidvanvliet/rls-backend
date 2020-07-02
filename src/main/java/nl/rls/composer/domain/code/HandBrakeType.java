@@ -10,7 +10,7 @@ package nl.rls.composer.domain.code;
 public enum HandBrakeType {
     NO_HB("0"), GOH("1"), POH("2");
 
-    private String code;
+    private final String code;
 
     HandBrakeType(String code) {
         this.code = code;

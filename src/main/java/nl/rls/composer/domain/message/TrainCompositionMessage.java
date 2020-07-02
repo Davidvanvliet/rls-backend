@@ -1,17 +1,13 @@
 package nl.rls.composer.domain.message;
 
-import java.util.Date;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rls.composer.domain.Company;
 import nl.rls.composer.domain.GenericMessage;
 import nl.rls.composer.domain.Train;
+
+import java.util.Date;
 
 /**
  * @author berend.wilkens
@@ -51,7 +47,6 @@ import nl.rls.composer.domain.Train;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
 public class TrainCompositionMessage extends GenericMessage {
     public TrainCompositionMessage(Integer ownerId) {
         super(ownerId);
@@ -62,7 +57,6 @@ public class TrainCompositionMessage extends GenericMessage {
      * Case Reference and Path Request
      */
     private String objectType;
-    @ManyToOne
     private Company company;
     /**
      * It is the main part of identifier and is determent by the company that
@@ -83,7 +77,6 @@ public class TrainCompositionMessage extends GenericMessage {
      */
     private Date startDate;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
     private Train train;
 
 }

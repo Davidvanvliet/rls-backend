@@ -8,7 +8,7 @@ public enum TrainRadioSystem {
     ONE("1"),
     TWO("2");
 
-    private String type;
+    private final String type;
 
     TrainRadioSystem(String type) {
         this.type = type;

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import nl.rls.ci.domain.CustomMessageStatus;
 import nl.rls.composer.domain.message.TrainCompositionMessage;
 
 import javax.persistence.*;
@@ -55,8 +56,10 @@ public class Train extends OwnedEntity {
     @JoinColumn(name = "train_id")
     private List<JourneySection> journeySections = new ArrayList<JourneySection>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "train_id")
+    @OneToMany(mappedBy = "train", cascade = CascadeType.ALL)
+    private List<CustomMessageStatus> customMessageStatuses;
+
+    @Transient
     private List<TrainCompositionMessage> trainCompositionMessages = new ArrayList<TrainCompositionMessage>();
 
     @Transient

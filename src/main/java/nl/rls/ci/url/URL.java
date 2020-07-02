@@ -300,7 +300,7 @@ public class URL implements Iterable<URL.Parameter> {
             return (toString().equals(((java.net.URL) anObject).toExternalForm()));
         }
         if (anObject instanceof java.net.URI) {
-            return (toString().equals(((java.net.URI) anObject).toString()));
+            return (toString().equals(anObject.toString()));
         }
         return false;
     }
@@ -861,8 +861,8 @@ public class URL implements Iterable<URL.Parameter> {
         if (target.startsWith("/"))
             target = target.substring(1);
 
-        String sourceElements[] = source.isEmpty() ? new String[0] : source.split("/");
-        String targetElements[] = target.isEmpty() ? new String[0] : target.split("/");
+        String[] sourceElements = source.isEmpty() ? new String[0] : source.split("/");
+        String[] targetElements = target.isEmpty() ? new String[0] : target.split("/");
 
         // set int common to the number of common elements in the path
         int common = 0;
@@ -1091,7 +1091,7 @@ public class URL implements Iterable<URL.Parameter> {
     public String getAuthority(int i) {
         if (i <= 0)
             return "";
-        String s[] = host.split("\\.");
+        String[] s = host.split("\\.");
         String r = "";
         int k = 1;
         for (int j = s.length - 1; j >= 0; j--) {
@@ -1114,9 +1114,9 @@ public class URL implements Iterable<URL.Parameter> {
         // default ports
         http(80), https(443), ftp(21);
 
-        private int defaultPort;
+        private final int defaultPort;
 
-        private Protocol(int defaultPort) {
+        Protocol(int defaultPort) {
             this.defaultPort = defaultPort;
         }
 
