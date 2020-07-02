@@ -1,0 +1,1 @@
+DELETE FROM danger_goods_type where id = 1;

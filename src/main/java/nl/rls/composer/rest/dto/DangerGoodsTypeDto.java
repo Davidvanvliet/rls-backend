@@ -31,4 +31,6 @@ public class DangerGoodsTypeDto extends IdentifiableRepresentationModel<DangerGo
      * Indicator for labelled dangerous goods in limited quantity according to chapter 3.-4 RID
      */
     private boolean limitedQuantityIndicator;
+
+    private String description;
 }
