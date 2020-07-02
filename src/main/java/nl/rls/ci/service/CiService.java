@@ -106,7 +106,6 @@ public class CiService {
             CustomMessageStatus customMessageStatus = CustomMessageStatusMapper.map(Objects.requireNonNull(liTechnicalAckResponseEntity.getBody()));
             customMessageStatus.setTrain(train);
             train.getCustomMessageStatuses().add(customMessageStatus);
-            
             return dozerBeanMapper.map(trainRepository.save(train), TrainDto.class);
 
         } catch (JAXBException | IOException | SAXException | HttpServerErrorException e) {
