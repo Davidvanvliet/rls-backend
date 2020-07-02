@@ -57,7 +57,7 @@ public class Train extends OwnedEntity {
     private List<JourneySection> journeySections = new ArrayList<JourneySection>();
 
     @OneToMany(mappedBy = "train", cascade = CascadeType.ALL)
-    private List<CustomMessageStatus> customMessageStatuses;
+    private List<CustomMessageStatus> customMessageStatuses = new ArrayList<>();
 
     @Transient
     private List<TrainCompositionMessage> trainCompositionMessages = new ArrayList<TrainCompositionMessage>();
